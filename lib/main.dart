@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:presensi_siswa/app/custom_splash.dart';
-import 'package:presensi_siswa/app/modules/home/views/home_view.dart';
+import 'package:presensi_siswa/app/modules/login_page/views/login_page_view.dart';
+import 'package:presensi_siswa/app/widget/custom_splash.dart';
 
 import 'app/routes/app_pages.dart';
 
@@ -27,13 +27,14 @@ class InitPage extends StatelessWidget {
       future: Future.delayed(const Duration(seconds: 2)),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const HomeView();
+          return const CusplashScreen();
         } else {
+          SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
           SystemChrome.setEnabledSystemUIMode(
             SystemUiMode.manual,
-            overlays: [SystemUiOverlay.top],
+            overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom],
           );
-          return const CusplashScreen();
+          return const LoginPageView();
         }
       },
     );

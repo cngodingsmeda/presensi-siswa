@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:presensi_siswa/all-material.dart';
+import 'package:presensi_siswa/all_material.dart';
 
 class CusplashScreen extends StatelessWidget {
   const CusplashScreen({super.key});
