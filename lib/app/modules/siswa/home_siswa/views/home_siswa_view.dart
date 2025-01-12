@@ -167,32 +167,12 @@ class HomeSiswaView extends GetView<HomeSiswaController> {
                         ),
                       ),
                       const SizedBox(height: 16),
-                      Material(
-                        color: Colors.transparent,
-                        borderRadius: BorderRadius.circular(
-                          16,
-                        ),
-                        child: InkWell(
-                          borderRadius: BorderRadius.circular(2),
-                          onTap: () {},
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                "Histori Absen",
-                                style: AllMaterial.workSans(
-                                  fontWeight: AllMaterial.fontMedium,
-                                  fontSize: 14,
-                                  color: AllMaterial.colorGreySec,
-                                ),
-                              ),
-                              const Icon(
-                                Icons.arrow_forward_ios_rounded,
-                                color: AllMaterial.colorPrimary,
-                                size: 16,
-                              ),
-                            ],
-                          ),
+                      Text(
+                        "Histori Absen",
+                        style: AllMaterial.workSans(
+                          fontWeight: AllMaterial.fontMedium,
+                          fontSize: 14,
+                          color: AllMaterial.colorGreySec,
                         ),
                       ),
                       ListView.builder(

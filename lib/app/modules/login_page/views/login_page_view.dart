@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:presensi_siswa/all_material.dart';
-import 'package:presensi_siswa/app/modules/siswa/main_siswa/views/main_siswa_view.dart';
 
 import '../controllers/login_page_controller.dart';
 
@@ -79,7 +78,8 @@ class LoginPageView extends GetView<LoginPageController> {
                 AllMaterial.cusButton(
                   label: "Login",
                   onTap: () {
-                    Get.off(() => const MainSiswaView());
+                    loginController.loginSementara(
+                        loginController.userC.text, loginController.passC.text);
                   },
                 ),
               ],

@@ -23,6 +23,7 @@ class InitPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // var logController = Get.put(LoginPageController());
     return FutureBuilder(
       future: Future.delayed(const Duration(seconds: 2)),
       builder: (context, snapshot) {
@@ -34,6 +35,19 @@ class InitPage extends StatelessWidget {
             SystemUiMode.manual,
             overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom],
           );
+          // logController.checkAuthentication();
+          // return PopScope(
+          //   canPop: true,
+          //   child: Obx(
+          //     () {
+          //       if (logController.isAuth.value) {
+          //         return logController.periksaRole();
+          //       } else {
+          //         return const LoginPageView();
+          //       }
+          //     },
+          //   ),
+          // );
           return const LoginPageView();
         }
       },

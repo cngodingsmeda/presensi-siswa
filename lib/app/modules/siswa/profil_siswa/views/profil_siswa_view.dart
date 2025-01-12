@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:presensi_siswa/all_material.dart';
+import 'package:presensi_siswa/app/modules/login_page/views/login_page_view.dart';
 import 'package:presensi_siswa/app/modules/siswa/absen_harian_siswa/views/absen_harian_siswa_view.dart';
 import 'package:presensi_siswa/app/modules/siswa/edit_profil_siswa/views/edit_profil_siswa_view.dart';
+import 'package:presensi_siswa/app/widget/ubah_password/views/ubah_password_view.dart';
+import 'package:presensi_siswa/app/widget/verifikasi_email/views/verifikasi_email_view.dart';
 
 import '../controllers/profil_siswa_controller.dart';
 
@@ -81,7 +84,9 @@ class ProfilSiswaView extends GetView<ProfilSiswaController> {
                         icon: MdiIcons.pencilBoxMultiple,
                       ),
                       AllMaterial.profilWidget(
-                        onTap: () {},
+                        onTap: () {
+                          Get.to(() => const UbahPasswordView());
+                        },
                         title: "Ubah Password",
                         icon: MdiIcons.lock,
                       ),
@@ -93,7 +98,9 @@ class ProfilSiswaView extends GetView<ProfilSiswaController> {
                         icon: MdiIcons.calendarBlank,
                       ),
                       AllMaterial.profilWidget(
-                        onTap: () {},
+                        onTap: () {
+                          Get.to(() => const VerifikasiEmailView());
+                        },
                         title: "Verifikasi Email",
                         icon: MdiIcons.email,
                       ),
@@ -103,7 +110,9 @@ class ProfilSiswaView extends GetView<ProfilSiswaController> {
                         icon: MdiIcons.bug,
                       ),
                       AllMaterial.profilWidget(
-                        onTap: () {},
+                        onTap: () {
+                          Get.off(() => const LoginPageView());
+                        },
                         title: "Logout",
                         icon: MdiIcons.logout,
                       ),

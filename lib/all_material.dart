@@ -588,21 +588,47 @@ abstract class AllMaterial {
   }
 
   // Profile Widget
-  static editableWidget(
-      {FocusNode? focusNode,
-      String? label,
-      TextEditingController? controller,
-      int maxLines = 1}) {
+  static editableWidget({
+    FocusNode? focusNode,
+    String? label,
+    TextEditingController? controller,
+    int maxLines = 1,
+    bool addRowButton = false,
+    String? rowButtonLabel,
+    void Function()? onTap,
+  }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "$label",
-          style: AllMaterial.workSans(
-            fontWeight: AllMaterial.fontMedium,
-            fontSize: 14,
-            color: AllMaterial.colorBlack,
-          ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "$label",
+              style: AllMaterial.workSans(
+                fontWeight: AllMaterial.fontMedium,
+                fontSize: 14,
+                color: AllMaterial.colorGreySec,
+              ),
+            ),
+            addRowButton == true
+                ? TextButton(
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.all(5),
+                      overlayColor: AllMaterial.colorPrimary,
+                    ),
+                    onPressed: onTap,
+                    child: Text(
+                      "$rowButtonLabel",
+                      style: AllMaterial.workSans(
+                        fontWeight: AllMaterial.fontMedium,
+                        fontSize: 14,
+                        color: AllMaterial.colorBlack,
+                      ),
+                    ),
+                  )
+                : const SizedBox.shrink(),
+          ],
         ),
         const SizedBox(height: 6),
         TextField(
@@ -638,8 +664,45 @@ abstract class AllMaterial {
             ),
           ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 25),
       ],
     );
+  }
+
+  // Message Scaffold
+  static void messageScaffold({required String title}) {
+    if (Get.context != null) {
+      ScaffoldMessenger.of(Get.context!).showSnackBar(
+        SnackBar(
+          duration: const Duration(seconds: 2),
+          content: Text(title),
+        ),
+      );
+    }
+  }
+
+  static String getErrorMessage(int statusCode) {
+    switch (statusCode) {
+      case 400:
+        return "Permintaan tidak valid. Periksa input Anda.";
+      case 401:
+        return "Anda tidak memiliki akses. Silakan login.";
+      case 403:
+        return "Anda tidak diizinkan untuk mengakses halaman ini.";
+      case 404:
+        return "Data tidak ditemukan.";
+      case 408:
+        return "Waktu habis. Silakan coba lagi.";
+      case 500:
+        return "Terjadi kesalahan pada server. Silakan coba lagi nanti.";
+      case 502:
+        return "Server sedang tidak dapat diakses. Coba lagi nanti.";
+      case 503:
+        return "Layanan sedang tidak tersedia. Silakan coba beberapa saat lagi.";
+      case 504:
+        return "Server tidak merespons tepat waktu. Silakan coba lagi.";
+      default:
+        return "Terjadi kesalahan tidak diketahui.";
+    }
   }
 }
