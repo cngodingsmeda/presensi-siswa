@@ -28,10 +28,14 @@ import '../modules/siswa/profil_siswa/bindings/profil_siswa_binding.dart';
 import '../modules/siswa/profil_siswa/views/profil_siswa_view.dart';
 import '../modules/walas/absen_harian_siswa_walas/bindings/absen_harian_siswa_walas_binding.dart';
 import '../modules/walas/absen_harian_siswa_walas/views/absen_harian_siswa_walas_view.dart';
-import '../modules/walas/detil_mapel_laporan_siswa_walas/bindings/detil_mapel_laporan_siswa_walas_binding.dart';
-import '../modules/walas/detil_mapel_laporan_siswa_walas/views/detil_mapel_laporan_siswa_walas_view.dart';
+import '../modules/walas/detil_laporan_pelajaran_walas/bindings/detil_laporan_pelajaran_walas_binding.dart';
+import '../modules/walas/detil_laporan_pelajaran_walas/views/detil_laporan_pelajaran_walas_view.dart';
+import '../modules/walas/edit_profil_walas/bindings/edit_profil_walas_binding.dart';
+import '../modules/walas/edit_profil_walas/views/edit_profil_walas_view.dart';
 import '../modules/walas/home_walas/bindings/home_walas_binding.dart';
 import '../modules/walas/home_walas/views/home_walas_view.dart';
+import '../modules/walas/laporan_pelajaran_siswa_walas/bindings/laporan_pelajaran_siswa_walas_binding.dart';
+import '../modules/walas/laporan_pelajaran_siswa_walas/views/laporan_pelajaran_siswa_walas_view.dart';
 import '../modules/walas/laporan_walas/bindings/laporan_walas_binding.dart';
 import '../modules/walas/laporan_walas/views/laporan_walas_view.dart';
 import '../modules/walas/main_walas/bindings/main_walas_binding.dart';
@@ -159,14 +163,24 @@ class AppPages {
       binding: PilihMapelLaporanSiswaWalasBinding(),
     ),
     GetPage(
-      name: _Paths.DETIL_MAPEL_LAPORAN_SISWA_WALAS,
-      page: () => const DetilMapelLaporanSiswaWalasView(),
-      binding: DetilMapelLaporanSiswaWalasBinding(),
-    ),
-    GetPage(
       name: _Paths.ABSEN_HARIAN_SISWA_WALAS,
       page: () => const AbsenHarianSiswaWalasView(),
       binding: AbsenHarianSiswaWalasBinding(),
+    ),
+    GetPage(
+      name: _Paths.EDIT_PROFIL_WALAS,
+      page: () => const EditProfilWalasView(),
+      binding: EditProfilWalasBinding(),
+    ),
+    GetPage(
+      name: _Paths.DETIL_LAPORAN_PELAJARAN_WALAS,
+      page: () => const DetilLaporanPelajaranWalasView(),
+      binding: DetilLaporanPelajaranWalasBinding(),
+    ),
+    GetPage(
+      name: _Paths.LAPORAN_PELAJARAN_SISWA_WALAS,
+      page: () => const LaporanPelajaranSiswaWalasView(),
+      binding: LaporanPelajaranSiswaWalasBinding(),
     ),
   ];
 }

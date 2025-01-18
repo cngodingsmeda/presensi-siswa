@@ -27,7 +27,11 @@ abstract class Routes {
       _Paths.PILIH_MAPEL_LAPORAN_SISWA_WALAS;
   static const DETIL_MAPEL_LAPORAN_SISWA_WALAS =
       _Paths.DETIL_MAPEL_LAPORAN_SISWA_WALAS;
-  static const ABSEN_HARIAN_SISWA_WALAS =_Paths.ABSEN_HARIAN_SISWA_WALAS;
+  static const ABSEN_HARIAN_SISWA_WALAS = _Paths.ABSEN_HARIAN_SISWA_WALAS;
+  static const EDIT_PROFIL_WALAS = _Paths.EDIT_PROFIL_WALAS;
+  static const DETIL_LAPORAN_PELAJARAN_WALAS =
+      _Paths.DETIL_LAPORAN_PELAJARAN_WALAS;
+  static const LAPORAN_PELAJARAN_SISWA_WALAS = _Paths.LAPORAN_PELAJARAN_SISWA_WALAS;
 }
 
 abstract class _Paths {
@@ -57,4 +61,7 @@ abstract class _Paths {
   static const DETIL_MAPEL_LAPORAN_SISWA_WALAS =
       '/detil-mapel-laporan-siswa-walas';
   static const ABSEN_HARIAN_SISWA_WALAS = '/absen-harian-siswa-walas';
+  static const EDIT_PROFIL_WALAS = '/edit-profil-walas';
+  static const DETIL_LAPORAN_PELAJARAN_WALAS = '/detil-laporan-pelajaran-walas';
+  static const LAPORAN_PELAJARAN_SISWA_WALAS = '/laporan-pelajaran-siswa-walas';
 }

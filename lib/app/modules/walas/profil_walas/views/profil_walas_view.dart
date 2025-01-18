@@ -4,6 +4,8 @@ import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:presensi_siswa/all_material.dart';
 import 'package:presensi_siswa/app/modules/login_page/views/login_page_view.dart';
+import 'package:presensi_siswa/app/modules/walas/absen_harian_siswa_walas/views/absen_harian_siswa_walas_view.dart';
+import 'package:presensi_siswa/app/modules/walas/edit_profil_walas/views/edit_profil_walas_view.dart';
 import 'package:presensi_siswa/app/widget/ubah_password/views/ubah_password_view.dart';
 import 'package:presensi_siswa/app/widget/verifikasi_email/views/verifikasi_email_view.dart';
 
@@ -77,7 +79,7 @@ class ProfilWalasView extends GetView<ProfilWalasController> {
                     children: [
                       AllMaterial.profilWidget(
                         onTap: () {
-                          // Get.to(() => const EditProfilSiswaView());
+                          Get.to(() => const EditProfilWalasView());
                         },
                         title: "Edit Profil",
                         icon: MdiIcons.pencilBoxMultiple,
@@ -91,9 +93,9 @@ class ProfilWalasView extends GetView<ProfilWalasController> {
                       ),
                       AllMaterial.profilWidget(
                         onTap: () {
-                          // Get.to(() => const AbsenHarianSiswaView());
+                           Get.to(() => const AbsenHarianSiswaWalasView());
                         },
-                        title: "Absen Harian",
+                        title: "Absen Harian Siswa",
                         icon: MdiIcons.calendarBlank,
                       ),
                       AllMaterial.profilWidget(

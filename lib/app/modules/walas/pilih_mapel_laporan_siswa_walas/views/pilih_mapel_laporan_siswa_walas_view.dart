@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:presensi_siswa/all_material.dart';
-import 'package:presensi_siswa/app/modules/walas/detil_mapel_laporan_siswa_walas/views/detil_mapel_laporan_siswa_walas_view.dart';
+import 'package:presensi_siswa/app/modules/walas/detil_laporan_pelajaran_walas/views/detil_laporan_pelajaran_walas_view.dart';
 
 import '../controllers/pilih_mapel_laporan_siswa_walas_controller.dart';
 
@@ -58,7 +57,7 @@ class PilihMapelLaporanSiswaWalasView
                         subtitleContext: "Guru Mapel :",
                         subtitle: controller.guru[index],
                         onTap: () {
-                          Get.to(() => const DetilMapelLaporanSiswaWalasView());
+                          Get.to(() => const DetilLaporanPelajaranWalasView());
                         },
                       ),
                     );

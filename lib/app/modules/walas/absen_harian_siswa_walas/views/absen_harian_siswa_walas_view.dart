@@ -1,9 +1,10 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:presensi_siswa/all_material.dart';
+import 'package:presensi_siswa/app/modules/walas/laporan_pelajaran_siswa_walas/views/laporan_pelajaran_siswa_walas_view.dart';
 
 import '../controllers/absen_harian_siswa_walas_controller.dart';
 
@@ -84,21 +85,14 @@ class AbsenHarianSiswaWalasView
                               color: AllMaterial.colorGreySec,
                             ),
                             children: [
-                              WidgetSpan(
-                                child: InkWell(
-                                  onTap: () {},
-                                  splashColor:
-                                      AllMaterial.colorPrimary.withOpacity(0.3),
-                                  highlightColor:
-                                      AllMaterial.colorPrimary.withOpacity(0.1),
-                                  child: Text(
-                                    "Senin, 12 Agustus 2024",
-                                    style: AllMaterial.workSans(
-                                      color: AllMaterial.colorPrimary,
-                                      fontWeight: AllMaterial.fontSemiBold,
-                                    ),
-                                  ),
+                              TextSpan(
+                                text: "Senin, 12 Agustus 2024",
+                                style: AllMaterial.workSans(
+                                  color: AllMaterial.colorPrimary,
+                                  fontWeight: AllMaterial.fontSemiBold,
                                 ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {},
                               ),
                             ],
                           ),
@@ -204,8 +198,8 @@ class AbsenHarianSiswaWalasView
                                     ],
                                   ),
                                   onTap: () {
-                                    print(
-                                        "Nama yang dipilih: ${controller.nama[index]}");
+                                    Get.to(() =>
+                                        const LaporanPelajaranSiswaWalasView());
                                   },
                                 ),
                                 const Divider(

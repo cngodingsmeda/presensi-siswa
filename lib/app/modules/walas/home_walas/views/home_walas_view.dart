@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import 'package:get/get.dart';
 import 'package:presensi_siswa/all_material.dart';
 import 'package:presensi_siswa/app/modules/walas/absen_harian_siswa_walas/views/absen_harian_siswa_walas_view.dart';
+import 'package:presensi_siswa/app/modules/walas/pilih_mapel_laporan_siswa_walas/views/pilih_mapel_laporan_siswa_walas_view.dart';
 
 import '../controllers/home_walas_controller.dart';
 
@@ -186,7 +186,8 @@ class HomeWalasView extends GetView<HomeWalasController> {
                             tengah: "Senin, 24 Agustus 2024",
                             bawah: "Senin, 24 Agustus 2024",
                             onTap: () {
-                              // Get.to(() => const DetilLaporanSiswaView());
+                              Get.to(() =>
+                                  const PilihMapelLaporanSiswaWalasView());
                             },
                             svg:
                                 SvgPicture.asset("assets/svg/absen-ceklis.svg"),
