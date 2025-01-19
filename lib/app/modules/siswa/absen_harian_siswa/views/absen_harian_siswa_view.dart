@@ -97,37 +97,18 @@ class AbsenHarianSiswaView extends GetView<AbsenHarianSiswaController> {
                                         ),
                                       ],
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                        horizontal: 8,
-                                      ),
-                                      child: Text(
-                                        "|",
-                                        style: AllMaterial.workSans(
-                                          color: AllMaterial.colorStroke,
-                                          fontWeight: AllMaterial.fontMedium,
-                                        ),
-                                      ),
-                                    ),
-                                    Text(
-                                      "XI RPL 1",
-                                      style: AllMaterial.workSans(
-                                        color: AllMaterial.colorPrimary,
-                                        fontWeight: AllMaterial.fontMedium,
-                                      ),
-                                    ),
                                   ],
                                 ),
                               ),
                               AllMaterial.iconWidget(
                                 icon: MdiIcons.clock,
-                                title: "07:00-14:00",
+                                title: "Pukul 07:00-14:00",
                               ),
                             ],
                           ),
                           const SizedBox(height: 15),
                           Text(
-                            "Absen Harian tersedia untuk hari ini.",
+                            "Absen XI RPL 1 tersedia untuk hari ini.",
                             style: AllMaterial.workSans(
                               color: AllMaterial.colorGreySec,
                             ),
@@ -189,9 +170,9 @@ class AbsenHarianSiswaView extends GetView<AbsenHarianSiswaController> {
                                     color: AllMaterial.colorGreySec,
                                   ),
                                 ),
-                                const SizedBox(height: 16),
+                                const SizedBox(height: 8),
                                 Wrap(
-                                  spacing: 10,
+                                  spacing: 5,
                                   children: List.generate(7, (index) {
                                     List<String> statuses = [
                                       "hadir",
@@ -199,7 +180,7 @@ class AbsenHarianSiswaView extends GetView<AbsenHarianSiswaController> {
                                       "alpa",
                                       "libur",
                                       "hadir",
-                                      "izin",
+                                      "belum",
                                       "libur"
                                     ];
                                     String status = statuses[index];
@@ -225,98 +206,125 @@ class AbsenHarianSiswaView extends GetView<AbsenHarianSiswaController> {
                                       backgroundColor = Colors.transparent;
                                       textColor = AllMaterial.colorGreySec;
                                     } else {
-                                      borderColor = Colors.grey;
+                                      borderColor = Colors.black;
                                       backgroundColor = Colors.transparent;
-                                      textColor = Colors.grey;
+                                      textColor = Colors.black;
                                     }
 
-                                    return Container(
-                                      width: 35,
-                                      height: 35,
-                                      alignment: Alignment.center,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                        color: backgroundColor,
-                                        border: Border.all(
-                                          color: borderColor,
+                                    return Padding(
+                                      padding: const EdgeInsets.only(top: 8),
+                                      child: Container(
+                                        width: 35,
+                                        height: 35,
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          color: backgroundColor,
+                                          border: Border.all(
+                                            color: borderColor,
+                                          ),
                                         ),
-                                      ),
-                                      child: Text(
-                                        "${index + 1}",
-                                        style: AllMaterial.workSans(
-                                          fontWeight: AllMaterial.fontMedium,
-                                          fontSize: 14,
-                                          color: textColor,
+                                        child: Text(
+                                          "${index + 1}",
+                                          style: AllMaterial.workSans(
+                                            fontWeight: AllMaterial.fontMedium,
+                                            fontSize: 14,
+                                            color: textColor,
+                                          ),
                                         ),
                                       ),
                                     );
                                   }),
                                 ),
                                 const SizedBox(height: 18),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: List.generate(
-                                    4,
-                                    (index) {
-                                      List<String> statuses = [
-                                        "Hadir",
-                                        "Alpa",
-                                        "Izin",
-                                        "Hari Libur",
-                                      ];
-                                      String status = statuses[index];
+                                SingleChildScrollView(
+                                  scrollDirection: Axis.horizontal,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: List.generate(
+                                          5,
+                                          (index) {
+                                            List<String> statuses = [
+                                              "Hadir",
+                                              "Alpa",
+                                              "Izin",
+                                              "Hari Libur",
+                                              "Belum Absen",
+                                            ];
+                                            String status = statuses[index];
 
-                                      Color borderColor;
-                                      Color? backgroundColor;
+                                            Color borderColor;
+                                            Color? backgroundColor;
 
-                                      if (status == "Hadir") {
-                                        borderColor = Colors.green;
-                                        backgroundColor = Colors.green;
-                                      } else if (status == "Izin") {
-                                        borderColor = AllMaterial.colorBlue;
-                                        backgroundColor = Colors.transparent;
-                                      } else if (status == "Alpa") {
-                                        borderColor = AllMaterial.colorRed;
-                                        backgroundColor = Colors.transparent;
-                                      } else if (status == "Hari Libur") {
-                                        borderColor = AllMaterial.colorGreySec;
-                                        backgroundColor = Colors.transparent;
-                                      } else {
-                                        borderColor = Colors.grey;
-                                        backgroundColor = Colors.transparent;
-                                      }
+                                            if (status == "Hadir") {
+                                              borderColor = Colors.green;
+                                              backgroundColor = Colors.green;
+                                            } else if (status == "Izin") {
+                                              borderColor =
+                                                  AllMaterial.colorBlue;
+                                              backgroundColor =
+                                                  Colors.transparent;
+                                            } else if (status == "Alpa") {
+                                              borderColor =
+                                                  AllMaterial.colorRed;
+                                              backgroundColor =
+                                                  Colors.transparent;
+                                            } else if (status == "Hari Libur") {
+                                              borderColor =
+                                                  AllMaterial.colorGreySec;
+                                              backgroundColor =
+                                                  Colors.transparent;
+                                            } else {
+                                              borderColor = Colors.black;
+                                              backgroundColor =
+                                                  Colors.transparent;
+                                            }
 
-                                      return Row(
-                                        children: [
-                                          Container(
-                                            width: 15,
-                                            height: 15,
-                                            alignment: Alignment.center,
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              color: backgroundColor,
-                                              border: Border.all(
-                                                color: borderColor,
+                                            return Padding(
+                                              padding: const EdgeInsets.only(
+                                                right: 15,
                                               ),
-                                            ),
-                                          ),
-                                          const SizedBox(width: 5),
-                                          Text(
-                                            "= $status",
-                                            style: AllMaterial.workSans(
-                                              fontWeight:
-                                                  AllMaterial.fontRegular,
-                                              fontSize: 14,
-                                              color: AllMaterial.colorGreySec,
-                                            ),
-                                          )
-                                        ],
-                                      );
-                                    },
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Container(
+                                                    width: 15,
+                                                    height: 15,
+                                                    alignment: Alignment.center,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              2),
+                                                      color: backgroundColor,
+                                                      border: Border.all(
+                                                        color: borderColor,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 5),
+                                                  Text(
+                                                    "= $status",
+                                                    style: AllMaterial.workSans(
+                                                      fontWeight: AllMaterial
+                                                          .fontRegular,
+                                                      fontSize: 14,
+                                                      color: AllMaterial
+                                                          .colorGreySec,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ),
+                                )
                               ],
                             ),
                           ),

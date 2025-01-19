@@ -53,11 +53,13 @@ class BuatAbsenHarianSiswaView extends GetView<BuatAbsenHarianSiswaController> {
                             controller: controller.namaC,
                             focusNode: controller.namaF,
                             label: "Hari Absen",
+                            readOnly: true,
                           ),
                           AllMaterial.editableWidget(
                             controller: controller.nisC,
                             focusNode: controller.nisF,
                             label: "Jam Absen Saat Ini",
+                            readOnly: true,
                           ),
                           AllMaterial.editableWidget(
                             controller: controller.emailC,
@@ -68,6 +70,7 @@ class BuatAbsenHarianSiswaView extends GetView<BuatAbsenHarianSiswaController> {
                             controller: controller.jenisKelaminC,
                             focusNode: controller.jenisKelaminF,
                             label: "Deskripsi",
+                            hintText: "Masukkan Deskripsi Absen...",
                             maxLines: 4,
                           ),
                           AllMaterial.editableWidget(

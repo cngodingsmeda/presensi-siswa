@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:presensi_siswa/all_material.dart';
+import 'package:presensi_siswa/app/modules/mapel/home_mapel/views/home_mapel_view.dart';
+import 'package:presensi_siswa/app/modules/mapel/laporan_mapel/views/laporan_mapel_view.dart';
+import 'package:presensi_siswa/app/modules/mapel/notifikasi_mapel/views/notifikasi_mapel_view.dart';
+import 'package:presensi_siswa/app/modules/mapel/profil_mapel/views/profil_mapel_view.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 import '../controllers/main_mapel_controller.dart';
@@ -20,16 +24,16 @@ class MainMapelView extends GetView<MainMapelController> {
         },
         children: const [
           // NAVIGASI HOME
-          // HomeWalasView(),
+          HomeMapelView(),
 
           // NAVIGASI LAPORAN
-          // LaporanWalasView(),
+          LaporanMapelView(),
 
           // NAVIGASI NOTIFIKASI
-          // NotifikasiWalasView(),
+          NotifikasiMapelView(),
 
           // NAVIGASI PROFIL
-          // ProfilWalasView(),
+          ProfilMapelView()
         ],
       ),
       bottomNavigationBar: Obx(

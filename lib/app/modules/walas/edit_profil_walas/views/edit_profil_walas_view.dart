@@ -81,7 +81,7 @@ class EditProfilWalasView extends GetView<EditProfilWalasController> {
                           AllMaterial.editableWidget(
                             controller: controller.nipC,
                             focusNode: controller.nipF,
-                            label: "NIS",
+                            label: "NIP",
                           ),
                           AllMaterial.editableWidget(
                             controller: controller.emailC,
@@ -96,7 +96,7 @@ class EditProfilWalasView extends GetView<EditProfilWalasController> {
                           AllMaterial.editableWidget(
                             controller: controller.agamaC,
                             focusNode: controller.agamaF,
-                            label: "Kelas & Jurusan",
+                            label: "Agama",
                           ),
                           AllMaterial.editableWidget(
                             controller: controller.noTeleponC,

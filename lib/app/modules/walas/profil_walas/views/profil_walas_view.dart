@@ -43,7 +43,6 @@ class ProfilWalasView extends GetView<ProfilWalasController> {
                         height: 80,
                         width: 80,
                         decoration: BoxDecoration(
-                          boxShadow: [AllMaterial.topShadow],
                           borderRadius: BorderRadius.circular(1000),
                           color: AllMaterial.colorSecondary,
                         ),
@@ -93,7 +92,7 @@ class ProfilWalasView extends GetView<ProfilWalasController> {
                       ),
                       AllMaterial.profilWidget(
                         onTap: () {
-                           Get.to(() => const AbsenHarianSiswaWalasView());
+                          Get.to(() => const AbsenHarianSiswaWalasView());
                         },
                         title: "Absen Harian Siswa",
                         icon: MdiIcons.calendarBlank,

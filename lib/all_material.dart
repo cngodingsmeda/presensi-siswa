@@ -405,6 +405,8 @@ abstract class AllMaterial {
     String? subtitle,
     Widget? konten,
     bool addSubtitle = true,
+    bool customButton = false,
+    Widget? customButtonWidget,
     void Function()? onTap,
   }) {
     return Get.bottomSheet(
@@ -450,14 +452,18 @@ abstract class AllMaterial {
                           color: AllMaterial.colorGreySec,
                         ),
                       ),
-                const SizedBox(height: 20),
+                addSubtitle == false
+                    ? const SizedBox.shrink()
+                    : const SizedBox(height: 20),
                 SizedBox(child: konten),
                 const SizedBox(height: 20),
-                AllMaterial.cusButton(
-                  icon: icon,
-                  label: "$buttonLabel",
-                  onTap: onTap,
-                ),
+                customButton == false
+                    ? AllMaterial.cusButton(
+                        icon: icon,
+                        label: "$buttonLabel",
+                        onTap: onTap,
+                      )
+                    : customButtonWidget
               ],
             ),
           ),
@@ -595,6 +601,8 @@ abstract class AllMaterial {
     int maxLines = 1,
     bool addRowButton = false,
     String? rowButtonLabel,
+    String? hintText,
+    bool readOnly = false,
     void Function()? onTap,
   }) {
     return Column(
@@ -632,6 +640,7 @@ abstract class AllMaterial {
         ),
         const SizedBox(height: 6),
         TextField(
+          readOnly: readOnly,
           controller: controller,
           focusNode: focusNode,
           maxLines: maxLines,
@@ -644,6 +653,16 @@ abstract class AllMaterial {
             color: AllMaterial.colorGreySec,
           ),
           decoration: InputDecoration(
+            disabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(
+                color: AllMaterial.colorGreySec,
+              ),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            hintText: hintText,
+            hintStyle: AllMaterial.workSans(
+              color: AllMaterial.colorGreySec,
+            ),
             contentPadding: const EdgeInsets.symmetric(
               vertical: 5,
               horizontal: 14,
@@ -675,7 +694,10 @@ abstract class AllMaterial {
       ScaffoldMessenger.of(Get.context!).showSnackBar(
         SnackBar(
           duration: const Duration(seconds: 2),
-          content: Text(title),
+          content: Text(
+            title,
+            style: AllMaterial.workSans(),
+          ),
         ),
       );
     }

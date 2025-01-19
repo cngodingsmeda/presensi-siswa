@@ -23,11 +23,10 @@ class BuatAbsenHarianSiswaController extends GetxController {
     namaC.text = "Senin, 25 Agustus 2024";
     nisC.text = "09:41";
     emailC.text = "Absen Hadir";
-    jenisKelaminC.text = "Masukkan Deskripsi absen...";
     super.onInit();
   }
 
-    var mapel = [
+  var mapel = [
     "Matematika",
     "Pendidikan Agama Islam & Budi Pekerti",
     "Penjas Orkes",

@@ -19,6 +19,12 @@ class LoginPageController extends GetxController {
     isPasswordHidden.value = !isPasswordHidden.value;
   }
 
+  @override
+  void onInit() {
+    checkAuthentication();
+    super.onInit();
+  }
+
   void loginSementara(String username, String password) {
     try {
       if (userC.text.isEmpty || passC.text.isEmpty) {
@@ -34,6 +40,7 @@ class LoginPageController extends GetxController {
           AllMaterial.messageScaffold(
             title: "Verifikasi Berhasil, Selamat Datang!",
           );
+          AllMaterial.box.write("role", "petugas");
         } else if (userC.text == "siswa" && passC.text == "siswa") {
           userC.text = "";
           passC.text = "";
@@ -41,6 +48,7 @@ class LoginPageController extends GetxController {
           AllMaterial.messageScaffold(
             title: "Verifikasi Berhasil, Selamat Datang!",
           );
+          AllMaterial.box.write("role", "siswa");
         } else if (userC.text == "mapel" && passC.text == "mapel") {
           userC.text = "";
           passC.text = "";
@@ -48,6 +56,7 @@ class LoginPageController extends GetxController {
           AllMaterial.messageScaffold(
             title: "Verifikasi Berhasil, Selamat Datang!",
           );
+          AllMaterial.box.write("role", "mapel");
         } else if (userC.text == "walas" && passC.text == "walas") {
           userC.text = "";
           passC.text = "";
@@ -55,6 +64,7 @@ class LoginPageController extends GetxController {
           AllMaterial.messageScaffold(
             title: "Verifikasi Berhasil, Selamat Datang!",
           );
+          AllMaterial.box.write("role", "walas");
         } else {
           AllMaterial.messageScaffold(
             title: "Username atau Password salah!",
@@ -71,31 +81,35 @@ class LoginPageController extends GetxController {
   }
 
   Widget periksaRole() {
-    // String role = AllMaterial.box.read("role");
-    if (role.contains("siswa")) {
+    String role = AllMaterial.box.read("role") ?? "";
+    print("Role yang dibaca: $role");
+
+    if (role == "siswa") {
       return const MainSiswaView();
-    } else if (role.contains("walas")) {
+    } else if (role == "walas") {
       return const MainWalasView();
-    } else if (role.contains("petugas")) {
-      return const MainSiswaView();
-    } else if (role.contains("mapel")) {
-      return const MainSiswaView();
+    } else if (role == "petugas") {
+      return const MainPetugasView();
+    } else if (role == "mapel") {
+      return const MainMapelView();
     } else {
       return const LoginPageView();
     }
   }
 
-  Future<void> checkAuthentication() async {
-    var token = AllMaterial.box.read("token");
-    if (token != null) {
-      try {
-        isAuth.value = true;
-        update();
-      } catch (e) {
-        isAuth.value = false;
-      }
+  void checkAuthentication() {
+    // Membaca nilai role dari GetStorage
+    var role = AllMaterial.box.read("role");
+    print("Role: $role");
+
+    // Pastikan role tidak null dan tidak kosong
+    if (role != null && role != "") {
+      isAuth.value = true;
     } else {
       isAuth.value = false;
     }
+
+    // Update tampilan jika perlu
+    update();
   }
 }

@@ -47,16 +47,19 @@ class UbahPasswordView extends GetView<UbahPasswordController> {
                                 AllMaterial.editableWidget(
                                   controller: controller.passBefC,
                                   focusNode: controller.passBefF,
-                                  label: "Masukkan Password Sebelumnya",
+                                  label: "Password Sebelumnya",
+                                  hintText: "Masukkan Password sebelumnya...",
                                 ),
                                 AllMaterial.editableWidget(
                                   controller: controller.passNewC,
                                   focusNode: controller.passNewF,
-                                  label: "Masukkan Password Baru",
+                                  label: "Password Baru",
+                                  hintText: "Masukkan Password baru...",
                                 ),
                                 AllMaterial.editableWidget(
                                   controller: controller.confirmPassNewC,
                                   focusNode: controller.confirmPassNewF,
+                                  hintText: "Harap konfirmasi Password...",
                                   label: "Konfirmasi Password Baru",
                                 ),
                               ],
@@ -82,6 +85,7 @@ class UbahPasswordView extends GetView<UbahPasswordController> {
                                 ),
                                 const SizedBox(height: 40),
                                 AllMaterial.editableWidget(
+                                  hintText: "X - X - X - X",
                                   addRowButton: true,
                                   rowButtonLabel: "Generate",
                                   onTap: () {

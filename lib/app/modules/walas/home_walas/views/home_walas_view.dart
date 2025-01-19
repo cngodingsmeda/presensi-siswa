@@ -12,6 +12,7 @@ class HomeWalasView extends GetView<HomeWalasController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AllMaterial.colorWhite,
       body: SafeArea(
         child: AllMaterial.containerLinear(
           padding: 0,

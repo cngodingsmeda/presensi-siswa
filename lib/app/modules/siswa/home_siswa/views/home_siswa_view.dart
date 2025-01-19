@@ -12,6 +12,7 @@ class HomeSiswaView extends GetView<HomeSiswaController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AllMaterial.colorWhite,
       body: SafeArea(
         child: AllMaterial.containerLinear(
           padding: 0,

@@ -42,7 +42,6 @@ class ProfilSiswaView extends GetView<ProfilSiswaController> {
                         height: 80,
                         width: 80,
                         decoration: BoxDecoration(
-                          boxShadow: [AllMaterial.topShadow],
                           borderRadius: BorderRadius.circular(1000),
                           color: AllMaterial.colorMint,
                         ),

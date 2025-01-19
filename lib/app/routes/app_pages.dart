@@ -2,10 +2,46 @@ import 'package:get/get.dart';
 
 import '../modules/login_page/bindings/login_page_binding.dart';
 import '../modules/login_page/views/login_page_view.dart';
+import '../modules/mapel/absen_bulanan_kelas_mapel/bindings/absen_bulanan_kelas_mapel_binding.dart';
+import '../modules/mapel/absen_bulanan_kelas_mapel/views/absen_bulanan_kelas_mapel_view.dart';
+import '../modules/mapel/detil_kelas_diajar_mapel/bindings/detil_kelas_diajar_mapel_binding.dart';
+import '../modules/mapel/detil_kelas_diajar_mapel/views/detil_kelas_diajar_mapel_view.dart';
+import '../modules/mapel/edit_profil_mapel/bindings/edit_profil_mapel_binding.dart';
+import '../modules/mapel/edit_profil_mapel/views/edit_profil_mapel_view.dart';
+import '../modules/mapel/home_mapel/bindings/home_mapel_binding.dart';
+import '../modules/mapel/home_mapel/views/home_mapel_view.dart';
+import '../modules/mapel/laporan_mapel/bindings/laporan_mapel_binding.dart';
+import '../modules/mapel/laporan_mapel/views/laporan_mapel_view.dart';
 import '../modules/mapel/main_mapel/bindings/main_mapel_binding.dart';
 import '../modules/mapel/main_mapel/views/main_mapel_view.dart';
+import '../modules/mapel/notifikasi_mapel/bindings/notifikasi_mapel_binding.dart';
+import '../modules/mapel/notifikasi_mapel/views/notifikasi_mapel_view.dart';
+import '../modules/mapel/profil_mapel/bindings/profil_mapel_binding.dart';
+import '../modules/mapel/profil_mapel/views/profil_mapel_view.dart';
+import '../modules/petugas/absen_bulanan_siswa_petugas/bindings/absen_bulanan_siswa_petugas_binding.dart';
+import '../modules/petugas/absen_bulanan_siswa_petugas/views/absen_bulanan_siswa_petugas_view.dart';
+import '../modules/petugas/absen_harian_siswa_petugas/bindings/absen_harian_siswa_petugas_binding.dart';
+import '../modules/petugas/absen_harian_siswa_petugas/views/absen_harian_siswa_petugas_view.dart';
+import '../modules/petugas/absen_kelas_harian_petugas/bindings/absen_kelas_harian_petugas_binding.dart';
+import '../modules/petugas/absen_kelas_harian_petugas/views/absen_kelas_harian_petugas_view.dart';
+import '../modules/petugas/absen_pelajaran_siswa_petugas/bindings/absen_pelajaran_siswa_petugas_binding.dart';
+import '../modules/petugas/absen_pelajaran_siswa_petugas/views/absen_pelajaran_siswa_petugas_view.dart';
+import '../modules/petugas/edit_profil_petugas/bindings/edit_profil_petugas_binding.dart';
+import '../modules/petugas/edit_profil_petugas/views/edit_profil_petugas_view.dart';
+import '../modules/petugas/histori_tinjauan_petugas/bindings/histori_tinjauan_petugas_binding.dart';
+import '../modules/petugas/histori_tinjauan_petugas/views/histori_tinjauan_petugas_view.dart';
+import '../modules/petugas/home_petugas/bindings/home_petugas_binding.dart';
+import '../modules/petugas/home_petugas/views/home_petugas_view.dart';
+import '../modules/petugas/laporan_petugas/bindings/laporan_petugas_binding.dart';
+import '../modules/petugas/laporan_petugas/views/laporan_petugas_view.dart';
 import '../modules/petugas/main_petugas/bindings/main_petugas_binding.dart';
 import '../modules/petugas/main_petugas/views/main_petugas_view.dart';
+import '../modules/petugas/notifikasi_petugas/bindings/notifikasi_petugas_binding.dart';
+import '../modules/petugas/notifikasi_petugas/views/notifikasi_petugas_view.dart';
+import '../modules/petugas/pelajaran_bulan_siswa_petugas/bindings/pelajaran_bulan_siswa_petugas_binding.dart';
+import '../modules/petugas/pelajaran_bulan_siswa_petugas/views/pelajaran_bulan_siswa_petugas_view.dart';
+import '../modules/petugas/profil_petugas/bindings/profil_petugas_binding.dart';
+import '../modules/petugas/profil_petugas/views/profil_petugas_view.dart';
 import '../modules/siswa/absen_harian_siswa/bindings/absen_harian_siswa_binding.dart';
 import '../modules/siswa/absen_harian_siswa/views/absen_harian_siswa_view.dart';
 import '../modules/siswa/buat_absen_harian_siswa/bindings/buat_absen_harian_siswa_binding.dart';
@@ -181,6 +217,96 @@ class AppPages {
       name: _Paths.LAPORAN_PELAJARAN_SISWA_WALAS,
       page: () => const LaporanPelajaranSiswaWalasView(),
       binding: LaporanPelajaranSiswaWalasBinding(),
+    ),
+    GetPage(
+      name: _Paths.HOME_MAPEL,
+      page: () => const HomeMapelView(),
+      binding: HomeMapelBinding(),
+    ),
+    GetPage(
+      name: _Paths.NOTIFIKASI_MAPEL,
+      page: () => const NotifikasiMapelView(),
+      binding: NotifikasiMapelBinding(),
+    ),
+    GetPage(
+      name: _Paths.PROFIL_MAPEL,
+      page: () => const ProfilMapelView(),
+      binding: ProfilMapelBinding(),
+    ),
+    GetPage(
+      name: _Paths.LAPORAN_MAPEL,
+      page: () => const LaporanMapelView(),
+      binding: LaporanMapelBinding(),
+    ),
+    GetPage(
+      name: _Paths.ABSEN_BULANAN_KELAS_MAPEL,
+      page: () => const AbsenBulananKelasMapelView(),
+      binding: AbsenBulananKelasMapelBinding(),
+    ),
+    GetPage(
+      name: _Paths.EDIT_PROFIL_MAPEL,
+      page: () => const EditProfilMapelView(),
+      binding: EditProfilMapelBinding(),
+    ),
+    GetPage(
+      name: _Paths.DETIL_KELAS_DIAJAR_MAPEL,
+      page: () => const DetilKelasDiajarMapelView(),
+      binding: DetilKelasDiajarMapelBinding(),
+    ),
+    GetPage(
+      name: _Paths.NOTIFIKASI_PETUGAS,
+      page: () => const NotifikasiPetugasView(),
+      binding: NotifikasiPetugasBinding(),
+    ),
+    GetPage(
+      name: _Paths.PROFIL_PETUGAS,
+      page: () => const ProfilPetugasView(),
+      binding: ProfilPetugasBinding(),
+    ),
+    GetPage(
+      name: _Paths.HOME_PETUGAS,
+      page: () => const HomePetugasView(),
+      binding: HomePetugasBinding(),
+    ),
+    GetPage(
+      name: _Paths.LAPORAN_PETUGAS,
+      page: () => const LaporanPetugasView(),
+      binding: LaporanPetugasBinding(),
+    ),
+    GetPage(
+      name: _Paths.HISTORI_TINJAUAN_PETUGAS,
+      page: () => const HistoriTinjauanPetugasView(),
+      binding: HistoriTinjauanPetugasBinding(),
+    ),
+    GetPage(
+      name: _Paths.ABSEN_HARIAN_SISWA_PETUGAS,
+      page: () => const AbsenHarianSiswaPetugasView(),
+      binding: AbsenHarianSiswaPetugasBinding(),
+    ),
+    GetPage(
+      name: _Paths.ABSEN_KELAS_HARIAN_PETUGAS,
+      page: () => const AbsenKelasHarianPetugasView(),
+      binding: AbsenKelasHarianPetugasBinding(),
+    ),
+    GetPage(
+      name: _Paths.ABSEN_PELAJARAN_SISWA_PETUGAS,
+      page: () => const AbsenPelajaranSiswaPetugasView(),
+      binding: AbsenPelajaranSiswaPetugasBinding(),
+    ),
+    GetPage(
+      name: _Paths.ABSEN_BULANAN_SISWA_PETUGAS,
+      page: () => const AbsenBulananSiswaPetugasView(),
+      binding: AbsenBulananSiswaPetugasBinding(),
+    ),
+    GetPage(
+      name: _Paths.PELAJARAN_BULAN_SISWA_PETUGAS,
+      page: () => const PelajaranBulanSiswaPetugasView(),
+      binding: PelajaranBulanSiswaPetugasBinding(),
+    ),
+    GetPage(
+      name: _Paths.EDIT_PROFIL_PETUGAS,
+      page: () => const EditProfilPetugasView(),
+      binding: EditProfilPetugasBinding(),
     ),
   ];
 }

@@ -45,7 +45,8 @@ class VerifikasiEmailView extends GetView<VerifikasiEmailController> {
                         AllMaterial.editableWidget(
                           controller: controller.emailC,
                           focusNode: controller.emailF,
-                          label: "Masukkan Alamat Email",
+                          label: "Alamat Email",
+                          hintText: "Masukkan Alamat Email...",
                         ),
                         AllMaterial.editableWidget(
                           addRowButton: true,
@@ -54,6 +55,7 @@ class VerifikasiEmailView extends GetView<VerifikasiEmailController> {
                             // GENERATE KODE OTP
                           },
                           controller: controller.otpC,
+                          hintText: "X - X - X - X",
                           focusNode: controller.otpF,
                           label: "Konfirmasi Kode-OTP",
                         ),
