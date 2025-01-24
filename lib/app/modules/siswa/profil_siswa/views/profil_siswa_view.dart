@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:presensi_siswa/all_material.dart';
-import 'package:presensi_siswa/app/modules/login_page/views/login_page_view.dart';
+import 'package:presensi_siswa/app/controller/general_controller.dart';
 import 'package:presensi_siswa/app/modules/siswa/absen_harian_siswa/views/absen_harian_siswa_view.dart';
 import 'package:presensi_siswa/app/modules/siswa/edit_profil_siswa/views/edit_profil_siswa_view.dart';
 import 'package:presensi_siswa/app/widget/ubah_password/views/ubah_password_view.dart';
@@ -20,9 +20,8 @@ class ProfilSiswaView extends GetView<ProfilSiswaController> {
       body: AllMaterial.containerLinear(
         child: SafeArea(
           child: SingleChildScrollView(
-            physics: const NeverScrollableScrollPhysics(),
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
+              padding: const EdgeInsets.symmetric(vertical: 20),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -110,14 +109,23 @@ class ProfilSiswaView extends GetView<ProfilSiswaController> {
                       ),
                       AllMaterial.profilWidget(
                         onTap: () {
-                          Get.off(() => const LoginPageView());
+                          final genC = Get.put(GeneralController());
+                          AllMaterial.cusDialogValidasi(
+                            title: "Logout",
+                            subtitle: "Apakah Anda yakin?",
+                            onConfirm: () async {
+                              await genC.logout();
+                              Get.back();
+                            },
+                            onCancel: () => Get.back(),
+                          );
                         },
                         title: "Logout",
                         icon: MdiIcons.logout,
                       ),
                     ],
                   ),
-                  const SizedBox(height: 200),
+                  const SizedBox(height: 60),
                 ],
               ),
             ),

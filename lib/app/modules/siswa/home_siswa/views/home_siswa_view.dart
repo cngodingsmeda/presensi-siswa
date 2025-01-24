@@ -17,9 +17,7 @@ class HomeSiswaView extends GetView<HomeSiswaController> {
         child: AllMaterial.containerLinear(
           padding: 0,
           child: Padding(
-            padding: const EdgeInsets.only(
-              top: 10,
-            ),
+            padding: const EdgeInsets.only(top: 20),
             child: ListView(
               children: [
                 Padding(

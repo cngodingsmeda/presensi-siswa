@@ -3,6 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 abstract class AllMaterial {
@@ -206,12 +207,16 @@ abstract class AllMaterial {
                     children: [
                       Text(
                         "$atas",
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                         style: AllMaterial.workSans(
                           color: AllMaterial.colorWhite,
                         ),
                       ),
                       Text(
                         "$tengah",
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                         style: AllMaterial.workSans(
                           fontWeight: AllMaterial.fontSemiBold,
                           fontSize: 18,
@@ -220,6 +225,8 @@ abstract class AllMaterial {
                       ),
                       Text(
                         "$bawah",
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                         style: AllMaterial.workSans(
                           color: AllMaterial.colorWhite,
                         ),
@@ -662,6 +669,7 @@ abstract class AllMaterial {
             hintText: hintText,
             hintStyle: AllMaterial.workSans(
               color: AllMaterial.colorGreySec,
+              fontWeight: AllMaterial.fontRegular,
             ),
             contentPadding: const EdgeInsets.symmetric(
               vertical: 5,
@@ -701,6 +709,113 @@ abstract class AllMaterial {
         ),
       );
     }
+  }
+
+  // DIALOG
+  static void cusDialogValidasi({
+    required String title,
+    required String subtitle,
+    required VoidCallback? onConfirm,
+    required VoidCallback? onCancel,
+  }) {
+    Get.dialog(
+      Dialog(
+        backgroundColor: AllMaterial.colorWhite,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(15),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                title,
+                textAlign: TextAlign.center,
+                style: AllMaterial.workSans(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                subtitle,
+                textAlign: TextAlign.center,
+                style: AllMaterial.workSans(
+                  fontSize: 16,
+                  fontWeight: AllMaterial.fontMedium,
+                  color: Colors.grey,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Expanded(
+                    child: OutlinedButton(
+                      onPressed: onCancel,
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: AllMaterial.colorPrimary,
+                        side: const BorderSide(color: AllMaterial.colorPrimary),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                      ),
+                      child: Text(
+                        'Batalkan',
+                        style: AllMaterial.workSans(
+                          fontWeight: AllMaterial.fontMedium,
+                          color: AllMaterial.colorPrimary,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: ElevatedButton(
+                      onPressed: onConfirm,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AllMaterial.colorPrimary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                      ),
+                      child: Text(
+                        'Konfirmasi',
+                        style: AllMaterial.workSans(
+                          fontWeight: AllMaterial.fontMedium,
+                          color: AllMaterial.colorWhite,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // Format = Senin, 21 Januari 2025
+  static String hariTanggalBulanTahun(String isoDate) {
+    DateTime parsedDate = DateTime.parse(isoDate);
+    String formattedDate =
+        DateFormat('EEEE, dd MMMM yyyy', 'id_ID').format(parsedDate);
+    return formattedDate;
+  }
+
+  // Format Nama Panjang = James Werren A.G.H
+  static String formatNamaPanjang(String namaPanjang) {
+    List<String> namaArray = namaPanjang.split(' ');
+    List<String> namaTigaPertama = namaArray.take(3).toList();
+    List<String> inisialSisa =
+        namaArray.skip(3).map((nama) => '${nama[0]}.').toList();
+
+    return (namaTigaPertama + inisialSisa).join(' ');
   }
 
   static String getErrorMessage(int statusCode) {

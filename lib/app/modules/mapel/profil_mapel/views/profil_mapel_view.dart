@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:presensi_siswa/all_material.dart';
-import 'package:presensi_siswa/app/modules/login_page/views/login_page_view.dart';
+import 'package:presensi_siswa/app/controller/general_controller.dart';
 import 'package:presensi_siswa/app/modules/mapel/edit_profil_mapel/views/edit_profil_mapel_view.dart';
 import 'package:presensi_siswa/app/widget/ubah_password/views/ubah_password_view.dart';
 import 'package:presensi_siswa/app/widget/verifikasi_email/views/verifikasi_email_view.dart';
@@ -19,7 +18,6 @@ class ProfilMapelView extends GetView<ProfilMapelController> {
       body: AllMaterial.containerLinear(
         child: SafeArea(
           child: SingleChildScrollView(
-            physics: const NeverScrollableScrollPhysics(),
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 10),
               child: Column(
@@ -102,14 +100,23 @@ class ProfilMapelView extends GetView<ProfilMapelController> {
                       ),
                       AllMaterial.profilWidget(
                         onTap: () {
-                          Get.off(() => const LoginPageView());
+                          final genC = Get.put(GeneralController());
+                          AllMaterial.cusDialogValidasi(
+                            title: "Logout",
+                            subtitle: "Apakah Anda yakin?",
+                            onConfirm: () async {
+                              await genC.logout();
+                              Get.back();
+                            },
+                            onCancel: () => Get.back(),
+                          );
                         },
                         title: "Logout",
                         icon: MdiIcons.logout,
                       ),
                     ],
                   ),
-                  const SizedBox(height: 200),
+                  const SizedBox(height: 60),
                 ],
               ),
             ),

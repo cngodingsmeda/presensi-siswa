@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -32,7 +31,6 @@ class AbsenKelasHarianPetugasView
                     color: AllMaterial.colorBlack,
                   ),
                 ),
-                
               ],
             ),
             Expanded(
@@ -74,7 +72,9 @@ class AbsenKelasHarianPetugasView
                             ),
                             children: [
                               TextSpan(
-                                text: "Senin, 12 Agustus 2024",
+                                text: AllMaterial.hariTanggalBulanTahun(
+                                  DateTime.now().toIso8601String(),
+                                ),
                                 style: AllMaterial.workSans(
                                   color: AllMaterial.colorPrimary,
                                   fontWeight: AllMaterial.fontSemiBold,

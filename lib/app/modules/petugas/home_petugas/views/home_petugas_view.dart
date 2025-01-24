@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:presensi_siswa/all_material.dart';
-import 'package:presensi_siswa/app/modules/petugas/absen_harian_siswa_petugas/views/absen_harian_siswa_petugas_view.dart';
+import 'package:presensi_siswa/app/modules/petugas/absen_harian_siswa_petugas/controllers/absen_harian_siswa_petugas_controller.dart';
 import 'package:presensi_siswa/app/modules/petugas/histori_tinjauan_petugas/views/histori_tinjauan_petugas_view.dart';
+import 'package:presensi_siswa/app/modules/petugas/main_petugas/controllers/main_petugas_controller.dart';
 
 import '../controllers/home_petugas_controller.dart';
 
@@ -14,6 +14,7 @@ class HomePetugasView extends GetView<HomePetugasController> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(HomePetugasController());
+    final mainCont = Get.put(MainPetugasController());
     return Scaffold(
       backgroundColor: AllMaterial.colorWhite,
       body: SafeArea(
@@ -21,7 +22,7 @@ class HomePetugasView extends GetView<HomePetugasController> {
           padding: 0,
           child: Padding(
             padding: const EdgeInsets.only(
-              top: 10,
+              top: 20,
             ),
             child: ListView(
               children: [
@@ -54,25 +55,42 @@ class HomePetugasView extends GetView<HomePetugasController> {
                             ],
                           ),
                           Container(
-                            alignment: Alignment.bottomRight,
+                            alignment: Alignment.center,
                             height: 40,
                             width: 40,
                             decoration: BoxDecoration(
-                              boxShadow: [AllMaterial.topShadow],
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  blurRadius: 4,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
                               borderRadius: BorderRadius.circular(1000),
                               color: AllMaterial.colorMint,
+                            ),
+                            child: Obx(
+                              () => Text(
+                                mainCont.userNameFilter.value,
+                                style: AllMaterial.workSans(
+                                  color: AllMaterial.colorWhite,
+                                  fontWeight: AllMaterial.fontSemiBold,
+                                  fontSize: 20,
+                                ),
+                              ),
                             ),
                           ),
                         ],
                       ),
                       const SizedBox(height: 17),
                       Material(
-                        color: const Color(0xffF7FFFA),
                         borderRadius: BorderRadius.circular(35),
                         child: InkWell(
                           borderRadius: BorderRadius.circular(35),
-                          onTap: () {
-                            Get.to(() => const AbsenHarianSiswaPetugasView());
+                          onTap: () async {
+                            var absen =
+                                Get.put(AbsenHarianSiswaPetugasController());
+                            await absen.fetchKelasTinjauan();
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(
@@ -103,7 +121,9 @@ class HomePetugasView extends GetView<HomePetugasController> {
                                 ),
                               ),
                               subtitle: Text(
-                                "Senin, 24 Januari 2025",
+                                AllMaterial.hariTanggalBulanTahun(
+                                  DateTime.now().toIso8601String(),
+                                ),
                                 style: AllMaterial.workSans(
                                   color: AllMaterial.colorGreySec,
                                 ),
@@ -153,19 +173,28 @@ class HomePetugasView extends GetView<HomePetugasController> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            AllMaterial.outlineText(
-                              title: "Absen Diterima",
-                              subtitle: "10 absen",
+                            Obx(
+                              () => AllMaterial.outlineText(
+                                title: "Absen Diterima",
+                                subtitle:
+                                    "${controller.absenDiterima.value} absen",
+                              ),
                             ),
                             const SizedBox(width: 8),
-                            AllMaterial.outlineText(
-                              title: "Absen Ditolak",
-                              subtitle: "2 absen",
+                            Obx(
+                              () => AllMaterial.outlineText(
+                                title: "Absen Ditolak",
+                                subtitle:
+                                    "${controller.absenDitolak.value} absen",
+                              ),
                             ),
                             const SizedBox(width: 8),
-                            AllMaterial.outlineText(
-                              title: "Absen Belum Ditinjau",
-                              subtitle: "7 absen",
+                            Obx(
+                              () => AllMaterial.outlineText(
+                                title: "Absen Belum Ditinjau",
+                                subtitle:
+                                    "${controller.absenBelumDitinjau.value} absen",
+                              ),
                             ),
                           ],
                         ),

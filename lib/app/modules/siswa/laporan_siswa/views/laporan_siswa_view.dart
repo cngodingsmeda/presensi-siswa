@@ -15,7 +15,7 @@ class LaporanSiswaView extends GetView<LaporanSiswaController> {
       body: AllMaterial.containerLinear(
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 20),
             child: Column(
               children: [
                 Text(
@@ -137,7 +137,6 @@ class LaporanSiswaView extends GetView<LaporanSiswaController> {
                           ),
                   ),
                 ),
-                // const SizedBox(height: 60),
               ],
             ),
           ),

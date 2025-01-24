@@ -78,8 +78,24 @@ class LoginPageView extends GetView<LoginPageController> {
                 AllMaterial.cusButton(
                   label: "Login",
                   onTap: () {
-                    loginController.loginSementara(
-                        loginController.userC.text, loginController.passC.text);
+                    if (loginController.userC.text != "" &&
+                        loginController.passC.text != "") {
+                      AllMaterial.cusDialogValidasi(
+                        title: "Login",
+                        subtitle: "Apakah Anda yakin?",
+                        onConfirm: () async {
+                          Get.back();
+                          await loginController.login(
+                              loginController.userC.text,
+                              loginController.passC.text);
+                        },
+                        onCancel: () => Get.back(),
+                      );
+                    } else {
+                      AllMaterial.messageScaffold(
+                        title: "Username atau Password tidak boleh kosong!",
+                      );
+                    }
                   },
                 ),
               ],

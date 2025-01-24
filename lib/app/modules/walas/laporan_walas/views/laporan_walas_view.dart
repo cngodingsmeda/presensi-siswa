@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import 'package:get/get.dart';
 import 'package:presensi_siswa/all_material.dart';
 import 'package:presensi_siswa/app/modules/walas/pilih_mapel_laporan_siswa_walas/views/pilih_mapel_laporan_siswa_walas_view.dart';
@@ -16,7 +15,7 @@ class LaporanWalasView extends GetView<LaporanWalasController> {
       body: AllMaterial.containerLinear(
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 20),
             child: Column(
               children: [
                 Text(
@@ -157,7 +156,6 @@ class LaporanWalasView extends GetView<LaporanWalasController> {
                 //           ),
                 //   ),
                 // ),
-                // const SizedBox(height: 60),
               ],
             ),
           ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:presensi_siswa/all_material.dart';
@@ -20,6 +19,7 @@ class AbsenHarianSiswaPetugasView
         child: SafeArea(
           child: Column(
             children: [
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -44,28 +44,55 @@ class AbsenHarianSiswaPetugasView
                   ),
                 ],
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                child: ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: controller.kelas.length,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: AllMaterial.cardWidget(
-                        svg: SvgPicture.asset("assets/svg/absen-ceklis.svg"),
-                        tengah: "Kelas ${controller.kelas[index]}",
-                        atas: "Senin, 24 Agustus 2024",
-                        bawah: "SMK Negeri 2 Mataram",
-                        onTap: () {
-                          Get.to(() => const AbsenKelasHarianPetugasView(),
-                              arguments: controller.kelas[index]);
-                        },
+              Obx(
+                () => controller.totalKelas.isEmpty
+                    ? Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Center(
+                            child: Text(
+                              "Tidak ada kelas yang dapat ditinjau",
+                              style: AllMaterial.workSans(
+                                fontWeight: AllMaterial.fontMedium,
+                                color: AllMaterial.colorGreySec,
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        child: Obx(
+                          () => ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount:
+                                  controller.kelas.value?.data?.length ?? 0,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.only(top: 16),
+                                  child: AllMaterial.cardWidget(
+                                    svg: SvgPicture.asset(
+                                        "assets/svg/absen-ceklis.svg"),
+                                    tengah:
+                                        "Kelas ${controller.kelas.value?.data?[index].nama}",
+                                    bawah: AllMaterial.hariTanggalBulanTahun(
+                                      DateTime.now().toIso8601String(),
+                                    ),
+                                    atas: "Absen Harian",
+                                    onTap: () {
+                                      Get.to(
+                                        () =>
+                                            const AbsenKelasHarianPetugasView(),
+                                        arguments: controller
+                                            .kelas.value?.data?[index].nama,
+                                      );
+                                    },
+                                  ),
+                                );
+                              }),
+                        ),
                       ),
-                    );
-                  },
-                ),
               ),
               const SizedBox(height: 20),
               // const SizedBox(height: 60),

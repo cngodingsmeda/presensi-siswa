@@ -13,7 +13,7 @@ class NotifikasiWalasView extends GetView<NotifikasiWalasController> {
       body: AllMaterial.containerLinear(
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 20),
             child: Column(
               children: [
                 Text(
@@ -66,7 +66,7 @@ class NotifikasiWalasView extends GetView<NotifikasiWalasController> {
                   ],
                 ),
                 const SizedBox(height: 20),
-                // const SizedBox(height: 60),
+                const SizedBox(height: 60),
               ],
             ),
           ),

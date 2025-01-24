@@ -1,4 +1,3 @@
 import 'package:get/get.dart';
 
-class ProfilPetugasController extends GetxController {
-}
+class ProfilPetugasController extends GetxController {}

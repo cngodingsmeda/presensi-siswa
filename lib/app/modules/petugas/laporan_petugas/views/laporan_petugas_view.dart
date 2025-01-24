@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:presensi_siswa/all_material.dart';
 import 'package:presensi_siswa/app/modules/petugas/absen_bulanan_siswa_petugas/views/absen_bulanan_siswa_petugas_view.dart';
@@ -16,7 +15,7 @@ class LaporanPetugasView extends GetView<LaporanPetugasController> {
       body: AllMaterial.containerLinear(
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.symmetric(vertical: 20),
             child: Column(
               children: [
                 Text(
@@ -133,6 +132,7 @@ class LaporanPetugasView extends GetView<LaporanPetugasController> {
                         );
                       }),
                 ),
+                // const SizedBox(height: 60),
               ],
             ),
           ),

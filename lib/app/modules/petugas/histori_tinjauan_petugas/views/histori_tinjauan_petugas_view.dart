@@ -22,6 +22,7 @@ class HistoriTinjauanPetugasView
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Header Row
+                const SizedBox(height: 10),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:presensi_siswa/all_material.dart';
@@ -15,8 +14,7 @@ class MainPetugasView extends GetView<MainPetugasController> {
   const MainPetugasView({super.key});
   @override
   Widget build(BuildContext context) {
-    final controller = MainPetugasController();
-
+    final controller = Get.put(MainPetugasController());
     return Scaffold(
       backgroundColor: AllMaterial.colorWhite,
       body: PageView(
