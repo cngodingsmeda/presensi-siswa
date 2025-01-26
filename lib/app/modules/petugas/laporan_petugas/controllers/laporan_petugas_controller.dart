@@ -1,18 +1,24 @@
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class LaporanPetugasController extends GetxController {
   var absen = [].obs;
   var selectedMonth = 6.obs;
-  var bulan = "".obs;
+  var bulanIni = "".obs;
   void updateHistoriAbsen(int month) {
     selectedMonth.value = month;
   }
 
-  var kelas = [
-    "X TKJ 1",
-    "X TKJ 2",
-    "X TKJ 3",
-    "X RPL 1",
-    "X RPL 2",
-  ];
+  @override
+  void onInit() {
+    DateTime now = DateTime.now();
+
+    int bulan = now.month;
+    String namaBulan = DateFormat('MMMM', 'id_ID').format(now);
+
+    print('Bulan ini adalah $namaBulan ($bulan)');
+    selectedMonth.value = bulan;
+    bulanIni.value = namaBulan;
+    super.onInit();
+  }
 }

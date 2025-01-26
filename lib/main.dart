@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:intl/date_symbol_data_local.dart';
+import 'package:presensi_siswa/all_material.dart';
 import 'package:presensi_siswa/app/modules/login_page/controllers/login_page_controller.dart';
 import 'package:presensi_siswa/app/modules/login_page/views/login_page_view.dart';
 import 'package:presensi_siswa/app/widget/splash_screen/custom_splash.dart';
@@ -17,6 +18,9 @@ void main() async {
     GetMaterialApp(
       title: "Presensi Siswa",
       getPages: AppPages.routes,
+      theme: ThemeData(
+        colorSchemeSeed: AllMaterial.colorPrimary,
+      ),
       locale: const Locale('id_ID'),
       debugShowCheckedModeBanner: false,
       home: const InitPage(),

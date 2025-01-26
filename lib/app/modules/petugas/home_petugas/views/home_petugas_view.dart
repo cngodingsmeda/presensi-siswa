@@ -201,6 +201,7 @@ class HomePetugasView extends GetView<HomePetugasController> {
                       ),
                       const SizedBox(height: 16),
                       Material(
+                        color: AllMaterial.colorWhite,
                         child: InkWell(
                           onTap: () {
                             Get.to(() => const HistoriTinjauanPetugasView());

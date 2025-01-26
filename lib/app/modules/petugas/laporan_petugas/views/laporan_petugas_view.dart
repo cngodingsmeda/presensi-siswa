@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:presensi_siswa/all_material.dart';
 import 'package:presensi_siswa/app/modules/petugas/absen_bulanan_siswa_petugas/views/absen_bulanan_siswa_petugas_view.dart';
+import 'package:presensi_siswa/app/modules/petugas/absen_harian_siswa_petugas/controllers/absen_harian_siswa_petugas_controller.dart';
+import 'package:presensi_siswa/app/modules/petugas/main_petugas/controllers/main_petugas_controller.dart';
 import 'package:svg_flutter/svg_flutter.dart';
 
 import '../controllers/laporan_petugas_controller.dart';
@@ -11,6 +13,10 @@ class LaporanPetugasView extends GetView<LaporanPetugasController> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(LaporanPetugasController());
+    final kelasC = Get.put(AbsenHarianSiswaPetugasController());
+    final profC = Get.put(MainPetugasController());
+    kelasC.fetchKelasTinjauan(getTo: false);
+    print(kelasC.kelas.value?.data?.kelas?.length);
     return Scaffold(
       body: AllMaterial.containerLinear(
         child: SafeArea(
@@ -106,31 +112,38 @@ class LaporanPetugasView extends GetView<LaporanPetugasController> {
                   ),
                 ),
                 Expanded(
-                  child: ListView.builder(
-                      itemCount: 5,
-                      itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.only(top: 16),
-                          child: Obx(
-                            () => AllMaterial.cardWidget(
-                              atas: "Absen ${controller.bulan}",
-                              tengah: "Kelas ${controller.kelas[index]}",
-                              bawah: "SMK Negeri 2 Mataram",
-                              onTap: () {
-                                Get.to(
-                                    () => const AbsenBulananSiswaPetugasView(),
-                                    arguments: {
-                                      "kelas":
-                                          controller.kelas[index].toString(),
-                                      "bulan": controller.bulan.value
-                                    });
-                              },
-                              svg: SvgPicture.asset(
-                                  "assets/svg/absen-ceklis.svg"),
+                  child: Obx(
+                    () => ListView.builder(
+                        itemCount: kelasC.kelas.value?.data?.kelas?.length ?? 0,
+                        itemBuilder: (context, index) {
+                          var kelasTinjauan =
+                              kelasC.kelas.value?.data?.kelas?[index];
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 16),
+                            child: Obx(
+                              () => AllMaterial.cardWidget(
+                                atas: "Absen ${controller.bulanIni}",
+                                tengah: "Kelas ${kelasTinjauan?.nama ?? ""}",
+                                bawah: profC.profilPetugas.value?.data?.sekolah
+                                        ?.nama!
+                                        .toUpperCase() ??
+                                    "",
+                                onTap: () {
+                                  Get.to(
+                                      () =>
+                                          const AbsenBulananSiswaPetugasView(),
+                                      arguments: {
+                                        "kelas": kelasTinjauan?.nama ?? "",
+                                        "bulan": controller.bulanIni.value
+                                      });
+                                },
+                                svg: SvgPicture.asset(
+                                    "assets/svg/absen-ceklis.svg"),
+                              ),
                             ),
-                          ),
-                        );
-                      }),
+                          );
+                        }),
+                  ),
                 ),
                 // const SizedBox(height: 60),
               ],
@@ -169,7 +182,7 @@ class ChoiceChipWidget extends StatelessWidget {
         onSelected: (bool selected) {
           if (selected) {
             controller.updateHistoriAbsen(month);
-            controller.bulan.value = label;
+            controller.bulanIni.value = label;
           }
         },
         backgroundColor: const Color(0xffECFAF0),

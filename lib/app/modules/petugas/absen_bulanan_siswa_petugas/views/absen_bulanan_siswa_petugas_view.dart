@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:presensi_siswa/all_material.dart';
+import 'package:presensi_siswa/app/modules/petugas/main_petugas/controllers/main_petugas_controller.dart';
 import 'package:presensi_siswa/app/modules/petugas/pelajaran_bulan_siswa_petugas/views/pelajaran_bulan_siswa_petugas_view.dart';
 
 import '../controllers/absen_bulanan_siswa_petugas_controller.dart';
@@ -16,6 +17,7 @@ class AbsenBulananSiswaPetugasView
   Widget build(BuildContext context) {
     final controller = Get.put(AbsenBulananSiswaPetugasController());
     var arg = Get.arguments ?? "";
+    final profC = Get.put(MainPetugasController());
     return Scaffold(
       backgroundColor: AllMaterial.colorWhite,
       body: SafeArea(
@@ -73,7 +75,9 @@ class AbsenBulananSiswaPetugasView
                           ),
                           AllMaterial.iconWidget(
                             icon: MdiIcons.mapMarker,
-                            title: "SMK Negeri 2 Mataram",
+                            title: profC
+                                    .profilPetugas.value?.data?.sekolah?.nama ??
+                                "",
                           ),
                         ],
                       ),

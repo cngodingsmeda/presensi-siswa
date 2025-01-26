@@ -22,7 +22,7 @@ class AbsenPelajaranSiswaPetugasView
         title: Column(
           children: [
             Text(
-              "${arg["kelas"]} - ${arg["nama"]}",
+              "${arg["kelas"]} - ${AllMaterial.formatNamaPanjang(arg["nama"] ?? "")}",
               style: AllMaterial.workSans(
                 color: AllMaterial.colorPrimary,
                 fontWeight: AllMaterial.fontSemiBold,
@@ -30,7 +30,9 @@ class AbsenPelajaranSiswaPetugasView
               ),
             ),
             Text(
-              "Senin, 25 Agustus 2024",
+              AllMaterial.hariTanggalBulanTahun(
+                DateTime.now().toIso8601String(),
+              ),
               style: AllMaterial.workSans(
                 color: AllMaterial.colorGreySec,
                 fontSize: 14,
@@ -44,131 +46,152 @@ class AbsenPelajaranSiswaPetugasView
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: 3,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 16),
-                    child: AllMaterial.menuJadwal(
-                      context: "Pukul ${controller.jam[index]}",
-                      title: "Jam ${controller.mapel[index]}",
-                      subtitleContext: "Guru Mapel :",
-                      subtitle: controller.guru[index],
-                      onTap: () {
-                        AllMaterial.detilKonten(
-                          buttonLabel: "Tutup Laporan",
-                          title: "Senin, 25 Agustus 2024",
-                          addSubtitle: false,
-                          icon: const Icon(
-                            Icons.clear,
-                            color: AllMaterial.colorWhite,
-                          ),
-                          onTap: () => Get.back(),
-                          konten: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: AllMaterial.contextWidget(
-                                      icon: MdiIcons.mapMarker,
-                                      subtitle: "Lokasi Absen",
-                                      title: "SMK Negeri 2 Mataram",
-                                    ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Expanded(
-                                    child: AllMaterial.contextWidget(
-                                      icon: MdiIcons.clock,
-                                      subtitle: "Waktu Absen",
-                                      title:
-                                          "Pukul ${controller.jamAbsen[index]}",
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 20),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Expanded(
-                                    child: AllMaterial.contextWidget(
-                                      icon: MdiIcons.account,
-                                      subtitle: "Nama Siswa",
-                                      title: arg["nama"],
-                                    ),
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Expanded(
-                                    child: AllMaterial.contextWidget(
-                                      icon: MdiIcons.fingerprint,
-                                      subtitle: "Jenis Absen",
-                                      title: "Absen Hadir",
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 20),
-                              Container(
-                                width: Get.width,
-                                padding: const EdgeInsets.all(16),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(15),
-                                  border: Border.all(
-                                    color: AllMaterial.colorStroke,
-                                    width: 1.5,
-                                  ),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.start,
+              child: Obx(
+                () => ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: controller.jadwal.value?.data?.length ?? 0,
+                  itemBuilder: (context, index) {
+                    var absen = controller.jadwal.value?.data?[index];
+                    return Padding(
+                      padding: const EdgeInsets.only(top: 16),
+                      child: AllMaterial.menuJadwal(
+                        context:
+                            "Pukul ${AllMaterial.jamMenit(absen?.jadwal?.jamMulai ?? "")} - ${AllMaterial.jamMenit(absen?.jadwal?.jamSelesai ?? "")}",
+                        title: "Jam ${absen?.jadwal?.mapel?.nama ?? ""}",
+                        subtitleContext: "Jenis Absen :",
+                        subtitle: absen?.status ?? "",
+                        onTap: () async {
+                          await controller
+                              .fetchDetilAbsenSiswaByIdPetugas("${absen?.id}");
+                          AllMaterial.detilKonten(
+                            buttonLabel: "Tutup Laporan",
+                            title: AllMaterial.hariTanggalBulanTahun(
+                              absen?.tanggal?.toIso8601String() ?? "",
+                            ),
+                            addSubtitle: false,
+                            icon: const Icon(
+                              Icons.clear,
+                              color: AllMaterial.colorWhite,
+                            ),
+                            onTap: () => Get.back(),
+                            konten: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      "Deskripsi Absen",
-                                      style: AllMaterial.workSans(
-                                        fontSize: 17,
-                                        color: AllMaterial.colorPrimary,
-                                        fontWeight: AllMaterial.fontSemiBold,
+                                    Expanded(
+                                      child: AllMaterial.contextWidget(
+                                        icon: MdiIcons.mapMarker,
+                                        subtitle: "Lokasi Absen",
+                                        title: controller
+                                                .detil
+                                                .value
+                                                ?.data
+                                                ?.jadwal
+                                                ?.koordinat
+                                                ?.namaTempat ??
+                                            "",
                                       ),
                                     ),
-                                    const SizedBox(height: 15),
-                                    Text(
-                                      "Tidak ada deskripsi yang ditambahkan.",
-                                      style: AllMaterial.workSans(
-                                        color: AllMaterial.colorGreySec,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 15),
-                                    Text(
-                                      "Bukti Dokumen",
-                                      style: AllMaterial.workSans(
-                                        fontSize: 17,
-                                        color: AllMaterial.colorPrimary,
-                                        fontWeight: AllMaterial.fontSemiBold,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 15),
-                                    Text(
-                                      "Tidak ada bukti dokumen yang ditambahkan.",
-                                      style: AllMaterial.workSans(
-                                        color: AllMaterial.colorGreySec,
+                                    const SizedBox(width: 10),
+                                    Expanded(
+                                      child: AllMaterial.contextWidget(
+                                        icon: MdiIcons.clock,
+                                        subtitle: "Waktu Absen",
+                                        title:
+                                            "Pukul ${controller.jamAbsen[index]}",
                                       ),
                                     ),
                                   ],
                                 ),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                },
+                                const SizedBox(height: 20),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Expanded(
+                                      child: AllMaterial.contextWidget(
+                                        icon: MdiIcons.account,
+                                        subtitle: "Nama Siswa",
+                                        title: AllMaterial.formatNamaPanjang(
+                                            arg["nama"] ?? ""),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Expanded(
+                                      child: AllMaterial.contextWidget(
+                                        icon: MdiIcons.fingerprint,
+                                        subtitle: "Jenis Absen",
+                                        title: "Absen ${absen?.status ?? ""}",
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 20),
+                                Container(
+                                  width: Get.width,
+                                  padding: const EdgeInsets.all(16),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    border: Border.all(
+                                      color: AllMaterial.colorStroke,
+                                      width: 1.5,
+                                    ),
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Deskripsi Absen",
+                                        style: AllMaterial.workSans(
+                                          fontSize: 17,
+                                          color: AllMaterial.colorPrimary,
+                                          fontWeight: AllMaterial.fontSemiBold,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 15),
+                                      Text(
+                                        (absen?.status == "hadir")
+                                            ? "Tidak ada deksripsi yang ditambahkan."
+                                            :
+                                            // absen.catatan ?? ""
+                                            "",
+                                        style: AllMaterial.workSans(
+                                          color: AllMaterial.colorGreySec,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 15),
+                                      Text(
+                                        "Bukti Dokumen",
+                                        style: AllMaterial.workSans(
+                                          fontSize: 17,
+                                          color: AllMaterial.colorPrimary,
+                                          fontWeight: AllMaterial.fontSemiBold,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 15),
+                                      Text(
+                                        "Tidak ada bukti dokumen yang ditambahkan.",
+                                        style: AllMaterial.workSans(
+                                          color: AllMaterial.colorGreySec,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
             const SizedBox(height: 20),

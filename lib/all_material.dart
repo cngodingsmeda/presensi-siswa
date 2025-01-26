@@ -808,6 +808,19 @@ abstract class AllMaterial {
     return formattedDate;
   }
 
+  // Format = 21:20
+static String jamMenit(String? waktu) {
+    if (waktu == null || waktu.isEmpty) {
+      return 'Belum Ditentukan';
+    }
+    try {
+      final parsedTime = DateFormat('HH:mm').parse(waktu);
+      return DateFormat('HH:mm').format(parsedTime);
+    } catch (e) {
+      return 'Format Tidak Valid';
+    }
+  }
+
   // Format Nama Panjang = James Werren A.G.H
   static String formatNamaPanjang(String namaPanjang) {
     List<String> namaArray = namaPanjang.split(' ');

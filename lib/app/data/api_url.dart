@@ -18,8 +18,13 @@ abstract class ApiUrl {
   static var urlGetStatistikTinjauanPetugas =
       "$url/petugasBK/absen/statistik-tinjauan";
   static var urlGetKelasTinjauanPetugas = "$url/petugasBK/absen/kelas-tinjauan";
-  static String getAbsenByKelasTinjauanPetugas(String tanggal, String idKelas) {
-    return "$url/petugasBK/absen/byKelas?tanggal=$tanggal&id_kelas=$idKelas";
+  static var urlGetHistoriTinjauanPetugas = "$url/petugasBK/absen/histori-tinjauan";
+  static var urlGetDetilHistoriTinjauanPetugas = "$url/petugasBK/absen/detail";
+  static String getAbsenByKelasTinjauanPetugas(String tanggal, String idKelas, String page) {
+    return "$url/petugasBK/absen/byKelas?tanggal=$tanggal&id_kelas=$idKelas&page=$page";
+  }
+  static String getAbsenSiswaByIdPetugas(String tanggal, String idSiswa) {
+    return "$url/petugasBK/absen/bySiswa?tanggal=$tanggal&id_siswa=$idSiswa";
   }
 
   // SISWA

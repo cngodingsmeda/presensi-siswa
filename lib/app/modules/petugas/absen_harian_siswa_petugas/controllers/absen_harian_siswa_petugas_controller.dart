@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:presensi_siswa/all_material.dart';
@@ -13,7 +12,7 @@ class AbsenHarianSiswaPetugasController extends GetxController {
   var token = AllMaterial.box.read("token");
   var totalKelas = [].obs;
 
-  Future<void> fetchKelasTinjauan() async {
+  Future<void> fetchKelasTinjauan({bool getTo = true}) async {
     try {
       final response = await http.get(
         Uri.parse(ApiUrl.urlGetKelasTinjauanPetugas),
@@ -22,27 +21,19 @@ class AbsenHarianSiswaPetugasController extends GetxController {
           "Authorization": "Bearer $token",
         },
       );
-      // Get.dialog(
-      //   const Center(
-      //     child: CircularProgressIndicator(
-      //       backgroundColor: AllMaterial.colorPrimary,
-      //       color: AllMaterial.colorSoftPrimary,
-      //     ),
-      //   ),
-      //   barrierDismissible: false,
-      // );
       print(response.statusCode);
       var data = jsonDecode(response.body);
       if (response.statusCode == 200) {
         kelas.value = KelasTinjauanPetugasModel.fromJson(data);
-        totalKelas.value = kelas.value!.data!;
-        Get.to(() => const AbsenHarianSiswaPetugasView());
+        totalKelas.value = kelas.value?.data?.kelas ?? [];
+        getTo ?
+        Get.to(() => const AbsenHarianSiswaPetugasView()) : null;
         print(data);
       } else {
         print(data);
       }
     } catch (e) {
-      print(e.toString());
+      print("${e.toString()} awadwadw");
     }
   }
 }
