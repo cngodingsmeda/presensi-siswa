@@ -38,8 +38,6 @@ import '../modules/petugas/main_petugas/bindings/main_petugas_binding.dart';
 import '../modules/petugas/main_petugas/views/main_petugas_view.dart';
 import '../modules/petugas/notifikasi_petugas/bindings/notifikasi_petugas_binding.dart';
 import '../modules/petugas/notifikasi_petugas/views/notifikasi_petugas_view.dart';
-import '../modules/petugas/pelajaran_bulan_siswa_petugas/bindings/pelajaran_bulan_siswa_petugas_binding.dart';
-import '../modules/petugas/pelajaran_bulan_siswa_petugas/views/pelajaran_bulan_siswa_petugas_view.dart';
 import '../modules/petugas/profil_petugas/bindings/profil_petugas_binding.dart';
 import '../modules/petugas/profil_petugas/views/profil_petugas_view.dart';
 import '../modules/siswa/absen_harian_siswa/bindings/absen_harian_siswa_binding.dart';
@@ -297,11 +295,6 @@ class AppPages {
       name: _Paths.ABSEN_BULANAN_SISWA_PETUGAS,
       page: () => const AbsenBulananSiswaPetugasView(),
       binding: AbsenBulananSiswaPetugasBinding(),
-    ),
-    GetPage(
-      name: _Paths.PELAJARAN_BULAN_SISWA_PETUGAS,
-      page: () => const PelajaranBulanSiswaPetugasView(),
-      binding: PelajaranBulanSiswaPetugasBinding(),
     ),
     GetPage(
       name: _Paths.EDIT_PROFIL_PETUGAS,

@@ -7,6 +7,7 @@ import 'package:presensi_siswa/all_material.dart';
 import 'package:presensi_siswa/app/controller/general_controller.dart';
 import 'package:presensi_siswa/app/data/api_url.dart';
 import 'package:presensi_siswa/app/model/model_petugas/profil_petugas_model.dart';
+import 'package:presensi_siswa/app/modules/petugas/histori_tinjauan_petugas/controllers/histori_tinjauan_petugas_controller.dart';
 import 'package:presensi_siswa/app/modules/petugas/home_petugas/controllers/home_petugas_controller.dart';
 
 class MainPetugasController extends GetxController {
@@ -18,8 +19,9 @@ class MainPetugasController extends GetxController {
   var userNameFilter = "P".obs;
   String token = AllMaterial.box.read("token");
   final homeCont = Get.put(HomePetugasController());
+  final historiC = Get.put(HistoriTinjauanPetugasController());
 
-// Home
+  // Home
   Future<void> fetchStatistikTinjauan() async {
     try {
       final response = await http.get(
@@ -36,6 +38,43 @@ class MainPetugasController extends GetxController {
         homeCont.absenDiterima.value = data["data"]["diterima"] ?? 0;
         homeCont.absenDitolak.value = data["data"]["ditolak"] ?? 0;
         print(data);
+      } else {
+        print(data);
+      }
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<void> patchTinjauanAbsenPetugas(bool isDiterima, String id) async {
+    print(id);
+    try {
+      print("${ApiUrl.urlPatchTinjauAbsenPetugas}/$id");
+      final response = await http.patch(
+        Uri.parse("${ApiUrl.urlPatchTinjauAbsenPetugas}/$id"),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+        body: jsonEncode(
+          {
+            "status_tinjauan": isDiterima == true ? "diterima" : "ditolak",
+          },
+        ),
+      );
+      print(response.statusCode);
+      var data = jsonDecode(response.body);
+      if (response.statusCode == 200) {
+        print(data);
+        historiC.absen.refresh();
+        historiC.absenDiterima.refresh();
+        historiC.absenDitolak.refresh();
+        historiC.absenPending.refresh();
+        historiC.detilAbsen.refresh();
+        historiC.fetchHistoriTinjauanPetugas();
+        final mainCont = Get.put(MainPetugasController());
+
+        mainCont.fetchStatistikTinjauan();
       } else {
         print(data);
       }
@@ -81,6 +120,7 @@ class MainPetugasController extends GetxController {
   @override
   void onInit() {
     fetchProfilPetugas();
+    historiC.fetchHistoriTinjauanPetugas();
     fetchStatistikTinjauan();
     super.onInit();
   }

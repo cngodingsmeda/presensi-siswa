@@ -5,8 +5,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:presensi_siswa/all_material.dart';
+import 'package:presensi_siswa/app/modules/petugas/absen_pelajaran_siswa_petugas/views/absen_pelajaran_siswa_petugas_view.dart';
 import 'package:presensi_siswa/app/modules/petugas/main_petugas/controllers/main_petugas_controller.dart';
-import 'package:presensi_siswa/app/modules/petugas/pelajaran_bulan_siswa_petugas/views/pelajaran_bulan_siswa_petugas_view.dart';
+import 'package:presensi_siswa/app/widget/status_row/status_row.dart';
 
 import '../controllers/absen_bulanan_siswa_petugas_controller.dart';
 
@@ -18,6 +19,7 @@ class AbsenBulananSiswaPetugasView
     final controller = Get.put(AbsenBulananSiswaPetugasController());
     var arg = Get.arguments ?? "";
     final profC = Get.put(MainPetugasController());
+    var namaKelas = Get.arguments["namaKelas"];
     return Scaffold(
       backgroundColor: AllMaterial.colorWhite,
       body: SafeArea(
@@ -38,9 +40,7 @@ class AbsenBulananSiswaPetugasView
                 ),
                 InkWell(
                   borderRadius: BorderRadius.circular(100),
-                  onTap: () {
-                    // Get.to(() => const JadwalAbsenSiswaView());
-                  },
+                  onTap: () {},
                   child: Ink(
                     padding: const EdgeInsets.all(14),
                     child: SvgPicture.asset(
@@ -59,7 +59,7 @@ class AbsenBulananSiswaPetugasView
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Absen ${arg["bulan"]} ${arg["kelas"]}",
+                        "Absen ${arg["bulan"]} $namaKelas",
                         style: AllMaterial.workSans(
                           fontSize: 25,
                           fontWeight: AllMaterial.fontMedium,
@@ -158,66 +158,112 @@ class AbsenBulananSiswaPetugasView
                         ),
                       ),
                       const SizedBox(height: 30),
-                      Column(
-                        children: List.generate(
-                          controller.nama.length,
-                          (index) {
-                            return Column(
-                              children: [
-                                ListTile(
-                                  contentPadding: EdgeInsets.zero,
-                                  minVerticalPadding: 0,
-                                  leading: Text(
-                                    "${index + 1}.",
-                                    style: AllMaterial.workSans(
-                                      fontWeight: AllMaterial.fontBold,
-                                      fontSize: 15,
-                                      color: AllMaterial.colorBlack,
+                      Obx(
+                        () => Column(
+                          children: List.generate(
+                            controller.jumlahSiswa.value,
+                            (index) {
+                              String namaSiswa = controller.listSiswa[index];
+
+                              int countKeys(Map<String, dynamic>? data,
+                                  String namaSiswa) {
+                                if (data == null) return 0;
+
+                                Map<String, dynamic>? siswaData =
+                                    data[namaSiswa] as Map<String, dynamic>?;
+                                if (siswaData == null) return 0;
+                                return siswaData.keys.length;
+                              }
+
+                              int totalKeys = countKeys(
+                                controller.absen.value?.data?.absen,
+                                namaSiswa,
+                              );
+
+                              return Column(
+                                children: [
+                                  ListTile(
+                                    contentPadding: EdgeInsets.zero,
+                                    minVerticalPadding: 0,
+                                    leading: Text(
+                                      "${index + 1}.",
+                                      style: AllMaterial.workSans(
+                                        fontWeight: AllMaterial.fontBold,
+                                        fontSize: 15,
+                                        color: AllMaterial.colorBlack,
+                                      ),
                                     ),
-                                  ),
-                                  title: Text(
-                                    controller.nama[index],
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: AllMaterial.workSans(
-                                      fontWeight: AllMaterial.fontRegular,
-                                      fontSize: 14,
-                                      color: AllMaterial.colorGreySec,
+                                    title: Text(
+                                      namaSiswa,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: AllMaterial.workSans(
+                                        fontWeight: AllMaterial.fontRegular,
+                                        fontSize: 14,
+                                        color: AllMaterial.colorGreySec,
+                                      ),
                                     ),
+                                    trailing: StatusRow(
+                                      namaSiswa: namaSiswa,
+                                      dataSiswa:
+                                          controller.absen.value?.data?.absen,
+                                      jumlahMapel: totalKeys,
+                                    ),
+                                    onTap: () {
+                                      final siswaKey = namaSiswa;
+
+                                      final dataSiswa =
+                                          controller.absen.value?.data?.absen;
+
+                                      int? getIdSiswa(
+                                          String siswaKey, String key) {
+                                        final data = dataSiswa?[siswaKey]?[key];
+                                        if (data != null) {
+                                          return data["id_siswa"];
+                                        }
+                                        return 0;
+                                      }
+
+                                      bool areAllValuesNull() {
+                                        for (int i = 1; i <= totalKeys; i++) {
+                                          String key = i.toString();
+                                          if (dataSiswa?[siswaKey]?[key] !=
+                                              null) {
+                                            return false;
+                                          }
+                                        }
+                                        return true;
+                                      }
+
+                                      bool isAlpa = areAllValuesNull();
+                                      final idSiswa =
+                                          getIdSiswa(siswaKey, "$totalKeys");
+                                      if (isAlpa) {
+                                        AllMaterial.messageScaffold(
+                                          title:
+                                              "Tidak ditemukan Absen untuk siswa terkait!",
+                                        );
+                                      } else {
+                                        print(idSiswa);
+                                        Get.to(
+                                          () =>
+                                              const AbsenPelajaranSiswaPetugasView(),
+                                          arguments: {
+                                            "idSiswa": idSiswa,
+                                            "kelas": namaKelas,
+                                            "nama": namaSiswa,
+                                          },
+                                        );
+                                      }
+                                    },
                                   ),
-                                  trailing: const Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Icon(
-                                        Icons.check,
-                                        color: AllMaterial.colorPrimary,
-                                      ),
-                                      Icon(
-                                        Icons.clear,
-                                        color: AllMaterial.colorRed,
-                                      ),
-                                      Icon(
-                                        Icons.check,
-                                        color: AllMaterial.colorPrimary,
-                                      ),
-                                    ],
+                                  const Divider(
+                                    color: AllMaterial.colorStroke,
                                   ),
-                                  onTap: () {
-                                    Get.to(
-                                        () =>
-                                            const PelajaranBulanSiswaPetugasView(),
-                                        arguments: {
-                                          "kelas": arg["kelas"],
-                                          "nama": controller.nama[index]
-                                        });
-                                  },
-                                ),
-                                const Divider(
-                                  color: AllMaterial.colorStroke,
-                                ),
-                              ],
-                            );
-                          },
+                                ],
+                              );
+                            },
+                          ),
                         ),
                       ),
                     ],
@@ -253,10 +299,12 @@ class AbsenBulananSiswaPetugasView
                 ),
               ),
             ),
-            Text(
-              "10 dari 32",
-              style: AllMaterial.workSans(
-                fontSize: 14,
+            Obx(
+              () => Text(
+                "${controller.listSiswa.length} dari ${controller.jumlahSiswa.value}",
+                style: AllMaterial.workSans(
+                  fontSize: 14,
+                ),
               ),
             ),
             TextButton(

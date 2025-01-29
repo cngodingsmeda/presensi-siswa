@@ -42,7 +42,7 @@ class Data {
   String? file;
   String? status;
   Siswa? siswa;
-  dynamic detail;
+  Detail? detail;
   Jadwal? jadwal;
 
   Data({
@@ -68,7 +68,7 @@ class Data {
         file: json["file"],
         status: json["status"],
         siswa: json["siswa"] == null ? null : Siswa.fromJson(json["siswa"]),
-        detail: json["detail"],
+        detail: json["detail"] == null ? null : Detail.fromJson(json["detail"]),
         jadwal: json["jadwal"] == null ? null : Jadwal.fromJson(json["jadwal"]),
       );
 
@@ -82,8 +82,48 @@ class Data {
         "file": file,
         "status": status,
         "siswa": siswa?.toJson(),
-        "detail": detail,
+        "detail": detail?.toJson(),
         "jadwal": jadwal?.toJson(),
+      };
+}
+
+class Detail {
+  int? id;
+  int? idAbsen;
+  String? catatan;
+  String? statusTinjauan;
+  dynamic idPeninjau;
+  dynamic tanggalTinjauan;
+  dynamic petugasBk;
+
+  Detail({
+    this.id,
+    this.idAbsen,
+    this.catatan,
+    this.statusTinjauan,
+    this.idPeninjau,
+    this.tanggalTinjauan,
+    this.petugasBk,
+  });
+
+  factory Detail.fromJson(Map<String, dynamic> json) => Detail(
+        id: json["id"],
+        idAbsen: json["id_absen"],
+        catatan: json["catatan"],
+        statusTinjauan: json["status_tinjauan"],
+        idPeninjau: json["id_peninjau"],
+        tanggalTinjauan: json["tanggal_tinjauan"],
+        petugasBk: json["petugas_bk"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "id_absen": idAbsen,
+        "catatan": catatan,
+        "status_tinjauan": statusTinjauan,
+        "id_peninjau": idPeninjau,
+        "tanggal_tinjauan": tanggalTinjauan,
+        "petugas_bk": petugasBk,
       };
 }
 

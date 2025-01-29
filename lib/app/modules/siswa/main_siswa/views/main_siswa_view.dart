@@ -5,9 +5,7 @@ import 'package:presensi_siswa/all_material.dart';
 import 'package:presensi_siswa/app/modules/siswa/home_siswa/views/home_siswa_view.dart';
 import 'package:presensi_siswa/app/modules/siswa/laporan_siswa/views/laporan_siswa_view.dart';
 import 'package:presensi_siswa/app/modules/siswa/notifikasi_siswa/views/notifikasi_siswa_view.dart';
-import 'package:presensi_siswa/app/modules/siswa/profil_siswa/controllers/profil_siswa_controller.dart';
 import 'package:presensi_siswa/app/modules/siswa/profil_siswa/views/profil_siswa_view.dart';
-import 'package:presensi_siswa/app/widget/error_screen/error_screen.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 
 import '../controllers/main_siswa_controller.dart';
@@ -17,34 +15,27 @@ class MainSiswaView extends GetView<MainSiswaController> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(MainSiswaController());
-    final profCont = Get.put(ProfilSiswaController());
 
     return Scaffold(
       backgroundColor: AllMaterial.colorWhite,
-      body: ErrorScreen(
-        role: "siswa",
-        statusCode: profCont.statusCode.value,
-        value: profCont.profilSiswa.value,
-        isLoading: profCont.isLoading,
-        child: PageView(
-          controller: controller.pageController,
-          onPageChanged: (value) {
-            controller.currentIndexBar.value = value;
-          },
-          children: const [
-            // NAVIGASI HOME
-            HomeSiswaView(),
+      body: PageView(
+        controller: controller.pageController,
+        onPageChanged: (value) {
+          controller.currentIndexBar.value = value;
+        },
+        children: const [
+          // NAVIGASI HOME
+          HomeSiswaView(),
 
-            // NAVIGASI LAPORAN
-            LaporanSiswaView(),
+          // NAVIGASI LAPORAN
+          LaporanSiswaView(),
 
-            // NAVIGASI NOTIFIKASI
-            NotifikasiSiswaView(),
+          // NAVIGASI NOTIFIKASI
+          NotifikasiSiswaView(),
 
-            // NAVIGASI PROFIL
-            ProfilSiswaView(),
-          ],
-        ),
+          // NAVIGASI PROFIL
+          ProfilSiswaView()
+        ],
       ),
       bottomNavigationBar: Obx(
         () => SalomonBottomBar(

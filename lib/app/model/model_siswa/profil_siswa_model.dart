@@ -40,6 +40,7 @@ class Data {
     Jurusan? jurusan;
     Alamat? alamat;
     Kelas? kelas;
+    Sekolah? sekolah;
 
     Data({
         this.id,
@@ -53,6 +54,7 @@ class Data {
         this.jurusan,
         this.alamat,
         this.kelas,
+        this.sekolah,
     });
 
     factory Data.fromJson(Map<String, dynamic> json) => Data(
@@ -67,6 +69,7 @@ class Data {
         jurusan: json["jurusan"] == null ? null : Jurusan.fromJson(json["jurusan"]),
         alamat: json["alamat"] == null ? null : Alamat.fromJson(json["alamat"]),
         kelas: json["kelas"] == null ? null : Kelas.fromJson(json["kelas"]),
+        sekolah: json["sekolah"] == null ? null : Sekolah.fromJson(json["sekolah"]),
     );
 
     Map<String, dynamic> toJson() => {
@@ -81,6 +84,7 @@ class Data {
         "jurusan": jurusan?.toJson(),
         "alamat": alamat?.toJson(),
         "kelas": kelas?.toJson(),
+        "sekolah": sekolah?.toJson(),
     };
 }
 
@@ -169,5 +173,33 @@ class Kelas {
         "id": id,
         "nama": nama,
         "id_jurusan": idJurusan,
+    };
+}
+
+class Sekolah {
+    int? id;
+    String? npsn;
+    String? nama;
+    String? logo;
+
+    Sekolah({
+        this.id,
+        this.npsn,
+        this.nama,
+        this.logo,
+    });
+
+    factory Sekolah.fromJson(Map<String, dynamic> json) => Sekolah(
+        id: json["id"],
+        npsn: json["npsn"],
+        nama: json["nama"],
+        logo: json["logo"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "id": id,
+        "npsn": npsn,
+        "nama": nama,
+        "logo": logo,
     };
 }

@@ -5,6 +5,10 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:http/http.dart' as http;
+import 'package:permission_handler/permission_handler.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 
 abstract class AllMaterial {
   static var box = GetStorage();
@@ -671,10 +675,6 @@ abstract class AllMaterial {
               color: AllMaterial.colorGreySec,
               fontWeight: AllMaterial.fontRegular,
             ),
-            contentPadding: const EdgeInsets.symmetric(
-              vertical: 5,
-              horizontal: 14,
-            ),
             focusedBorder: OutlineInputBorder(
               borderSide: const BorderSide(
                 color: AllMaterial.colorPrimary,
@@ -809,7 +809,7 @@ abstract class AllMaterial {
   }
 
   // Format = 21:20
-static String jamMenit(String? waktu) {
+  static String jamMenit(String? waktu) {
     if (waktu == null || waktu.isEmpty) {
       return 'Belum Ditentukan';
     }
@@ -829,6 +829,35 @@ static String jamMenit(String? waktu) {
         namaArray.skip(3).map((nama) => '${nama[0]}.').toList();
 
     return (namaTigaPertama + inisialSisa).join(' ');
+  }
+
+  // Download & Save Image
+  static Future<void> downloadAndSaveImage(
+      String imageUrl, String namePath) async {
+    PermissionStatus status = await Permission.storage.request();
+
+    if (status.isGranted) {
+      try {
+        final directory = await getApplicationDocumentsDirectory();
+        final savePath = '${directory.path}/$namePath.jpg';
+
+        final response = await http.get(Uri.parse(imageUrl));
+
+        if (response.statusCode == 200) {
+          final file = File(savePath);
+          await file.writeAsBytes(response.bodyBytes);
+          print("Image downloaded and saved to $savePath");
+        } else {
+          print("Failed to load image");
+        }
+      } catch (e) {
+        print("Download failed: $e");
+      }
+    } else {
+      print(
+          "Storage permission denied. Please enable storage permission in settings.");
+      openAppSettings();
+    }
   }
 
   static String getErrorMessage(int statusCode) {

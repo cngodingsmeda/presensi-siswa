@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:presensi_siswa/all_material.dart';
-
+import 'package:presensi_siswa/app/data/api_url.dart';
 import '../controllers/edit_profil_petugas_controller.dart';
 
 class EditProfilPetugasView extends GetView<EditProfilPetugasController> {
@@ -11,7 +11,6 @@ class EditProfilPetugasView extends GetView<EditProfilPetugasController> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(EditProfilPetugasController());
-
     return Scaffold(
       backgroundColor: AllMaterial.colorWhite,
       resizeToAvoidBottomInset: true,
@@ -57,6 +56,25 @@ class EditProfilPetugasView extends GetView<EditProfilPetugasController> {
                           boxShadow: [AllMaterial.topShadow],
                           borderRadius: BorderRadius.circular(1000),
                           color: AllMaterial.colorMint,
+                          image:
+                              controller.mainCont.profilPetugas.value?.data?.fotoProfile ==
+                                          "" ||
+                                      controller.mainCont.profilPetugas.value?.data
+                                              ?.fotoProfile ==
+                                          null
+                                  ? null
+                                  : DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: NetworkImage(
+                                        controller.mainCont.profilPetugas.value?.data
+                                                ?.fotoProfile
+                                                ?.replaceAll(
+                                              "localhost",
+                                              ApiUrl.baseUrl,
+                                            ) ??
+                                            "https://picsum.photos/200/300?grayscale",
+                                      ),
+                                    ),
                         ),
                         child: IconButton(
                           color: AllMaterial.colorPrimary,

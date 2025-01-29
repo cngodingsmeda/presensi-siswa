@@ -3,8 +3,10 @@ import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:presensi_siswa/all_material.dart';
 import 'package:presensi_siswa/app/controller/general_controller.dart';
+import 'package:presensi_siswa/app/data/api_url.dart';
 import 'package:presensi_siswa/app/modules/siswa/absen_harian_siswa/views/absen_harian_siswa_view.dart';
 import 'package:presensi_siswa/app/modules/siswa/edit_profil_siswa/views/edit_profil_siswa_view.dart';
+import 'package:presensi_siswa/app/modules/siswa/main_siswa/controllers/main_siswa_controller.dart';
 import 'package:presensi_siswa/app/widget/ubah_password/views/ubah_password_view.dart';
 import 'package:presensi_siswa/app/widget/verifikasi_email/views/verifikasi_email_view.dart';
 
@@ -15,6 +17,7 @@ class ProfilSiswaView extends GetView<ProfilSiswaController> {
 
   @override
   Widget build(BuildContext context) {
+    final mainCont = Get.put(MainSiswaController());
     return Scaffold(
       backgroundColor: AllMaterial.colorWhite,
       body: AllMaterial.containerLinear(
@@ -36,22 +39,55 @@ class ProfilSiswaView extends GetView<ProfilSiswaController> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Container(
-                        alignment: Alignment.bottomRight,
-                        height: 80,
-                        width: 80,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(1000),
-                          color: AllMaterial.colorMint,
-                        ),
-                      ),
+                      mainCont.profilSiswa.value?.data?.fotoProfile == "" || mainCont.profilSiswa.value?.data?.fotoProfile == null
+                          ? Container(
+                              alignment: Alignment.center,
+                              height: 80,
+                              width: 80,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(1000),
+                                color: AllMaterial.colorMint,
+                              ),
+                              child: Obx(
+                                () => Text(
+                                  mainCont.userNameFilter.value,
+                                  style: AllMaterial.workSans(
+                                    color: AllMaterial.colorWhite,
+                                    fontWeight: AllMaterial.fontSemiBold,
+                                    fontSize: 40,
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Container(
+                              alignment: Alignment.center,
+                              height: 80,
+                              width: 80,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(1000),
+                                color: AllMaterial.colorMint,
+                                image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(
+                                    mainCont.profilSiswa.value?.data
+                                            ?.fotoProfile
+                                            ?.replaceAll(
+                                          "localhost",
+                                          ApiUrl.baseUrl,
+                                        ) ??
+                                        "https://picsum.photos/200/300?grayscale",
+                                  ),
+                                ),
+                              ),
+                            ),
                       const SizedBox(width: 16),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Habil Arlian Asrori",
+                              AllMaterial.formatNamaPanjang(
+                                  mainCont.profilSiswa.value?.data?.nama ?? ""),
                               style: AllMaterial.workSans(
                                 fontWeight: AllMaterial.fontBold,
                                 fontSize: 20,
@@ -59,7 +95,7 @@ class ProfilSiswaView extends GetView<ProfilSiswaController> {
                               ),
                             ),
                             Text(
-                              "NIS : 21424521232",
+                              "NIS : ${mainCont.profilSiswa.value?.data?.nis ?? ""}",
                               style: AllMaterial.workSans(
                                 fontWeight: AllMaterial.fontMedium,
                                 fontSize: 14,

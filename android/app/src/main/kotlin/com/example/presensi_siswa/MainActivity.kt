@@ -1,5 +1,7 @@
-package com.example.presensi_siswa
+package com.presensi_siswa
 
 import io.flutter.embedding.android.FlutterActivity
 
-class MainActivity: FlutterActivity()
+class MainActivity: FlutterActivity(){
+    
+}

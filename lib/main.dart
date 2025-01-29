@@ -6,6 +6,7 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'package:presensi_siswa/all_material.dart';
 import 'package:presensi_siswa/app/modules/login_page/controllers/login_page_controller.dart';
 import 'package:presensi_siswa/app/modules/login_page/views/login_page_view.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:presensi_siswa/app/widget/splash_screen/custom_splash.dart';
 
 import 'app/routes/app_pages.dart';
@@ -13,6 +14,7 @@ import 'app/routes/app_pages.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDateFormatting('id_ID', null);
+  await Permission.storage.request();
   await GetStorage.init();
   runApp(
     GetMaterialApp(

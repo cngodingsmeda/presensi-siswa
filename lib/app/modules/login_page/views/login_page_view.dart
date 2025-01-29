@@ -27,7 +27,6 @@ class LoginPageView extends GetView<LoginPageController> {
                   ),
                 ),
                 const SizedBox(height: 50),
-                // Username Field
                 AllMaterial.textField(
                   label: "Username",
                   controller: loginController.userC,
@@ -35,7 +34,6 @@ class LoginPageView extends GetView<LoginPageController> {
                 ),
                 const SizedBox(height: 20),
 
-                // Password Field
                 Obx(() => TextField(
                       controller: loginController.passC,
                       focusNode: loginController.passF,
@@ -77,20 +75,11 @@ class LoginPageView extends GetView<LoginPageController> {
                 const SizedBox(height: 25),
                 AllMaterial.cusButton(
                   label: "Login",
-                  onTap: () {
+                  onTap: () async {
                     if (loginController.userC.text != "" &&
                         loginController.passC.text != "") {
-                      AllMaterial.cusDialogValidasi(
-                        title: "Login",
-                        subtitle: "Apakah Anda yakin?",
-                        onConfirm: () async {
-                          Get.back();
-                          await loginController.login(
-                              loginController.userC.text,
-                              loginController.passC.text);
-                        },
-                        onCancel: () => Get.back(),
-                      );
+                      await loginController.login(loginController.userC.text,
+                          loginController.passC.text);
                     } else {
                       AllMaterial.messageScaffold(
                         title: "Username atau Password tidak boleh kosong!",

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:presensi_siswa/all_material.dart';
-import 'package:presensi_siswa/app/modules/siswa/detil_laporan_siswa/views/detil_laporan_siswa_view.dart';
+import 'package:presensi_siswa/app/modules/petugas/absen_harian_siswa_petugas/controllers/absen_harian_siswa_petugas_controller.dart';
+import 'package:presensi_siswa/app/modules/siswa/profil_siswa/controllers/profil_siswa_controller.dart';
 
 import '../controllers/laporan_siswa_controller.dart';
 
@@ -11,6 +12,8 @@ class LaporanSiswaView extends GetView<LaporanSiswaController> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(LaporanSiswaController());
+    final profC = Get.put(ProfilSiswaController());
+    final kelasC = Get.put(AbsenHarianSiswaPetugasController());
     return Scaffold(
       body: AllMaterial.containerLinear(
         child: SafeArea(
@@ -19,7 +22,7 @@ class LaporanSiswaView extends GetView<LaporanSiswaController> {
             child: Column(
               children: [
                 Text(
-                  "Laporan Saya",
+                  "Laporan Kelas",
                   style: AllMaterial.workSans(
                     fontSize: 17,
                     fontWeight: AllMaterial.fontSemiBold,
@@ -105,36 +108,42 @@ class LaporanSiswaView extends GetView<LaporanSiswaController> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 20),
                 Expanded(
                   child: Obx(
-                    () => controller.absen.isNotEmpty
-                        ? ListView.builder(
-                            itemCount: controller.absen.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.only(top: 16),
-                                child: AllMaterial.cardWidget(
-                                  atas: "Absen Hadir",
-                                  tengah: "Senin, 24 Agustus 2024",
-                                  bawah: "SMK Negeri 2 Mataram",
-                                  onTap: () {
-                                    Get.to(() => const DetilLaporanSiswaView());
-                                  },
-                                  svg: SvgPicture.asset(
-                                      "assets/svg/absen-ceklis.svg"),
+                    () => ListView.builder(
+                        itemCount: kelasC.kelas.value?.data?.kelas?.length ?? 0,
+                        itemBuilder: (context, index) {
+                          var kelasTinjauan =
+                              kelasC.kelas.value?.data?.kelas?[index];
+                          return Padding(
+                            padding: const EdgeInsets.only(top: 16),
+                            child: Obx(
+                              () => AllMaterial.cardWidget(
+                                atas: "Absen ${controller.bulanIni}",
+                                tengah: "Kelas ${kelasTinjauan?.nama ?? ""}",
+                                bawah: profC
+                                        .profilSiswa.value?.data?.sekolah?.nama!
+                                        .toUpperCase() ??
+                                    "",
+                                onTap: () {
+                                  // Get.to(
+                                  //     () =>
+                                  //         const AbsenBulananSiswaPetugasView(),
+                                  //     arguments: {
+                                  //       "namaKelas": kelasTinjauan?.nama ?? "",
+                                  //       "idKelas":
+                                  //           kelasTinjauan?.id.toString() ?? "",
+                                  //       "bulan": controller.bulanIni.value
+                                  //     });
+                                },
+                                svg: SvgPicture.asset(
+                                  "assets/svg/absen-ceklis.svg",
+                                  fit: BoxFit.cover,
                                 ),
-                              );
-                            },
-                          )
-                        : Center(
-                            child: Text(
-                              "Tidak ada Laporan Saya untuk bulan ini",
-                              style: AllMaterial.workSans(
-                                color: AllMaterial.colorGreySec,
                               ),
                             ),
-                          ),
+                          );
+                        }),
                   ),
                 ),
               ],

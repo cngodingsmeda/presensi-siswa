@@ -4,7 +4,9 @@ import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:presensi_siswa/all_material.dart';
 import 'package:presensi_siswa/app/modules/siswa/buat_absen_harian_siswa/views/buat_absen_harian_siswa_view.dart';
+import 'package:presensi_siswa/app/modules/siswa/home_siswa/controllers/home_siswa_controller.dart';
 import 'package:presensi_siswa/app/modules/siswa/jadwal_absen_siswa/views/jadwal_absen_siswa_view.dart';
+import 'package:presensi_siswa/app/modules/siswa/main_siswa/controllers/main_siswa_controller.dart';
 
 import '../controllers/absen_harian_siswa_controller.dart';
 
@@ -13,6 +15,8 @@ class AbsenHarianSiswaView extends GetView<AbsenHarianSiswaController> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(AbsenHarianSiswaController());
+    final mainCont = Get.put(MainSiswaController());
+    final homeCont = Get.put(HomeSiswaController());
     return Scaffold(
       backgroundColor: AllMaterial.colorWhite,
       body: SafeArea(
@@ -50,7 +54,8 @@ class AbsenHarianSiswaView extends GetView<AbsenHarianSiswaController> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "SMK Negeri 2 Mataram",
+                            mainCont.profilSiswa.value?.data?.sekolah?.nama ??
+                                "",
                             style: AllMaterial.workSans(
                               fontSize: 25,
                               fontWeight: AllMaterial.fontMedium,
@@ -88,11 +93,14 @@ class AbsenHarianSiswaView extends GetView<AbsenHarianSiswaController> {
                                           color: AllMaterial.colorPrimary,
                                         ),
                                         const SizedBox(width: 4),
-                                        Text(
-                                          "3 Mapel",
-                                          style: AllMaterial.workSans(
-                                            color: AllMaterial.colorPrimary,
-                                            fontWeight: AllMaterial.fontMedium,
+                                        Obx(
+                                          () => Text(
+                                            "${controller.jumlahMapel.value} Mapel",
+                                            style: AllMaterial.workSans(
+                                              color: AllMaterial.colorPrimary,
+                                              fontWeight:
+                                                  AllMaterial.fontMedium,
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -100,17 +108,67 @@ class AbsenHarianSiswaView extends GetView<AbsenHarianSiswaController> {
                                   ],
                                 ),
                               ),
-                              AllMaterial.iconWidget(
-                                icon: MdiIcons.clock,
-                                title: "Pukul 07:00-14:00",
-                              ),
+                              Obx(() {
+                                var jadwalAbsen =
+                                    controller.jadwal.value?.data?.dataJadwal ??
+                                        [];
+                                if (jadwalAbsen.isEmpty) {
+                                  return AllMaterial.iconWidget(
+                                      icon: MdiIcons.clock,
+                                      title: "Tidak ada jadwal");
+                                } else {
+                                  return AllMaterial.iconWidget(
+                                    icon: MdiIcons.clock,
+                                    title: controller
+                                                    .jadwal
+                                                    .value
+                                                    ?.data
+                                                    ?.dataJadwal
+                                                    ?.first
+                                                    .jadwal
+                                                    ?.jamMulai ==
+                                                "" &&
+                                            controller
+                                                    .jadwal
+                                                    .value
+                                                    ?.data
+                                                    ?.dataJadwal
+                                                    ?.first
+                                                    .jadwal
+                                                    ?.jamMulai ==
+                                                null &&
+                                            controller
+                                                    .jadwal
+                                                    .value
+                                                    ?.data
+                                                    ?.dataJadwal
+                                                    ?.last
+                                                    .jadwal
+                                                    ?.jamSelesai ==
+                                                "" &&
+                                            controller
+                                                    .jadwal
+                                                    .value
+                                                    ?.data
+                                                    ?.dataJadwal
+                                                    ?.last
+                                                    .jadwal
+                                                    ?.jamSelesai ==
+                                                null
+                                        ? "Tidak ada jadwal"
+                                        : "Pukul ${controller.jadwal.value?.data?.dataJadwal?.first.jadwal?.jamMulai ?? "00:00"}-${controller.jadwal.value?.data?.dataJadwal?.last.jadwal?.jamSelesai ?? "00:00"}",
+                                  );
+                                }
+                              }),
                             ],
                           ),
                           const SizedBox(height: 15),
-                          Text(
-                            "Absen XI RPL 1 tersedia untuk hari ini.",
-                            style: AllMaterial.workSans(
-                              color: AllMaterial.colorGreySec,
+                          Obx(
+                            () => Text(
+                              "Absen ${mainCont.profilSiswa.value?.data?.kelas?.nama ?? ""} ${controller.bisaAbsen.isTrue ? "tersedia" : "tidak tersedia"} untuk hari ini.",
+                              style: AllMaterial.workSans(
+                                color: AllMaterial.colorGreySec,
+                              ),
                             ),
                           ),
                           const SizedBox(height: 15),
@@ -128,7 +186,7 @@ class AbsenHarianSiswaView extends GetView<AbsenHarianSiswaController> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "Rekap Seluruh Absen",
+                                  "Rekap Absen Minggu Ini",
                                   style: AllMaterial.workSans(
                                     fontWeight: AllMaterial.fontMedium,
                                     fontSize: 14,
@@ -144,19 +202,20 @@ class AbsenHarianSiswaView extends GetView<AbsenHarianSiswaController> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      AllMaterial.outlineText(
-                                        title: "Absen Hadir",
-                                        subtitle: "10x",
+                                      Obx(
+                                        () => AllMaterial.outlineText(
+                                          title: "Absen Hadir",
+                                          subtitle:
+                                              "${homeCont.absenHadir.value}x",
+                                        ),
                                       ),
                                       const SizedBox(width: 8),
-                                      AllMaterial.outlineText(
-                                        title: "Absen Sakit",
-                                        subtitle: "2x",
-                                      ),
-                                      const SizedBox(width: 8),
-                                      AllMaterial.outlineText(
-                                        title: "Absen Izin/Telat/Dispensasi",
-                                        subtitle: "0x",
+                                      Obx(
+                                        () => AllMaterial.outlineText(
+                                          title: "Absen Izin/Sakit/Dispensasi",
+                                          subtitle:
+                                              "${homeCont.absenIzin.value}x",
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -173,17 +232,13 @@ class AbsenHarianSiswaView extends GetView<AbsenHarianSiswaController> {
                                 const SizedBox(height: 8),
                                 Wrap(
                                   spacing: 5,
-                                  children: List.generate(7, (index) {
-                                    List<String> statuses = [
-                                      "hadir",
-                                      "izin",
-                                      "alpa",
-                                      "libur",
-                                      "hadir",
-                                      "belum",
-                                      "libur"
-                                    ];
-                                    String status = statuses[index];
+                                  children: List.generate(
+                                      mainCont.rekapMingguan.value?.data
+                                              ?.progress?.length ??
+                                          0, (index) {
+                                    var statuses = mainCont
+                                        .rekapMingguan.value?.data?.progress;
+                                    var status = statuses![index].status;
 
                                     Color borderColor;
                                     Color textColor;
@@ -193,7 +248,8 @@ class AbsenHarianSiswaView extends GetView<AbsenHarianSiswaController> {
                                       borderColor = Colors.green;
                                       backgroundColor = Colors.green;
                                       textColor = Colors.white;
-                                    } else if (status == "izin") {
+                                    } else if (status == "izin" ||
+                                        status == "sakit") {
                                       borderColor = AllMaterial.colorBlue;
                                       backgroundColor = Colors.transparent;
                                       textColor = AllMaterial.colorBlue;
@@ -251,7 +307,7 @@ class AbsenHarianSiswaView extends GetView<AbsenHarianSiswaController> {
                                             List<String> statuses = [
                                               "Hadir",
                                               "Alpa",
-                                              "Izin",
+                                              "Izin/Sakit",
                                               "Hari Libur",
                                               "Belum Absen",
                                             ];
@@ -263,7 +319,7 @@ class AbsenHarianSiswaView extends GetView<AbsenHarianSiswaController> {
                                             if (status == "Hadir") {
                                               borderColor = Colors.green;
                                               backgroundColor = Colors.green;
-                                            } else if (status == "Izin") {
+                                            } else if (status == "Izin/Sakit") {
                                               borderColor =
                                                   AllMaterial.colorBlue;
                                               backgroundColor =
@@ -376,58 +432,74 @@ class AbsenHarianSiswaView extends GetView<AbsenHarianSiswaController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Senin, 21 Desember 2024",
+              AllMaterial.hariTanggalBulanTahun(
+                DateTime.now().toIso8601String(),
+              ),
               style: AllMaterial.workSans(
                 fontWeight: AllMaterial.fontMedium,
                 fontSize: 16,
                 color: AllMaterial.colorBlack,
               ),
             ),
-            Column(
-                children: List.generate(
-              3,
-              (index) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
+            Obx(
+              () => controller.jumlahMapel.value == 0
+                  ? Padding(
+                      padding: const EdgeInsets.only(top: 10),
                       child: Text(
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        "${controller.mapel[index]} (${controller.jam[index]})",
+                        "Tidak ada jadwal untuk hari ini",
                         style: AllMaterial.workSans(
-                          fontWeight: AllMaterial.fontRegular,
-                          fontSize: 14,
+                          fontWeight: AllMaterial.fontMedium,
                           color: AllMaterial.colorGreySec,
                         ),
                       ),
+                    )
+                  : Column(
+                      children:
+                          List.generate(controller.jumlahMapel.value, (index) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                "${controller.mapel[index]} (${controller.jam[index]})",
+                                style: AllMaterial.workSans(
+                                  fontWeight: AllMaterial.fontRegular,
+                                  fontSize: 14,
+                                  color: AllMaterial.colorGreySec,
+                                ),
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.check,
+                                  color: AllMaterial.colorPrimary,
+                                ),
+                                const SizedBox(width: 2),
+                                Text(
+                                  "Terisi",
+                                  style: AllMaterial.workSans(
+                                    fontWeight: AllMaterial.fontMedium,
+                                    fontSize: 15,
+                                    color: AllMaterial.colorBlack,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        );
+                      }),
                     ),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.check,
-                          color: AllMaterial.colorPrimary,
-                        ),
-                        const SizedBox(width: 2),
-                        Text(
-                          "Terisi",
-                          style: AllMaterial.workSans(
-                            fontWeight: AllMaterial.fontMedium,
-                            fontSize: 15,
-                            color: AllMaterial.colorBlack,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                );
-              },
-            )),
+            ),
             const SizedBox(height: 20),
             AllMaterial.cusButton(
-              onTap: () {
-                Get.to(() => const BuatAbsenHarianSiswaView());
-              },
+              onTap: controller.bisaAbsen.isFalse
+                  ? null
+                  : () {
+                      Get.to(() => const BuatAbsenHarianSiswaView());
+                    },
               label: "Absen Harian",
               icon: const Icon(
                 Icons.fingerprint,

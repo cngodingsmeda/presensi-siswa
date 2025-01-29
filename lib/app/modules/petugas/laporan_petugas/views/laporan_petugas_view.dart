@@ -133,19 +133,20 @@ class LaporanPetugasView extends GetView<LaporanPetugasController> {
                                       () =>
                                           const AbsenBulananSiswaPetugasView(),
                                       arguments: {
-                                        "kelas": kelasTinjauan?.nama ?? "",
+                                        "namaKelas": kelasTinjauan?.nama ?? "",
+                                        "idKelas":
+                                            kelasTinjauan?.id.toString() ?? "",
                                         "bulan": controller.bulanIni.value
                                       });
                                 },
                                 svg: SvgPicture.asset(
-                                    "assets/svg/absen-ceklis.svg"),
+                                    "assets/svg/absen-ceklis.svg",fit: BoxFit.cover,),
                               ),
                             ),
                           );
                         }),
                   ),
                 ),
-                // const SizedBox(height: 60),
               ],
             ),
           ),

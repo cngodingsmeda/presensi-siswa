@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:presensi_siswa/all_material.dart';
+import 'package:presensi_siswa/app/data/api_url.dart';
 
 import '../controllers/edit_profil_siswa_controller.dart';
 
@@ -57,6 +58,25 @@ class EditProfilSiswaView extends GetView<EditProfilSiswaController> {
                           boxShadow: [AllMaterial.topShadow],
                           borderRadius: BorderRadius.circular(1000),
                           color: AllMaterial.colorMint,
+                          image: controller.mainCont.profilSiswa.value?.data
+                                          ?.fotoProfile ==
+                                      "" ||
+                                  controller.mainCont.profilSiswa.value?.data
+                                          ?.fotoProfile ==
+                                      null
+                              ? null
+                              : DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: NetworkImage(
+                                    controller.mainCont.profilSiswa.value?.data
+                                            ?.fotoProfile
+                                            ?.replaceAll(
+                                          "localhost",
+                                          ApiUrl.baseUrl,
+                                        ) ??
+                                        "https://picsum.photos/200/300?grayscale",
+                                  ),
+                                ),
                         ),
                         child: IconButton(
                           color: AllMaterial.colorPrimary,

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:presensi_siswa/app/modules/siswa/main_siswa/controllers/main_siswa_controller.dart';
 
 class EditProfilSiswaController extends GetxController {
+  var mainCont = Get.put(MainSiswaController());
   // TEXT EDITING CONTROLLER
   TextEditingController namaC = TextEditingController();
   TextEditingController nisC = TextEditingController();
@@ -20,12 +22,15 @@ class EditProfilSiswaController extends GetxController {
 
   @override
   void onInit() {
-    namaC.text = "Habil Arlian Asrori";
-    nisC.text = "21424521232";
-    emailC.text = "aabiljr@gmail.com";
-    jenisKelaminC.text = "Laki-Laki";
-    kelasJurusanC.text = "XI RPL 1";
-    noTeleponC.text = "08214142141";
+    namaC.text = mainCont.profilSiswa.value?.data?.nama ?? "";
+    nisC.text = mainCont.profilSiswa.value?.data?.nis ?? "";
+    emailC.text = mainCont.profilSiswa.value?.data?.email ?? "";
+    jenisKelaminC.text =
+        mainCont.profilSiswa.value?.data?.jenisKelamin == "laki"
+            ? "Laki-Laki"
+            : "Perempuan";
+    kelasJurusanC.text = mainCont.profilSiswa.value?.data?.kelas?.nama ?? "";
+    noTeleponC.text = mainCont.profilSiswa.value?.data?.noTelepon ?? "";
     super.onInit();
   }
 }

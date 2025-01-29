@@ -4,11 +4,16 @@ import 'package:presensi_siswa/all_material.dart';
 import 'package:presensi_siswa/app/data/api_url.dart';
 import 'package:presensi_siswa/app/modules/login_page/controllers/login_page_controller.dart';
 import 'package:presensi_siswa/app/modules/login_page/views/login_page_view.dart';
+import 'package:presensi_siswa/app/modules/petugas/home_petugas/controllers/home_petugas_controller.dart';
+import 'package:presensi_siswa/app/modules/petugas/laporan_petugas/controllers/laporan_petugas_controller.dart';
+import 'package:presensi_siswa/app/modules/petugas/main_petugas/controllers/main_petugas_controller.dart';
+import 'package:presensi_siswa/app/modules/siswa/home_siswa/controllers/home_siswa_controller.dart';
+import 'package:presensi_siswa/app/modules/siswa/main_siswa/controllers/main_siswa_controller.dart';
 
 class GeneralController extends GetxController {
   var logController = Get.put(LoginPageController());
 
-  Future<dynamic> logout({bool? isExpired}) async {
+  Future<dynamic> logout({bool isExpired = false}) async {
     try {
       final response = await http.post(
         Uri.parse(ApiUrl.urlPostLogout),
@@ -50,14 +55,15 @@ class GeneralController extends GetxController {
           // logController.isGuru.value = false;
         } else if (logController.isSiswa.value) {
           // Siswa
-          // final homeSiswaController = Get.put(HomeSiswaController());
-          // final homePageSiswaController = Get.put(HomepageSiswaController());
-          // final profileController = Get.put(ProfileSiswaController());
-          // final historiController = Get.put(HistoriAbsenSiswaControllr());
-          // homeSiswaController.indexPage.value = 0;
+          final mainSiswaController = Get.put(MainSiswaController());
+          final homePageSiswaController = Get.put(HomeSiswaController());
+          mainSiswaController.currentIndexBar.value = 0;
+          mainSiswaController.profilSiswa.value = null;
+          mainSiswaController.rekapMingguan.value = null;
+          mainSiswaController.userNameFilter.value = "";
+          homePageSiswaController.absenHadir.value = 0;
+          homePageSiswaController.absenIzin.value = 0;
           // historiController.absen.value = <Datum>[];
-          // homePageSiswaController.ajuanPkl.value = null;
-          // homePageSiswaController.readCount.value = 0;
           // profileController.profil.value = null;
           // profileController.isLoading.value = true;
         } else if (logController.isMapel.value) {
@@ -77,6 +83,17 @@ class GeneralController extends GetxController {
           // profileDudiController.isLoading.value = true;
         } else if (logController.isPetugas.value) {
           // Petugas
+          final mainPetugasController = Get.put(MainPetugasController());
+          final homePagePetugasController = Get.put(HomePetugasController());
+          final historiController = Get.put(LaporanPetugasController());
+          mainPetugasController.currentIndexBar.value = 0;
+          mainPetugasController.profilPetugas.value = null;
+          mainPetugasController.userNameFilter.value = "";
+          homePagePetugasController.absenBelumDitinjau.value = 0;
+          homePagePetugasController.absenDiterima.value = 0;
+          homePagePetugasController.absenDitolak.value = 0;
+          historiController.absen.value = [];
+          historiController.selectedMonth.value = 1;
         }
         update();
       } else {

@@ -8,31 +8,11 @@ import 'package:presensi_siswa/app/model/model_petugas/detil_histori_tinjauan_ab
 import 'package:presensi_siswa/app/model/model_petugas/histori_tinjauan_absen_siswa_petugas.dart';
 
 class HistoriTinjauanPetugasController extends GetxController {
-  var mapel = [
-    "Pendidikan Agama",
-    "Penjas Orkes",
-    "Matematika",
+  var stringTitle = [
+    "Absen Belum Ditinjau",
+    "Absen Ditolak",
+    "Absen Diterima",
   ];
-  var jam = [
-    "07:40",
-    "07:50",
-    "07:59",
-  ];
-
-  var nama = [
-    "Kathryn Murphy",
-    "John Doe",
-    "Alice Johnson",
-    "Michael Smith",
-    "Sophia Davis",
-    "William Brown",
-    "Olivia Wilson",
-    "James Garcia",
-    "Isabella Martinez",
-    "Liam Anderson",
-  ];
-
-  var stringTitle = ["Absen Belum Ditinjau", "Absen Diterima", "Absen Ditolak"];
 
   var absen = Rx<HistoriTinjauanAbsenPetugasModel?>(null);
   var absenPending = RxList<BelumDitinjau?>([null]);
@@ -94,7 +74,7 @@ class HistoriTinjauanPetugasController extends GetxController {
         if (data != null && data['data'] != null) {
           detilAbsen.value =
               DetilHistoriTinjauanAbsenPetugasModel.fromJson(data);
-          print("Data berhasil dimuat");
+          print("Data berhasil dimuat: $data");
         } else {
           print("Error: Data tidak valid atau kosong");
         }
@@ -104,11 +84,5 @@ class HistoriTinjauanPetugasController extends GetxController {
     } catch (e) {
       print("Error: ${e.toString()}awawa");
     }
-  }
-
-  @override
-  void onInit() async {
-    await fetchHistoriTinjauanPetugas();
-    super.onInit();
   }
 }

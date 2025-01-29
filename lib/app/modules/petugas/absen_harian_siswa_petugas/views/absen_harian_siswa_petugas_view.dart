@@ -74,7 +74,7 @@ class AbsenHarianSiswaPetugasView
                                   padding: const EdgeInsets.only(top: 16),
                                   child: AllMaterial.cardWidget(
                                     svg: SvgPicture.asset(
-                                        "assets/svg/absen-ceklis.svg"),
+                                        "assets/svg/absen-ceklis.svg",fit: BoxFit.cover,),
                                     tengah:
                                         "Kelas ${controller.kelas.value?.data?.kelas?[index].nama}",
                                     bawah: AllMaterial.hariTanggalBulanTahun(

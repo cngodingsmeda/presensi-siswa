@@ -78,6 +78,7 @@ class Jadwal {
     String? jamMulai;
     String? jamSelesai;
     Mapel? mapel;
+    GuruMapel? guruMapel;
 
     Jadwal({
         this.id,
@@ -85,6 +86,7 @@ class Jadwal {
         this.jamMulai,
         this.jamSelesai,
         this.mapel,
+        this.guruMapel,
     });
 
     factory Jadwal.fromJson(Map<String, dynamic> json) => Jadwal(
@@ -93,6 +95,7 @@ class Jadwal {
         jamMulai: json["jam_mulai"],
         jamSelesai: json["jam_selesai"],
         mapel: json["mapel"] == null ? null : Mapel.fromJson(json["mapel"]),
+        guruMapel: json["guru_mapel"] == null ? null : GuruMapel.fromJson(json["guru_mapel"]),
     );
 
     Map<String, dynamic> toJson() => {
@@ -101,6 +104,75 @@ class Jadwal {
         "jam_mulai": jamMulai,
         "jam_selesai": jamSelesai,
         "mapel": mapel?.toJson(),
+        "guru_mapel": guruMapel?.toJson(),
+    };
+}
+
+class GuruMapel {
+    int? id;
+    String? nip;
+    String? nama;
+    String? noTelepon;
+    String? email;
+    String? jenisKelamin;
+    String? tempatLahir;
+    DateTime? tanggalLahir;
+    String? agama;
+    dynamic fotoProfile;
+    int? idSekolah;
+    int? idTahun;
+    int? idMapel;
+    dynamic tokenFcm;
+
+    GuruMapel({
+        this.id,
+        this.nip,
+        this.nama,
+        this.noTelepon,
+        this.email,
+        this.jenisKelamin,
+        this.tempatLahir,
+        this.tanggalLahir,
+        this.agama,
+        this.fotoProfile,
+        this.idSekolah,
+        this.idTahun,
+        this.idMapel,
+        this.tokenFcm,
+    });
+
+    factory GuruMapel.fromJson(Map<String, dynamic> json) => GuruMapel(
+        id: json["id"],
+        nip: json["nip"],
+        nama: json["nama"],
+        noTelepon: json["no_telepon"],
+        email: json["email"],
+        jenisKelamin: json["jenis_kelamin"],
+        tempatLahir: json["tempat_lahir"],
+        tanggalLahir: json["tanggal_lahir"] == null ? null : DateTime.parse(json["tanggal_lahir"]),
+        agama: json["agama"],
+        fotoProfile: json["foto_profile"],
+        idSekolah: json["id_sekolah"],
+        idTahun: json["id_tahun"],
+        idMapel: json["id_mapel"],
+        tokenFcm: json["token_FCM"],
+    );
+
+    Map<String, dynamic> toJson() => {
+        "id": id,
+        "nip": nip,
+        "nama": nama,
+        "no_telepon": noTelepon,
+        "email": email,
+        "jenis_kelamin": jenisKelamin,
+        "tempat_lahir": tempatLahir,
+        "tanggal_lahir": "${tanggalLahir!.year.toString().padLeft(4, '0')}-${tanggalLahir!.month.toString().padLeft(2, '0')}-${tanggalLahir!.day.toString().padLeft(2, '0')}",
+        "agama": agama,
+        "foto_profile": fotoProfile,
+        "id_sekolah": idSekolah,
+        "id_tahun": idTahun,
+        "id_mapel": idMapel,
+        "token_FCM": tokenFcm,
     };
 }
 
