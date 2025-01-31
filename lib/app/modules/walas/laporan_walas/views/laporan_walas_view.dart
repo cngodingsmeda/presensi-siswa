@@ -119,8 +119,10 @@ class LaporanWalasView extends GetView<LaporanWalasController> {
                               Get.to(() =>
                                   const PilihMapelLaporanSiswaWalasView());
                             },
-                            svg:
-                                SvgPicture.asset("assets/svg/absen-ceklis.svg"),
+                            svg: SvgPicture.asset(
+                              "assets/svg/absen-ceklis.svg",
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         );
                       }),

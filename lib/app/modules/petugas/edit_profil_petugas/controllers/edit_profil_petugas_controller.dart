@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:presensi_siswa/app/modules/petugas/main_petugas/controllers/main_petugas_controller.dart';
 
 class EditProfilPetugasController extends GetxController {
+  final mainCont = Get.put(MainPetugasController());
+
   // TEXT EDITING CONTROLLER
   TextEditingController namaC = TextEditingController();
   TextEditingController nipC = TextEditingController();
@@ -20,12 +23,12 @@ class EditProfilPetugasController extends GetxController {
 
   @override
   void onInit() {
-    namaC.text = "Sustri Ardika";
-    nipC.text = "21424521232";
-    emailC.text = "aabiljr@gmail.com";
-    jenisKelaminC.text = "Laki-Laki";
-    agamaC.text = "Islam";
-    noTeleponC.text = "08214142141";
+    namaC.text = mainCont.profilPetugas.value?.data?.nama ?? "";
+    nipC.text = mainCont.profilPetugas.value?.data?.nip ?? "";
+    emailC.text = mainCont.profilPetugas.value?.data?.email ?? "";
+    jenisKelaminC.text = mainCont.profilPetugas.value?.data?.jenisKelamin ?? "";
+    agamaC.text = mainCont.profilPetugas.value?.data?.agama ?? "";
+    noTeleponC.text = mainCont.profilPetugas.value?.data?.noTelepon ?? "";
     super.onInit();
   }
 }

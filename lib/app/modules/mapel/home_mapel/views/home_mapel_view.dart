@@ -141,6 +141,7 @@ class HomeMapelView extends GetView<HomeMapelController> {
                                   arguments: controller.kelas[index]);
                             },
                             svg: SvgPicture.asset(
+                              fit: BoxFit.cover,
                               "assets/svg/absen-ceklis.svg",
                             ),
                           ),

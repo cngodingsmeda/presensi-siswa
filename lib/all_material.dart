@@ -5,6 +5,10 @@ import 'package:get_storage/get_storage.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:http/http.dart' as http;
+import 'package:permission_handler/permission_handler.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 
 abstract class AllMaterial {
   static var box = GetStorage();
@@ -486,6 +490,7 @@ abstract class AllMaterial {
     String? subtitle,
     String? context,
     String? subtitleContext,
+    bool subtitleColor = true,
   }) {
     return Material(
       color: const Color(0xffF9FDFA),
@@ -535,7 +540,7 @@ abstract class AllMaterial {
                         text: " $subtitle",
                         style: AllMaterial.workSans(
                           fontWeight: AllMaterial.fontMedium,
-                          color: AllMaterial.colorPrimary,
+                          color: subtitleColor ? AllMaterial.colorPrimary : AllMaterial.colorRed,
                         ),
                       ),
                     ],
@@ -671,10 +676,6 @@ abstract class AllMaterial {
               color: AllMaterial.colorGreySec,
               fontWeight: AllMaterial.fontRegular,
             ),
-            contentPadding: const EdgeInsets.symmetric(
-              vertical: 5,
-              horizontal: 14,
-            ),
             focusedBorder: OutlineInputBorder(
               borderSide: const BorderSide(
                 color: AllMaterial.colorPrimary,
@@ -808,6 +809,19 @@ abstract class AllMaterial {
     return formattedDate;
   }
 
+  // Format = 21:20
+  static String jamMenit(String? waktu) {
+    if (waktu == null || waktu.isEmpty) {
+      return 'Belum Ditentukan';
+    }
+    try {
+      final parsedTime = DateFormat('HH:mm').parse(waktu);
+      return DateFormat('HH:mm').format(parsedTime);
+    } catch (e) {
+      return 'Format Tidak Valid';
+    }
+  }
+
   // Format Nama Panjang = James Werren A.G.H
   static String formatNamaPanjang(String namaPanjang) {
     List<String> namaArray = namaPanjang.split(' ');
@@ -816,6 +830,35 @@ abstract class AllMaterial {
         namaArray.skip(3).map((nama) => '${nama[0]}.').toList();
 
     return (namaTigaPertama + inisialSisa).join(' ');
+  }
+
+  // Download & Save Image
+  static Future<void> downloadAndSaveImage(
+      String imageUrl, String namePath) async {
+    PermissionStatus status = await Permission.storage.request();
+
+    if (status.isGranted) {
+      try {
+        final directory = await getApplicationDocumentsDirectory();
+        final savePath = '${directory.path}/$namePath.jpg';
+
+        final response = await http.get(Uri.parse(imageUrl));
+
+        if (response.statusCode == 200) {
+          final file = File(savePath);
+          await file.writeAsBytes(response.bodyBytes);
+          print("Image downloaded and saved to $savePath");
+        } else {
+          print("Failed to load image");
+        }
+      } catch (e) {
+        print("Download failed: $e");
+      }
+    } else {
+      print(
+          "Storage permission denied. Please enable storage permission in settings.");
+      openAppSettings();
+    }
   }
 
   static String getErrorMessage(int statusCode) {

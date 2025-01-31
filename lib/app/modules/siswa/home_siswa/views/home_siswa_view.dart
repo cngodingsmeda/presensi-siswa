@@ -1,9 +1,13 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:presensi_siswa/all_material.dart';
+import 'package:presensi_siswa/app/data/api_url.dart';
 import 'package:presensi_siswa/app/modules/siswa/absen_harian_siswa/views/absen_harian_siswa_view.dart';
-import 'package:presensi_siswa/app/modules/siswa/detil_laporan_siswa/views/detil_laporan_siswa_view.dart';
+import 'package:presensi_siswa/app/modules/siswa/laporan_siswa/controllers/laporan_siswa_controller.dart';
+import 'package:presensi_siswa/app/modules/siswa/main_siswa/controllers/main_siswa_controller.dart';
 
 import '../controllers/home_siswa_controller.dart';
 
@@ -11,6 +15,8 @@ class HomeSiswaView extends GetView<HomeSiswaController> {
   const HomeSiswaView({super.key});
   @override
   Widget build(BuildContext context) {
+    final mainCont = Get.put(MainSiswaController());
+    final lapCont = Get.put(LaporanSiswaController());
     return Scaffold(
       backgroundColor: AllMaterial.colorWhite,
       body: SafeArea(
@@ -48,15 +54,53 @@ class HomeSiswaView extends GetView<HomeSiswaController> {
                               ),
                             ],
                           ),
-                          Container(
-                            alignment: Alignment.bottomRight,
-                            height: 40,
-                            width: 40,
-                            decoration: BoxDecoration(
-                              boxShadow: [AllMaterial.topShadow],
-                              borderRadius: BorderRadius.circular(1000),
-                              color: AllMaterial.colorMint,
-                            ),
+                          Obx(
+                            () => mainCont.profilSiswa.value?.data
+                                            ?.fotoProfile ==
+                                        "" ||
+                                    mainCont.profilSiswa.value?.data
+                                            ?.fotoProfile ==
+                                        null
+                                ? Container(
+                                    alignment: Alignment.center,
+                                    height: 40,
+                                    width: 40,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(1000),
+                                      color: AllMaterial.colorMint,
+                                    ),
+                                    child: Obx(
+                                      () => Text(
+                                        mainCont.userNameFilter.value,
+                                        style: AllMaterial.workSans(
+                                          color: AllMaterial.colorWhite,
+                                          fontWeight: AllMaterial.fontSemiBold,
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                : Container(
+                                    alignment: Alignment.center,
+                                    height: 40,
+                                    width: 40,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(1000),
+                                      color: AllMaterial.colorMint,
+                                      image: DecorationImage(
+                                        fit: BoxFit.cover,
+                                        image: NetworkImage(
+                                          mainCont.profilSiswa.value?.data
+                                                  ?.fotoProfile
+                                                  ?.replaceAll(
+                                                "localhost",
+                                                ApiUrl.baseUrl,
+                                              ) ??
+                                              "https://picsum.photos/200/300?grayscale",
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                           ),
                         ],
                       ),
@@ -66,9 +110,11 @@ class HomeSiswaView extends GetView<HomeSiswaController> {
                         borderRadius: BorderRadius.circular(35),
                         child: InkWell(
                           borderRadius: BorderRadius.circular(35),
-                          onTap: () => Get.to(
-                            () => const AbsenHarianSiswaView(),
-                          ),
+                          onTap: () {
+                            Get.to(
+                              () => const AbsenHarianSiswaView(),
+                            );
+                          },
                           child: Container(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 15,
@@ -98,7 +144,8 @@ class HomeSiswaView extends GetView<HomeSiswaController> {
                                 ),
                               ),
                               subtitle: Text(
-                                "Senin, 24 Januari 2025",
+                                AllMaterial.hariTanggalBulanTahun(
+                                    DateTime.now().toIso8601String()),
                                 style: AllMaterial.workSans(
                                   color: AllMaterial.colorGreySec,
                                 ),
@@ -116,6 +163,7 @@ class HomeSiswaView extends GetView<HomeSiswaController> {
                 ),
                 const SizedBox(height: 23),
                 Container(
+                  height: Get.height,
                   decoration: BoxDecoration(
                     boxShadow: [
                       AllMaterial.topShadow,
@@ -131,10 +179,11 @@ class HomeSiswaView extends GetView<HomeSiswaController> {
                     horizontal: 20,
                   ),
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Rekap Seluruh Absen",
+                        "Rekap Absen Mingguan",
                         style: AllMaterial.workSans(
                           fontWeight: AllMaterial.fontMedium,
                           fontSize: 14,
@@ -148,19 +197,18 @@ class HomeSiswaView extends GetView<HomeSiswaController> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            AllMaterial.outlineText(
-                              title: "Absen Hadir",
-                              subtitle: "10x",
+                            Obx(
+                              () => AllMaterial.outlineText(
+                                title: "Absen Hadir",
+                                subtitle: "${controller.absenHadir.value}x",
+                              ),
                             ),
                             const SizedBox(width: 8),
-                            AllMaterial.outlineText(
-                              title: "Absen Sakit",
-                              subtitle: "2x",
-                            ),
-                            const SizedBox(width: 8),
-                            AllMaterial.outlineText(
-                              title: "Absen Izin/Telat/Dispensasi",
-                              subtitle: "0x",
+                            Obx(
+                              () => AllMaterial.outlineText(
+                                title: "Absen Izin/Sakit/Dispensasi",
+                                subtitle: "${controller.absenIzin.value}x",
+                              ),
                             ),
                           ],
                         ),
@@ -174,24 +222,53 @@ class HomeSiswaView extends GetView<HomeSiswaController> {
                           color: AllMaterial.colorGreySec,
                         ),
                       ),
-                      ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: 3,
-                        itemBuilder: (context, index) => Padding(
-                          padding: const EdgeInsets.only(top: 16),
-                          child: AllMaterial.cardWidget(
-                            atas: "Absen Hadir",
-                            tengah: "Senin, 24 Agustus 2024",
-                            bawah: "SMK Negeri 2 Mataram",
-                            onTap: () {
-                              Get.to(() => const DetilLaporanSiswaView());
-                            },
-                            svg:
-                                SvgPicture.asset("assets/svg/absen-ceklis.svg"),
-                          ),
-                        ),
-                      ),
+                      Obx(() {
+                        if (lapCont.isLoading.value) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+
+                        if (lapCont.absensiList.isEmpty) {
+                          return Center(
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 20),
+                              child: Text(
+                                "Tidak ada histori absensi belakangan ini",
+                                style: AllMaterial.workSans(
+                                    color: AllMaterial.colorGreySec),
+                              ),
+                            ),
+                          );
+                        }
+
+                        int itemCount = min(3, lapCont.absensiList.length);
+
+                        return ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: itemCount,
+                          itemBuilder: (context, index) {
+                            final absenData = lapCont.absensiList[index];
+                            final absen = absenData['absen'];
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 16),
+                              child: Obx(
+                                () => AllMaterial.cardWidget(
+                                  atas: "Absen Harian",
+                                  tengah: AllMaterial.hariTanggalBulanTahun(
+                                      absen['tanggal']),
+                                  bawah: mainCont.profilSiswa.value?.data
+                                          ?.sekolah?.nama ??
+                                      "",
+                                  svg: SvgPicture.asset(
+                                      "assets/svg/absen-ceklis.svg"),
+                                  onTap: () {},
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      }),
                       const SizedBox(height: 16),
                     ],
                   ),

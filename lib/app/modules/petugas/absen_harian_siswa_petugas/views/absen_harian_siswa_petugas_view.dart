@@ -67,15 +67,16 @@ class AbsenHarianSiswaPetugasView
                               physics: const NeverScrollableScrollPhysics(),
                               shrinkWrap: true,
                               itemCount:
-                                  controller.kelas.value?.data?.length ?? 0,
+                                  controller.kelas.value?.data?.kelas?.length ??
+                                      0,
                               itemBuilder: (context, index) {
                                 return Padding(
                                   padding: const EdgeInsets.only(top: 16),
                                   child: AllMaterial.cardWidget(
                                     svg: SvgPicture.asset(
-                                        "assets/svg/absen-ceklis.svg"),
+                                        "assets/svg/absen-ceklis.svg",fit: BoxFit.cover,),
                                     tengah:
-                                        "Kelas ${controller.kelas.value?.data?[index].nama}",
+                                        "Kelas ${controller.kelas.value?.data?.kelas?[index].nama}",
                                     bawah: AllMaterial.hariTanggalBulanTahun(
                                       DateTime.now().toIso8601String(),
                                     ),
@@ -84,8 +85,13 @@ class AbsenHarianSiswaPetugasView
                                       Get.to(
                                         () =>
                                             const AbsenKelasHarianPetugasView(),
-                                        arguments: controller
-                                            .kelas.value?.data?[index].nama,
+                                        arguments: {
+                                          "namaKelas": controller.kelas.value
+                                              ?.data?.kelas?[index].nama,
+                                          "idKelas": controller.kelas.value
+                                                  ?.data?.kelas?[index].id ??
+                                              0,
+                                        },
                                       );
                                     },
                                   ),

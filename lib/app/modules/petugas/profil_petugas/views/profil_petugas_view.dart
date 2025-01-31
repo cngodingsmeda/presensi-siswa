@@ -3,9 +3,11 @@ import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:presensi_siswa/all_material.dart';
 import 'package:presensi_siswa/app/controller/general_controller.dart';
+import 'package:presensi_siswa/app/data/api_url.dart';
 import 'package:presensi_siswa/app/modules/petugas/absen_harian_siswa_petugas/views/absen_harian_siswa_petugas_view.dart';
 import 'package:presensi_siswa/app/modules/petugas/edit_profil_petugas/views/edit_profil_petugas_view.dart';
 import 'package:presensi_siswa/app/modules/petugas/main_petugas/controllers/main_petugas_controller.dart';
+import 'package:presensi_siswa/app/widget/hero_image/hero_image.dart';
 import 'package:presensi_siswa/app/widget/ubah_password/views/ubah_password_view.dart';
 import 'package:presensi_siswa/app/widget/verifikasi_email/views/verifikasi_email_view.dart';
 
@@ -37,25 +39,64 @@ class ProfilPetugasView extends GetView<ProfilPetugasController> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Container(
-                        alignment: Alignment.center,
-                        height: 80,
-                        width: 80,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(1000),
-                          color: AllMaterial.colorMint,
-                        ),
-                        child: Obx(
-                          () => Text(
-                            mainCont.userNameFilter.value,
-                            style: AllMaterial.workSans(
-                              color: AllMaterial.colorWhite,
-                              fontWeight: AllMaterial.fontSemiBold,
-                              fontSize: 40,
+                      mainCont.profilPetugas.value?.data?.fotoProfile == "" ||
+                              mainCont.profilPetugas.value?.data?.fotoProfile ==
+                                  null
+                          ? Container(
+                              alignment: Alignment.center,
+                              height: 80,
+                              width: 80,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(1000),
+                                color: AllMaterial.colorMint,
+                              ),
+                              child: Obx(
+                                () => Text(
+                                  mainCont.userNameFilter.value,
+                                  style: AllMaterial.workSans(
+                                    color: AllMaterial.colorWhite,
+                                    fontWeight: AllMaterial.fontSemiBold,
+                                    fontSize: 40,
+                                  ),
+                                ),
+                              ),
+                            )
+                          : GestureDetector(
+                              onTap: () {
+                                Get.to(
+                                  () => HeroImage(
+                                    namePath:
+                                        "${mainCont.profilPetugas.value?.data?.nama?.replaceAll(" ", "-")}-fotoProfile",
+                                    imageUrl: mainCont.profilPetugas.value?.data
+                                            ?.fotoProfile
+                                            ?.replaceAll(
+                                                "localhost", ApiUrl.baseUrl) ??
+                                        "https://picsum.photos/200/300?grayscale",
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                alignment: Alignment.center,
+                                height: 80,
+                                width: 80,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(1000),
+                                  color: AllMaterial.colorMint,
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(
+                                      mainCont.profilPetugas.value?.data
+                                              ?.fotoProfile
+                                              ?.replaceAll(
+                                            "localhost",
+                                            ApiUrl.baseUrl,
+                                          ) ??
+                                          "https://picsum.photos/200/300?grayscale",
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
-                      ),
                       const SizedBox(width: 16),
                       Expanded(
                         child: Column(

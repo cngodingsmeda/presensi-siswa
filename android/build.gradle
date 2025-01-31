@@ -1,3 +1,15 @@
+buildscript {
+    ext.kotlin_version = '1.9.0' // Versi Kotlin terbaru
+}
+configurations.all {
+ resolutionStrategy {
+    cacheChangingModulesFor 0, 'seconds'
+    cacheDynamicVersionsFor 0, 'seconds'
+        eachDependency {
+            it.artifactResolutionTimeout = 60
+        }
+    }
+}
 allprojects {
     repositories {
         google()

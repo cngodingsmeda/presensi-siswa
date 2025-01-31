@@ -188,8 +188,10 @@ class HomeWalasView extends GetView<HomeWalasController> {
                               Get.to(() =>
                                   const PilihMapelLaporanSiswaWalasView());
                             },
-                            svg:
-                                SvgPicture.asset("assets/svg/absen-ceklis.svg"),
+                            svg: SvgPicture.asset(
+                              "assets/svg/absen-ceklis.svg",
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                       ),

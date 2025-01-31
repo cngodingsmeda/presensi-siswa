@@ -72,6 +72,7 @@ class LoginPageController extends GetxController {
         var token = data["data"]["access_token"];
         AllMaterial.box.write("username", userC.text);
         AllMaterial.box.write("password", passC.text);
+        AllMaterial.box.remove("token");
         AllMaterial.box.write("token", token);
         String roleData = data["data"]["role"];
         AllMaterial.box.write("role", roleData);

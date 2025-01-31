@@ -122,6 +122,7 @@ class LaporanMapelView extends GetView<LaporanMapelController> {
                                     const AbsenBulananKelasMapelView(), arguments: controller.kelas[index]);
                               },
                               svg: SvgPicture.asset(
+                                fit: BoxFit.cover,
                                   "assets/svg/absen-ceklis.svg"),
                             ),
                           ),

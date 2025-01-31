@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:presensi_siswa/all_material.dart';
-import 'package:presensi_siswa/app/modules/siswa/detil_laporan_siswa/views/detil_laporan_siswa_view.dart';
+import 'package:presensi_siswa/app/modules/siswa/main_siswa/controllers/main_siswa_controller.dart';
 
 import '../controllers/laporan_siswa_controller.dart';
 
@@ -11,6 +11,7 @@ class LaporanSiswaView extends GetView<LaporanSiswaController> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(LaporanSiswaController());
+    final mainC = Get.put(MainSiswaController());
     return Scaffold(
       body: AllMaterial.containerLinear(
         child: SafeArea(
@@ -105,38 +106,50 @@ class LaporanSiswaView extends GetView<LaporanSiswaController> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 20),
                 Expanded(
-                  child: Obx(
-                    () => controller.absen.isNotEmpty
-                        ? ListView.builder(
-                            itemCount: controller.absen.length,
-                            itemBuilder: (context, index) {
-                              return Padding(
-                                padding: const EdgeInsets.only(top: 16),
-                                child: AllMaterial.cardWidget(
-                                  atas: "Absen Hadir",
-                                  tengah: "Senin, 24 Agustus 2024",
-                                  bawah: "SMK Negeri 2 Mataram",
-                                  onTap: () {
-                                    Get.to(() => const DetilLaporanSiswaView());
-                                  },
-                                  svg: SvgPicture.asset(
-                                      "assets/svg/absen-ceklis.svg"),
-                                ),
-                              );
-                            },
-                          )
-                        : Center(
-                            child: Text(
-                              "Tidak ada Laporan Saya untuk bulan ini",
-                              style: AllMaterial.workSans(
-                                color: AllMaterial.colorGreySec,
+                  child: Obx(() {
+                    if (controller.isLoading.value) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    if (controller.absensiList.isEmpty) {
+                      return Center(
+                        child: Text(
+                          "Tidak ada laporan absensi pada bulan ini",
+                          style: AllMaterial.workSans(
+                              color: AllMaterial.colorGreySec),
+                        ),
+                      );
+                    }
+
+                    return ListView.builder(
+                      itemCount: controller.absensiList.length,
+                      itemBuilder: (context, index) {
+                        final absenData = controller.absensiList[index];
+                        final absen = absenData['absen'];
+                        print(mainC.profilSiswa.value?.data?.sekolah?.nama);
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 16),
+                          child: Obx(
+                            () => AllMaterial.cardWidget(
+                              atas: "Absen Bulanan",
+                              tengah: AllMaterial.hariTanggalBulanTahun(
+                                absen['tanggal'],
                               ),
+                              bawah: mainC
+                                      .profilSiswa.value?.data?.sekolah?.nama ??
+                                  "",
+                              svg: SvgPicture.asset(
+                                "assets/svg/absen-ceklis.svg",
+                              ),
+                              onTap: () {},
                             ),
                           ),
-                  ),
-                ),
+                        );
+                      },
+                    );
+                  }),
+                )
               ],
             ),
           ),

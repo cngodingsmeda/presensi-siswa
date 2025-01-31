@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:presensi_siswa/all_material.dart';
+import 'package:presensi_siswa/app/data/api_url.dart';
 import 'package:presensi_siswa/app/modules/petugas/absen_harian_siswa_petugas/controllers/absen_harian_siswa_petugas_controller.dart';
+import 'package:presensi_siswa/app/modules/petugas/histori_tinjauan_petugas/controllers/histori_tinjauan_petugas_controller.dart';
 import 'package:presensi_siswa/app/modules/petugas/histori_tinjauan_petugas/views/histori_tinjauan_petugas_view.dart';
 import 'package:presensi_siswa/app/modules/petugas/main_petugas/controllers/main_petugas_controller.dart';
+import 'package:presensi_siswa/app/widget/hero_image/hero_image.dart';
+import 'package:presensi_siswa/app/widget/preview_image/preview_image.dart';
 
 import '../controllers/home_petugas_controller.dart';
 
@@ -15,6 +20,7 @@ class HomePetugasView extends GetView<HomePetugasController> {
   Widget build(BuildContext context) {
     final controller = Get.put(HomePetugasController());
     final mainCont = Get.put(MainPetugasController());
+    final historiC = Get.put(HistoriTinjauanPetugasController());
     return Scaffold(
       backgroundColor: AllMaterial.colorWhite,
       body: SafeArea(
@@ -54,31 +60,69 @@ class HomePetugasView extends GetView<HomePetugasController> {
                               ),
                             ],
                           ),
-                          Container(
-                            alignment: Alignment.center,
-                            height: 40,
-                            width: 40,
-                            decoration: BoxDecoration(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
-                                  blurRadius: 4,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
-                              borderRadius: BorderRadius.circular(1000),
-                              color: AllMaterial.colorMint,
-                            ),
-                            child: Obx(
-                              () => Text(
-                                mainCont.userNameFilter.value,
-                                style: AllMaterial.workSans(
-                                  color: AllMaterial.colorWhite,
-                                  fontWeight: AllMaterial.fontSemiBold,
-                                  fontSize: 20,
-                                ),
-                              ),
-                            ),
+                          Obx(
+                            () => mainCont.profilPetugas.value?.data
+                                            ?.fotoProfile ==
+                                        "" ||
+                                    mainCont.profilPetugas.value?.data
+                                            ?.fotoProfile ==
+                                        null
+                                ? Container(
+                                    alignment: Alignment.center,
+                                    height: 40,
+                                    width: 40,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(1000),
+                                      color: AllMaterial.colorMint,
+                                    ),
+                                    child: Obx(
+                                      () => Text(
+                                        mainCont.userNameFilter.value,
+                                        style: AllMaterial.workSans(
+                                          color: AllMaterial.colorWhite,
+                                          fontWeight: AllMaterial.fontSemiBold,
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                : GestureDetector(
+                                    onTap: () {
+                                      Get.to(
+                                        () => HeroImage(
+                                          namePath:
+                                              "${mainCont.profilPetugas.value?.data?.nama?.replaceAll(" ", "-")}-fotoProfile",
+                                          imageUrl: mainCont.profilPetugas.value
+                                                  ?.data?.fotoProfile
+                                                  ?.replaceAll("localhost",
+                                                      ApiUrl.baseUrl) ??
+                                              "https://picsum.photos/200/300?grayscale",
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      height: 40,
+                                      width: 40,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(1000),
+                                        color: AllMaterial.colorMint,
+                                        image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: NetworkImage(
+                                            mainCont.profilPetugas.value?.data
+                                                    ?.fotoProfile
+                                                    ?.replaceAll(
+                                                  "localhost",
+                                                  ApiUrl.baseUrl,
+                                                ) ??
+                                                "https://picsum.photos/200/300?grayscale",
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                           ),
                         ],
                       ),
@@ -141,6 +185,7 @@ class HomePetugasView extends GetView<HomePetugasController> {
                 ),
                 const SizedBox(height: 23),
                 Container(
+                  height: Get.height,
                   decoration: BoxDecoration(
                     boxShadow: [
                       AllMaterial.topShadow,
@@ -157,6 +202,7 @@ class HomePetugasView extends GetView<HomePetugasController> {
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
                         "Rekap Tinjauan",
@@ -201,6 +247,7 @@ class HomePetugasView extends GetView<HomePetugasController> {
                       ),
                       const SizedBox(height: 16),
                       Material(
+                        color: AllMaterial.colorWhite,
                         child: InkWell(
                           onTap: () {
                             Get.to(() => const HistoriTinjauanPetugasView());
@@ -225,133 +272,387 @@ class HomePetugasView extends GetView<HomePetugasController> {
                           ),
                         ),
                       ),
-                      ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: 3,
-                        itemBuilder: (context, index) => Padding(
-                          padding: const EdgeInsets.only(top: 16),
-                          child: AllMaterial.cardWidget(
-                            tengah: controller.nama[index],
-                            atas: "Senin, 24 Agustus 2024",
-                            bawah: "Absen Diterima",
-                            onTap: () {
-                              AllMaterial.detilKonten(
-                                buttonLabel: "Tutup Laporan",
-                                title: "Absen Harian",
-                                addSubtitle: false,
-                                icon: const Icon(
-                                  Icons.clear,
-                                  color: AllMaterial.colorWhite,
+                      Obx(
+                        () {
+                          var histori = historiC.absenPending.length > 3
+                              ? historiC.absenPending.sublist(0, 3)
+                              : historiC.absenPending;
+                          if (histori.isEmpty) {
+                            print(histori.length);
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 30),
+                              child: Center(
+                                child: Text(
+                                  "Tidak ada absen yang harus ditinjau",
+                                  style: AllMaterial.workSans(
+                                    color: AllMaterial.colorGreySec,
+                                  ),
                                 ),
-                                onTap: () => Get.back(),
-                                konten: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          child: AllMaterial.contextWidget(
-                                            icon: MdiIcons.mapMarker,
-                                            subtitle: "Lokasi Absen",
-                                            title: "SMK Negeri 2 Mataram",
-                                          ),
-                                        ),
-                                        const SizedBox(width: 10),
-                                        Expanded(
-                                          child: AllMaterial.contextWidget(
-                                            icon: MdiIcons.clock,
-                                            subtitle: "Waktu Absen",
-                                            title: "Pukul 08:05",
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 20),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          child: AllMaterial.contextWidget(
-                                            icon: MdiIcons.account,
-                                            subtitle: "Nama Siswa",
-                                            title: controller.nama[index],
-                                          ),
-                                        ),
-                                        const SizedBox(width: 10),
-                                        Expanded(
-                                          child: AllMaterial.contextWidget(
-                                            icon: MdiIcons.fingerprint,
-                                            subtitle: "Jenis Absen",
-                                            title: "Absen Hadir",
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 20),
-                                    Container(
-                                      width: Get.width,
-                                      padding: const EdgeInsets.all(16),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(15),
-                                        border: Border.all(
-                                          color: AllMaterial.colorStroke,
-                                          width: 1.5,
-                                        ),
-                                      ),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                              ),
+                            );
+                          } else {
+                            return ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: histori.length,
+                              itemBuilder: (context, index) => Padding(
+                                padding: const EdgeInsets.only(top: 16),
+                                child: AllMaterial.cardWidget(
+                                  tengah: AllMaterial.formatNamaPanjang(
+                                      histori[index]?.siswa?.nama ?? ""),
+                                  atas: AllMaterial.hariTanggalBulanTahun(
+                                      histori[index]
+                                              ?.tanggal
+                                              ?.toIso8601String() ??
+                                          DateTime.now().toIso8601String()),
+                                  bawah: "Absen Belum Ditinjau",
+                                  onTap: () async {
+                                    final id =
+                                        histori[index]?.id?.toString() ?? "0";
+
+                                    await historiC
+                                        .fetchDetilHistoriTinjauanPetugas(id);
+
+                                    final absen = historiC.detilAbsen.value;
+
+                                    AllMaterial.detilKonten(
+                                      customButton: true,
+                                      customButtonWidget: Row(
+                                        mainAxisSize: MainAxisSize.min,
                                         mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
-                                          Text(
-                                            "Deskripsi Absen",
-                                            style: AllMaterial.workSans(
-                                              fontSize: 17,
-                                              color: AllMaterial.colorPrimary,
-                                              fontWeight:
-                                                  AllMaterial.fontSemiBold,
+                                          Expanded(
+                                            child: ElevatedButton.icon(
+                                              onPressed: () async {
+                                                AllMaterial.cusDialogValidasi(
+                                                  title: "Menolak Absen",
+                                                  subtitle:
+                                                      "Apakah Anda yakin?",
+                                                  onConfirm: () async {
+                                                    await mainCont
+                                                        .patchTinjauanAbsenPetugas(
+                                                            false, id);
+                                                    Get.back();
+                                                    Get.back();
+                                                  },
+                                                  onCancel: () => Get.back(),
+                                                );
+                                              },
+                                              label: Text(
+                                                "Tolak",
+                                                style: AllMaterial.workSans(
+                                                  color:
+                                                      AllMaterial.colorPrimary,
+                                                  fontSize: 16,
+                                                  fontWeight:
+                                                      AllMaterial.fontSemiBold,
+                                                ),
+                                              ),
+                                              icon: const Icon(Icons.clear,
+                                                  color:
+                                                      AllMaterial.colorPrimary),
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor:
+                                                    AllMaterial.colorWhite,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                                elevation: 0,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 14),
+                                              ),
                                             ),
                                           ),
-                                          const SizedBox(height: 15),
-                                          Text(
-                                            "Tidak ada deskripsi yang ditambahkan.",
-                                            style: AllMaterial.workSans(
-                                              color: AllMaterial.colorGreySec,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 15),
-                                          Text(
-                                            "Bukti Dokumen",
-                                            style: AllMaterial.workSans(
-                                              fontSize: 17,
-                                              color: AllMaterial.colorPrimary,
-                                              fontWeight:
-                                                  AllMaterial.fontSemiBold,
-                                            ),
-                                          ),
-                                          const SizedBox(height: 15),
-                                          Text(
-                                            "Tidak ada bukti dokumen yang ditambahkan.",
-                                            style: AllMaterial.workSans(
-                                              color: AllMaterial.colorGreySec,
+                                          const SizedBox(width: 15),
+                                          Expanded(
+                                            child: ElevatedButton.icon(
+                                              onPressed: () async {
+                                                AllMaterial.cusDialogValidasi(
+                                                  title: "Menerima Absen",
+                                                  subtitle:
+                                                      "Apakah Anda yakin?",
+                                                  onConfirm: () async {
+                                                    await mainCont
+                                                        .patchTinjauanAbsenPetugas(
+                                                            true, id);
+                                                    Get.back();
+                                                    Get.back();
+                                                  },
+                                                  onCancel: () => Get.back(),
+                                                );
+                                              },
+                                              label: Text(
+                                                "Terima",
+                                                style: AllMaterial.workSans(
+                                                  color: AllMaterial.colorWhite,
+                                                  fontSize: 16,
+                                                  fontWeight:
+                                                      AllMaterial.fontSemiBold,
+                                                ),
+                                              ),
+                                              icon: const Icon(Icons.check,
+                                                  color:
+                                                      AllMaterial.colorWhite),
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor:
+                                                    AllMaterial.colorPrimary,
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                                elevation: 0,
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 14),
+                                              ),
                                             ),
                                           ),
                                         ],
                                       ),
-                                    ),
-                                  ],
+                                      title: absen?.data?.tanggal == null
+                                          ? ""
+                                          : AllMaterial.hariTanggalBulanTahun(
+                                              absen?.data?.tanggal
+                                                      ?.toIso8601String() ??
+                                                  ""),
+                                      addSubtitle: false,
+                                      konten: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                vertical: 5, horizontal: 10),
+                                            margin: const EdgeInsets.only(
+                                                right: 5, bottom: 15),
+                                            decoration: BoxDecoration(
+                                              color:
+                                                  AllMaterial.colorSoftPrimary,
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                              border: Border.all(
+                                                  color:
+                                                      AllMaterial.colorStroke),
+                                            ),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Icon(MdiIcons.accountTie,
+                                                    color: AllMaterial
+                                                        .colorPrimary),
+                                                const SizedBox(width: 4),
+                                                Text(
+                                                  absen?.data?.siswa?.kelas
+                                                          ?.guruWalas?.nama ??
+                                                      "",
+                                                  style: AllMaterial.workSans(
+                                                    color: AllMaterial
+                                                        .colorPrimary,
+                                                    fontWeight:
+                                                        AllMaterial.fontMedium,
+                                                  ),
+                                                ),
+                                                const SizedBox(width: 10),
+                                                Text("|",
+                                                    style: AllMaterial.workSans(
+                                                        color: AllMaterial
+                                                            .colorSoftPrimary)),
+                                                const SizedBox(width: 10),
+                                                Text(
+                                                  absen?.data?.siswa?.kelas
+                                                          ?.nama ??
+                                                      "",
+                                                  style: AllMaterial.workSans(
+                                                    color: AllMaterial
+                                                        .colorPrimary,
+                                                    fontWeight:
+                                                        AllMaterial.fontMedium,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Expanded(
+                                                child:
+                                                    AllMaterial.contextWidget(
+                                                  icon: MdiIcons.account,
+                                                  subtitle: "Nama Siswa",
+                                                  title: absen
+                                                          ?.data?.siswa?.nama ??
+                                                      "",
+                                                ),
+                                              ),
+                                              const SizedBox(width: 10),
+                                              Expanded(
+                                                child:
+                                                    AllMaterial.contextWidget(
+                                                  icon: MdiIcons.clock,
+                                                  subtitle: "Waktu Absen",
+                                                  title:
+                                                      "Pukul ${absen?.data?.jam == "" ? "" : AllMaterial.jamMenit(absen?.data?.jam)}",
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 20),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Expanded(
+                                                child:
+                                                    AllMaterial.contextWidget(
+                                                  icon: MdiIcons.accountTie,
+                                                  subtitle: "Guru Mapel",
+                                                  title: absen?.data?.jadwal
+                                                          ?.guruMapel?.nama ??
+                                                      "",
+                                                ),
+                                              ),
+                                              const SizedBox(width: 10),
+                                              Expanded(
+                                                child:
+                                                    AllMaterial.contextWidget(
+                                                  icon: MdiIcons.fingerprint,
+                                                  subtitle: "Jenis Absen",
+                                                  title:
+                                                      "Absen ${absen?.data?.status ?? ""}",
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 20),
+                                          Container(
+                                            width: Get.width,
+                                            padding: const EdgeInsets.all(16),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                              border: Border.all(
+                                                  color:
+                                                      AllMaterial.colorStroke,
+                                                  width: 1.5),
+                                            ),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  "Deskripsi Absen",
+                                                  style: AllMaterial.workSans(
+                                                    fontSize: 17,
+                                                    color: AllMaterial
+                                                        .colorPrimary,
+                                                    fontWeight: AllMaterial
+                                                        .fontSemiBold,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 15),
+                                                Text(
+                                                  absen?.data?.detail
+                                                              ?.catatan ==
+                                                          ""
+                                                      ? "Tidak ada deskripsi yang ditambahkan."
+                                                      : absen?.data?.detail
+                                                              ?.catatan ??
+                                                          "",
+                                                  style: AllMaterial.workSans(
+                                                      color: AllMaterial
+                                                          .colorGreySec),
+                                                ),
+                                                const SizedBox(
+                                                  height: 15,
+                                                ),
+                                                Text(
+                                                  "Bukti Dokumen",
+                                                  style: AllMaterial.workSans(
+                                                    fontSize: 17,
+                                                    color: AllMaterial
+                                                        .colorPrimary,
+                                                    fontWeight: AllMaterial
+                                                        .fontSemiBold,
+                                                  ),
+                                                ),
+                                                const SizedBox(height: 15),
+                                                Obx(
+                                                  () => historiC
+                                                                  .detilAbsen
+                                                                  .value
+                                                                  ?.data
+                                                                  ?.file ==
+                                                              "" ||
+                                                          historiC
+                                                                  .detilAbsen
+                                                                  .value
+                                                                  ?.data
+                                                                  ?.file ==
+                                                              null
+                                                      ? GestureDetector(
+                                                          onTap: () {
+                                                            Get.to(
+                                                              () => HeroImage(
+                                                                namePath:
+                                                                    "${absen?.data?.siswa?.nama?.replaceAll(" ", "-")}-${DateFormat('dd-MM-yyyy').format(
+                                                                  DateTime
+                                                                      .now(),
+                                                                )}",
+                                                                imageUrl: absen
+                                                                        ?.data
+                                                                        ?.file
+                                                                        ?.replaceAll(
+                                                                            "localhost",
+                                                                            ApiUrl.baseUrl) ??
+                                                                    "https://picsum.photos/200/300?grayscale",
+                                                              ),
+                                                            );
+                                                          },
+                                                          child: PreviewImage(
+                                                            fileName: absen
+                                                                    ?.data?.file
+                                                                    ?.replaceAll(
+                                                                        "localhost",
+                                                                        ApiUrl
+                                                                            .baseUrl) ??
+                                                                "https://picsum.photos/200/300?grayscale",
+                                                          ),
+                                                        )
+                                                      : Text(
+                                                          "Tidak ada bukti dokumen yang ditambahkan.",
+                                                          style: AllMaterial
+                                                              .workSans(
+                                                            color: AllMaterial
+                                                                .colorGreySec,
+                                                          ),
+                                                        ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                  svg: SvgPicture.asset(
+                                    "assets/svg/absen-ceklis.svg",
+                                    fit: BoxFit.cover,
+                                  ),
                                 ),
-                              );
-                            },
-                            svg:
-                                SvgPicture.asset("assets/svg/absen-ceklis.svg"),
-                          ),
-                        ),
+                              ),
+                            );
+                          }
+                        },
                       ),
                       const SizedBox(height: 16),
                     ],

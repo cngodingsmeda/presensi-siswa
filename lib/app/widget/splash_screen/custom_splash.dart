@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:presensi_siswa/all_material.dart';
 
 class CusplashScreen extends StatelessWidget {
@@ -21,11 +22,7 @@ class CusplashScreen extends StatelessWidget {
               width: 105,
               height: 105,
               margin: const EdgeInsets.symmetric(vertical: 5),
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("assets/icon/logo.png"),
-                ),
-              ),
+              child: SvgPicture.asset("assets/svg/logo.svg"),
             ),
             RichText(
               text: TextSpan(
