@@ -39,7 +39,9 @@ class ProfilSiswaView extends GetView<ProfilSiswaController> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      mainCont.profilSiswa.value?.data?.fotoProfile == "" || mainCont.profilSiswa.value?.data?.fotoProfile == null
+                      mainCont.profilSiswa.value?.data?.fotoProfile == "" ||
+                              mainCont.profilSiswa.value?.data?.fotoProfile ==
+                                  null
                           ? Container(
                               alignment: Alignment.center,
                               height: 80,
@@ -71,10 +73,11 @@ class ProfilSiswaView extends GetView<ProfilSiswaController> {
                                   image: NetworkImage(
                                     mainCont.profilSiswa.value?.data
                                             ?.fotoProfile
-                                            ?.replaceAll(
-                                          "localhost",
-                                          ApiUrl.baseUrl,
-                                        ) ??
+                                            .toString()
+                                            .replaceAll(
+                                              "localhost",
+                                              ApiUrl.baseUrl,
+                                            ) ??
                                         "https://picsum.photos/200/300?grayscale",
                                   ),
                                 ),

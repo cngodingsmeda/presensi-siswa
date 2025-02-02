@@ -7,6 +7,7 @@ import 'package:presensi_siswa/all_material.dart';
 import 'package:presensi_siswa/app/data/api_url.dart';
 import 'package:presensi_siswa/app/modules/petugas/main_petugas/controllers/main_petugas_controller.dart';
 import 'package:presensi_siswa/app/widget/hero_image/hero_image.dart';
+import 'package:presensi_siswa/app/widget/open_file/open_file_custom.dart';
 import 'package:presensi_siswa/app/widget/preview_image/preview_image.dart';
 import '../controllers/histori_tinjauan_petugas_controller.dart';
 
@@ -394,6 +395,9 @@ class HistoriTinjauanPetugasView
                                                             mainAxisAlignment:
                                                                 MainAxisAlignment
                                                                     .spaceBetween,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
                                                             children: [
                                                               Expanded(
                                                                 child: AllMaterial
@@ -430,6 +434,9 @@ class HistoriTinjauanPetugasView
                                                             mainAxisAlignment:
                                                                 MainAxisAlignment
                                                                     .spaceBetween,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
                                                             children: [
                                                               Expanded(
                                                                 child: AllMaterial
@@ -543,14 +550,30 @@ class HistoriTinjauanPetugasView
                                                                       ? GestureDetector(
                                                                           onTap:
                                                                               () {
-                                                                            Get.to(
-                                                                              () => HeroImage(
-                                                                                namePath: "${absen?.data?.siswa?.nama?.replaceAll(" ", "-")}-${DateFormat('dd-MM-yyyy').format(
-                                                                                  DateTime.now(),
-                                                                                )}",
-                                                                                imageUrl: absen?.data?.file?.replaceAll("localhost", ApiUrl.baseUrl) ?? "https://picsum.photos/200/300?grayscale",
-                                                                              ),
-                                                                            );
+                                                                            if (absen?.data?.file != null ||
+                                                                                absen?.data?.file != "") {
+                                                                              if (absen!.data!.file!.endsWith(".jpg") || absen.data!.file!.endsWith(".png]")) {
+                                                                                Get.to(
+                                                                                  () => HeroImage(
+                                                                                    namePath: "${absen.data?.siswa?.nama?.replaceAll(" ", "-")}-${DateFormat('dd-MM-yyyy').format(
+                                                                                      DateTime.now(),
+                                                                                    )}",
+                                                                                    imageUrl: absen.data?.file?.replaceAll("localhost", ApiUrl.baseUrl) ?? "https://picsum.photos/200/300?grayscale",
+                                                                                  ),
+                                                                                );
+                                                                              } else if (absen.data!.file!.endsWith(".pdf") || absen.data!.file!.endsWith(".docx]")) {
+                                                                                FileHandler.openFile(absen.data!.file ?? "");
+                                                                              } else {
+                                                                                Get.back();
+                                                                                AllMaterial.messageScaffold(
+                                                                                  title: "File tidak ditemukan, coba lagi nanti!",
+                                                                                );
+                                                                              }
+                                                                            } else {
+                                                                              AllMaterial.messageScaffold(
+                                                                                title: "File tidak ditemukan, coba lagi nanti!",
+                                                                              );
+                                                                            }
                                                                           },
                                                                           child:
                                                                               PreviewImage(
@@ -828,14 +851,30 @@ class HistoriTinjauanPetugasView
                                                                       ? GestureDetector(
                                                                           onTap:
                                                                               () {
-                                                                            Get.to(
-                                                                              () => HeroImage(
-                                                                                namePath: "${absen?.data?.siswa?.nama?.replaceAll(" ", "-")}-${DateFormat('dd-MM-yyyy').format(
-                                                                                  DateTime.now(),
-                                                                                )}",
-                                                                                imageUrl: absen?.data?.file?.replaceAll("localhost", ApiUrl.baseUrl) ?? "https://picsum.photos/200/300?grayscale",
-                                                                              ),
-                                                                            );
+                                                                            if (absen?.data?.file != null ||
+                                                                                absen?.data?.file != "") {
+                                                                              if (absen!.data!.file!.endsWith(".jpg") || absen.data!.file!.endsWith(".png]")) {
+                                                                                Get.to(
+                                                                                  () => HeroImage(
+                                                                                    namePath: "${absen.data?.siswa?.nama?.replaceAll(" ", "-")}-${DateFormat('dd-MM-yyyy').format(
+                                                                                      DateTime.now(),
+                                                                                    )}",
+                                                                                    imageUrl: absen.data?.file?.replaceAll("localhost", ApiUrl.baseUrl) ?? "https://picsum.photos/200/300?grayscale",
+                                                                                  ),
+                                                                                );
+                                                                              } else if (absen.data!.file!.endsWith(".pdf") || absen.data!.file!.endsWith(".docx]")) {
+                                                                                FileHandler.openFile(absen.data!.file ?? "");
+                                                                              } else {
+                                                                                Get.back();
+                                                                                AllMaterial.messageScaffold(
+                                                                                  title: "File tidak ditemukan, coba lagi nanti!",
+                                                                                );
+                                                                              }
+                                                                            } else {
+                                                                              AllMaterial.messageScaffold(
+                                                                                title: "File tidak ditemukan, coba lagi nanti!",
+                                                                              );
+                                                                            }
                                                                           },
                                                                           child:
                                                                               PreviewImage(
@@ -1114,14 +1153,30 @@ class HistoriTinjauanPetugasView
                                                                       ? GestureDetector(
                                                                           onTap:
                                                                               () {
-                                                                            Get.to(
-                                                                              () => HeroImage(
-                                                                                namePath: "${absen?.data?.siswa?.nama?.replaceAll(" ", "-")}-${DateFormat('dd-MM-yyyy').format(
-                                                                                  DateTime.now(),
-                                                                                )}",
-                                                                                imageUrl: absen?.data?.file?.replaceAll("localhost", ApiUrl.baseUrl) ?? "https://picsum.photos/200/300?grayscale",
-                                                                              ),
-                                                                            );
+                                                                            if (absen?.data?.file != null ||
+                                                                                absen?.data?.file != "") {
+                                                                              if (absen!.data!.file!.endsWith(".jpg") || absen.data!.file!.endsWith(".png]")) {
+                                                                                Get.to(
+                                                                                  () => HeroImage(
+                                                                                    namePath: "${absen.data?.siswa?.nama?.replaceAll(" ", "-")}-${DateFormat('dd-MM-yyyy').format(
+                                                                                      DateTime.now(),
+                                                                                    )}",
+                                                                                    imageUrl: absen.data?.file?.replaceAll("localhost", ApiUrl.baseUrl) ?? "https://picsum.photos/200/300?grayscale",
+                                                                                  ),
+                                                                                );
+                                                                              } else if (absen.data!.file!.endsWith(".pdf") || absen.data!.file!.endsWith(".docx]")) {
+                                                                                FileHandler.openFile(absen.data!.file ?? "");
+                                                                              } else {
+                                                                              Get.back();
+                                                                                AllMaterial.messageScaffold(
+                                                                                  title: "File tidak ditemukan, coba lagi nanti!",
+                                                                                );
+                                                                              }
+                                                                            } else {
+                                                                              AllMaterial.messageScaffold(
+                                                                                title: "File tidak ditemukan, coba lagi nanti!",
+                                                                              );
+                                                                            }
                                                                           },
                                                                           child:
                                                                               PreviewImage(

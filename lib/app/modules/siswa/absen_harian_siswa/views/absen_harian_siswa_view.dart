@@ -508,16 +508,28 @@ class AbsenHarianSiswaView extends GetView<AbsenHarianSiswaController> {
                     ),
             ),
             const SizedBox(height: 20),
-            AllMaterial.cusButton(
-              onTap: controller.bisaAbsen.isFalse
-                  ? null
-                  : () {
-                      Get.to(() => const BuatAbsenHarianSiswaView());
-                    },
-              label: "Absen Harian",
-              icon: const Icon(
-                Icons.fingerprint,
-                color: AllMaterial.colorWhite,
+            Obx(
+              () => AllMaterial.cusButton(
+                onTap: controller.bisaAbsen.isFalse
+                    ? null
+                    : () {
+                        Get.to(
+                          () => const BuatAbsenHarianSiswaView(),
+                          arguments: {
+                            "tanggal": AllMaterial.hariTanggalBulanTahun(
+                              DateTime.now().toIso8601String(),
+                            ),
+                            "lokasi": mainCont
+                                    .profilSiswa.value?.data?.sekolah?.nama ??
+                                ""
+                          },
+                        );
+                      },
+                label: "Absen Harian",
+                icon: const Icon(
+                  Icons.fingerprint,
+                  color: AllMaterial.colorWhite,
+                ),
               ),
             ),
           ],

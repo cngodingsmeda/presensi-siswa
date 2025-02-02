@@ -18,6 +18,7 @@ class MainPetugasController extends GetxController {
   var statusCode = 0.obs;
   var userNameFilter = "P".obs;
   String token = AllMaterial.box.read("token");
+  var unreadNotifications = 0.obs;
   final homeCont = Get.put(HomePetugasController());
   final historiC = Get.put(HistoriTinjauanPetugasController());
 

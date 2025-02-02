@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:presensi_siswa/all_material.dart';
-
+import 'package:presensi_siswa/app/data/api_url.dart';
+import 'package:presensi_siswa/app/widget/hero_image/hero_image.dart';
+import 'package:presensi_siswa/app/widget/open_file/open_file_custom.dart';
+import 'package:presensi_siswa/app/widget/preview_image/preview_image.dart';
 import '../controllers/detil_laporan_siswa_controller.dart';
 
 class DetilLaporanSiswaView extends GetView<DetilLaporanSiswaController> {
@@ -10,54 +14,62 @@ class DetilLaporanSiswaView extends GetView<DetilLaporanSiswaController> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(DetilLaporanSiswaController());
+    // final lapCont = Get.put(LaporanSiswaController());
+    var arg = Get.arguments;
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: AllMaterial.colorWhite,
+        surfaceTintColor: AllMaterial.colorWhite,
+        centerTitle: true,
+        title: Text(
+          arg["tanggal"] ?? "",
+          style: AllMaterial.workSans(
+            fontSize: 17,
+            fontWeight: AllMaterial.fontSemiBold,
+          ),
+        ),
+      ),
       body: AllMaterial.containerLinear(
         padding: 0,
         child: SafeArea(
           child: Column(
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      Get.back();
-                    },
-                    icon: Icon(
-                      MdiIcons.arrowLeft,
-                      color: AllMaterial.colorBlack,
-                    ),
-                  ),
-                  SizedBox(
-                    width: Get.width / 4.5,
-                  ),
-                  Text(
-                    "Detil Laporan",
-                    style: AllMaterial.workSans(
-                      fontSize: 17,
-                      fontWeight: AllMaterial.fontSemiBold,
-                    ),
-                  ),
-                ],
-              ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
-                  itemCount: 3,
+                  itemCount: controller.detilAbsen.length,
                   itemBuilder: (context, index) {
+                    var mapel = controller.detilAbsen[index];
+                    if (controller.detilAbsen.isEmpty) {
+                      return Center(
+                        child: Text(
+                          "Tidak ada detail laporan yang tersedia",
+                          style: AllMaterial.workSans(
+                              color: AllMaterial.colorGreySec),
+                        ),
+                      );
+                    }
                     return Padding(
                       padding: const EdgeInsets.only(top: 16),
                       child: AllMaterial.menuJadwal(
-                        context: "Pukul ${controller.jam[index]}",
-                        title: "Jam ${controller.mapel[index]}",
-                        subtitleContext: "Jenis Absen :",
-                        subtitle: "Hadir",
-                        onTap: () {
+                        context:
+                            "Pukul ${AllMaterial.jamMenit(mapel["absen"]["jam"] ?? "")}",
+                        title: "Jam ${mapel["mapel"]["nama"]}",
+                        subtitleContext: "Status Absen :",
+                        subtitle: mapel["absen"]["status"],
+                        subtitleColor: mapel["absen"]["status"] == "tidak_hadir"
+                            ? false
+                            : true,
+                        onTap: () async {
+                          var id = mapel["absen"]["id"];
+
+                          await controller.fetchDetilAbsenSiswa(id);
+                          var detil = controller.detil.value?.data;
                           AllMaterial.detilKonten(
                             buttonLabel: "Tutup Laporan",
-                            title: "Jam ${controller.mapel[index]}",
+                            title: "Jam ${mapel["mapel"]["nama"]}",
                             addSubtitle: false,
                             icon: const Icon(
                               Icons.clear,
@@ -70,13 +82,15 @@ class DetilLaporanSiswaView extends GetView<DetilLaporanSiswaController> {
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Expanded(
                                       child: AllMaterial.contextWidget(
                                         icon: MdiIcons.mapMarker,
                                         subtitle: "Lokasi Absen",
-                                        title:
-                                            "SMK Negeri 2 Mataram dengan Deskripsi Sangat Panjang",
+                                        title: detil?.jadwal?.koordinat
+                                                ?.namaTempat ??
+                                            "",
                                       ),
                                     ),
                                     const SizedBox(width: 10),
@@ -85,13 +99,14 @@ class DetilLaporanSiswaView extends GetView<DetilLaporanSiswaController> {
                                         icon: MdiIcons.clock,
                                         subtitle: "Waktu Absen",
                                         title:
-                                            "Pukul ${controller.jamAbsen[index]}",
+                                            "Pukul ${AllMaterial.jamMenit(detil?.jam ?? "")}",
                                       ),
                                     ),
                                   ],
                                 ),
                                 const SizedBox(height: 20),
                                 Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
@@ -99,7 +114,9 @@ class DetilLaporanSiswaView extends GetView<DetilLaporanSiswaController> {
                                       child: AllMaterial.contextWidget(
                                         icon: MdiIcons.accountTie,
                                         subtitle: "Guru Mapel",
-                                        title: "Heri Harjanto S.Pd",
+                                        title: AllMaterial.formatNamaPanjang(
+                                            detil?.jadwal?.guruMapel?.nama ??
+                                                ""),
                                       ),
                                     ),
                                     const SizedBox(width: 10),
@@ -107,7 +124,8 @@ class DetilLaporanSiswaView extends GetView<DetilLaporanSiswaController> {
                                       child: AllMaterial.contextWidget(
                                         icon: MdiIcons.fingerprint,
                                         subtitle: "Jenis Absen",
-                                        title: "Absen Hadir",
+                                        title:
+                                            "Absen ${mapel["absen"]["status"]}",
                                       ),
                                     ),
                                   ],
@@ -138,7 +156,10 @@ class DetilLaporanSiswaView extends GetView<DetilLaporanSiswaController> {
                                       ),
                                       const SizedBox(height: 15),
                                       Text(
-                                        "Tidak ada deskripsi yang ditambahkan.",
+                                        detil?.detail?.catatan == "" ||
+                                                detil?.detail?.catatan == null
+                                            ? "Tidak ada deskripsi yang ditambahkan."
+                                            : "${detil?.detail?.catatan}",
                                         style: AllMaterial.workSans(
                                           color: AllMaterial.colorGreySec,
                                         ),
@@ -153,11 +174,91 @@ class DetilLaporanSiswaView extends GetView<DetilLaporanSiswaController> {
                                         ),
                                       ),
                                       const SizedBox(height: 15),
-                                      Text(
-                                        "Tidak ada bukti dokumen yang ditambahkan.",
-                                        style: AllMaterial.workSans(
-                                          color: AllMaterial.colorGreySec,
-                                        ),
+                                      Obx(
+                                        () => controller.detil.value?.data
+                                                        ?.file !=
+                                                    "" &&
+                                                controller.detil.value?.data
+                                                        ?.file !=
+                                                    null
+                                            ? GestureDetector(
+                                                onTap: () {
+                                                  if (controller.detil.value
+                                                              ?.data?.file !=
+                                                          null ||
+                                                      controller.detil.value
+                                                              ?.data?.file !=
+                                                          "") {
+                                                    if (controller.detil.value!
+                                                            .data!.file!
+                                                            .endsWith(".jpg") ||
+                                                        controller.detil.value!
+                                                            .data!.file!
+                                                            .endsWith(
+                                                                ".png]")) {
+                                                      Get.to(
+                                                        () => HeroImage(
+                                                          namePath:
+                                                              "${controller.detil.value?.data?.siswa?.nama?.replaceAll(" ", "-")}-${DateFormat('dd-MM-yyyy').format(
+                                                            DateTime.now(),
+                                                          )}",
+                                                          imageUrl: controller
+                                                                  .detil
+                                                                  .value
+                                                                  ?.data
+                                                                  ?.file
+                                                                  ?.replaceAll(
+                                                                      "localhost",
+                                                                      ApiUrl
+                                                                          .baseUrl) ??
+                                                              "https://picsum.photos/200/300?grayscale",
+                                                        ),
+                                                      );
+                                                    } else if (controller.detil
+                                                            .value!.data!.file!
+                                                            .endsWith(".pdf") ||
+                                                        controller.detil.value!
+                                                            .data!.file!
+                                                            .endsWith(
+                                                                ".docx]")) {
+                                                      FileHandler.openFile(
+                                                          controller
+                                                                  .detil
+                                                                  .value!
+                                                                  .data!
+                                                                  .file ??
+                                                              "");
+                                                    } else {
+                                                      Get.back();
+                                                      AllMaterial
+                                                          .messageScaffold(
+                                                        title:
+                                                            "File tidak ditemukan, coba lagi nanti!",
+                                                      );
+                                                    }
+                                                  } else {
+                                                    AllMaterial.messageScaffold(
+                                                      title:
+                                                          "File tidak ditemukan, coba lagi nanti!",
+                                                    );
+                                                  }
+                                                },
+                                                child: PreviewImage(
+                                                  fileName: controller.detil
+                                                          .value?.data?.file
+                                                          ?.replaceAll(
+                                                              "localhost",
+                                                              ApiUrl.baseUrl) ??
+                                                      "https://picsum.photos/200/300?grayscale",
+                                                ),
+                                              )
+                                            : Text(
+                                                "Tidak ada bukti dokumen yang ditambahkan.",
+                                                style: AllMaterial.workSans(
+                                                  color:
+                                                      AllMaterial.colorGreySec,
+                                                ),
+                                              ),
                                       ),
                                     ],
                                   ),

@@ -147,7 +147,15 @@ class AbsenKelasHarianPetugasView
                       ),
                       const SizedBox(height: 30),
                       Obx(
-                        () => Column(
+                        () => controller.statusCode.value == 404
+                            ? Center(
+                                child: Text(
+                                  "Tidak ada absen pada tanggal yang diberikan",
+                                  style: AllMaterial.workSans(
+                                    color: AllMaterial.colorGreySec,
+                                  ),
+                                ),
+                              ) : Column(
                           children: List.generate(
                             controller.jumlahSiswa.value,
                             (index) {

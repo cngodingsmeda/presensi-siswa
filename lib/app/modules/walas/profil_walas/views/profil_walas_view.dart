@@ -3,8 +3,10 @@ import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:presensi_siswa/all_material.dart';
 import 'package:presensi_siswa/app/controller/general_controller.dart';
-import 'package:presensi_siswa/app/modules/walas/absen_harian_siswa_walas/views/absen_harian_siswa_walas_view.dart';
+import 'package:presensi_siswa/app/data/api_url.dart';
 import 'package:presensi_siswa/app/modules/walas/edit_profil_walas/views/edit_profil_walas_view.dart';
+import 'package:presensi_siswa/app/modules/walas/main_walas/controllers/main_walas_controller.dart';
+import 'package:presensi_siswa/app/widget/hero_image/hero_image.dart';
 import 'package:presensi_siswa/app/widget/ubah_password/views/ubah_password_view.dart';
 import 'package:presensi_siswa/app/widget/verifikasi_email/views/verifikasi_email_view.dart';
 
@@ -14,7 +16,7 @@ class ProfilWalasView extends GetView<ProfilWalasController> {
   const ProfilWalasView({super.key});
   @override
   Widget build(BuildContext context) {
-    // final controller = Get.put(ProfilWalasController());
+    final mainCont = Get.put(MainWalasController());
     return Scaffold(
       backgroundColor: AllMaterial.colorWhite,
       body: AllMaterial.containerLinear(
@@ -36,22 +38,72 @@ class ProfilWalasView extends GetView<ProfilWalasController> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Container(
-                        alignment: Alignment.bottomRight,
-                        height: 80,
-                        width: 80,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(1000),
-                          color: AllMaterial.colorSecondary,
-                        ),
-                      ),
+                      mainCont.profilWalas.value?.data?.fotoProfile == "" ||
+                              mainCont.profilWalas.value?.data?.fotoProfile ==
+                                  null
+                          ? Container(
+                              alignment: Alignment.center,
+                              height: 80,
+                              width: 80,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(1000),
+                                color: AllMaterial.colorMint,
+                              ),
+                              child: Obx(
+                                () => Text(
+                                  mainCont.userNameFilter.value,
+                                  style: AllMaterial.workSans(
+                                    color: AllMaterial.colorWhite,
+                                    fontWeight: AllMaterial.fontSemiBold,
+                                    fontSize: 40,
+                                  ),
+                                ),
+                              ),
+                            )
+                          : GestureDetector(
+                              onTap: () {
+                                Get.to(
+                                  () => HeroImage(
+                                    namePath:
+                                        "${mainCont.profilWalas.value?.data?.nama?.replaceAll(" ", "-")}-fotoProfile",
+                                    imageUrl: mainCont.profilWalas.value?.data
+                                            ?.fotoProfile
+                                            ?.replaceAll(
+                                                "localhost", ApiUrl.baseUrl) ??
+                                        "https://picsum.photos/200/300?grayscale",
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                alignment: Alignment.center,
+                                height: 80,
+                                width: 80,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(1000),
+                                  color: AllMaterial.colorMint,
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(
+                                      mainCont.profilWalas.value?.data
+                                              ?.fotoProfile
+                                              ?.replaceAll(
+                                            "localhost",
+                                            ApiUrl.baseUrl,
+                                          ) ??
+                                          "https://picsum.photos/200/300?grayscale",
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
                       const SizedBox(width: 16),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Heri Harjanto S.Pd",
+                              AllMaterial.formatNamaPanjang(
+                                  mainCont.profilWalas.value?.data?.nama ?? ""),
                               style: AllMaterial.workSans(
                                 fontWeight: AllMaterial.fontBold,
                                 fontSize: 20,
@@ -59,7 +111,7 @@ class ProfilWalasView extends GetView<ProfilWalasController> {
                               ),
                             ),
                             Text(
-                              "NIP : 21424521232",
+                              "NIP : ${mainCont.profilWalas.value?.data?.nip ?? ""}",
                               style: AllMaterial.workSans(
                                 fontWeight: AllMaterial.fontMedium,
                                 fontSize: 14,
@@ -90,14 +142,21 @@ class ProfilWalasView extends GetView<ProfilWalasController> {
                       ),
                       AllMaterial.profilWidget(
                         onTap: () {
-                          Get.to(() => const AbsenHarianSiswaWalasView());
+                          // Get.to(() => const AbsenHarianSiswaPetugasView());
                         },
-                        title: "Absen Harian Siswa",
+                        title: "Absen Harian",
                         icon: MdiIcons.calendarBlank,
                       ),
                       AllMaterial.profilWidget(
                         onTap: () {
-                          Get.to(() => const VerifikasiEmailView());
+                          var email = mainCont.profilWalas.value?.data?.email;
+                          if (email == "" || email == null) {
+                            Get.to(() => const VerifikasiEmailView());
+                          } else {
+                            AllMaterial.messageScaffold(
+                              title: "Email Anda telah terverifikasi!",
+                            );
+                          }
                         },
                         title: "Verifikasi Email",
                         icon: MdiIcons.email,

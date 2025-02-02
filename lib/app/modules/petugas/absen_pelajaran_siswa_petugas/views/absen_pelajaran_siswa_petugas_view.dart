@@ -6,6 +6,7 @@ import 'package:material_design_icons_flutter/material_design_icons_flutter.dart
 import 'package:presensi_siswa/all_material.dart';
 import 'package:presensi_siswa/app/data/api_url.dart';
 import 'package:presensi_siswa/app/widget/hero_image/hero_image.dart';
+import 'package:presensi_siswa/app/widget/open_file/open_file_custom.dart';
 import 'package:presensi_siswa/app/widget/preview_image/preview_image.dart';
 
 import '../controllers/absen_pelajaran_siswa_petugas_controller.dart';
@@ -83,6 +84,7 @@ class AbsenPelajaranSiswaPetugasView
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
@@ -113,6 +115,7 @@ class AbsenPelajaranSiswaPetugasView
                                 ),
                                 const SizedBox(height: 20),
                                 Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
@@ -191,21 +194,65 @@ class AbsenPelajaranSiswaPetugasView
                                                     null
                                             ? GestureDetector(
                                                 onTap: () {
-                                                  Get.to(
-                                                    () => HeroImage(
-                                                      namePath:
-                                                          "${controller.detil.value?.data?.siswa?.nama?.replaceAll(" ", "-")}-${DateFormat('dd-MM-yyyy').format(
-                                                        DateTime.now(),
-                                                      )}",
-                                                      imageUrl: controller.detil
-                                                              .value?.data?.file
-                                                              ?.replaceAll(
-                                                                  "localhost",
-                                                                  ApiUrl
-                                                                      .baseUrl) ??
-                                                          "https://picsum.photos/200/300?grayscale",
-                                                    ),
-                                                  );
+                                                  if (controller.detil.value
+                                                              ?.data?.file !=
+                                                          null ||
+                                                      controller.detil.value
+                                                              ?.data?.file !=
+                                                          "") {
+                                                    if (controller.detil.value!
+                                                            .data!.file!
+                                                            .endsWith(".jpg") ||
+                                                        controller.detil.value!
+                                                            .data!.file!
+                                                            .endsWith(
+                                                                ".png]")) {
+                                                      Get.to(
+                                                        () => HeroImage(
+                                                          namePath:
+                                                              "${controller.detil.value?.data?.siswa?.nama?.replaceAll(" ", "-")}-${DateFormat('dd-MM-yyyy').format(
+                                                            DateTime.now(),
+                                                          )}",
+                                                          imageUrl: controller
+                                                                  .detil
+                                                                  .value
+                                                                  ?.data
+                                                                  ?.file
+                                                                  ?.replaceAll(
+                                                                      "localhost",
+                                                                      ApiUrl
+                                                                          .baseUrl) ??
+                                                              "https://picsum.photos/200/300?grayscale",
+                                                        ),
+                                                      );
+                                                    } else if (controller.detil
+                                                            .value!.data!.file!
+                                                            .endsWith(".pdf") ||
+                                                        controller.detil.value!
+                                                            .data!.file!
+                                                            .endsWith(
+                                                                ".docx]")) {
+                                                      FileHandler.openFile(
+                                                          controller
+                                                                  .detil
+                                                                  .value
+                                                                  ?.data
+                                                                  ?.file ??
+                                                              "");
+                                                    } else {
+                                                      Get.back();
+                                                      AllMaterial
+                                                          .messageScaffold(
+                                                        title:
+                                                            "File tidak ditemukan, coba lagi nanti!",
+                                                      );
+                                                    }
+                                                  } else {
+                                                    AllMaterial.messageScaffold(
+                                                      title:
+                                                          "File tidak ditemukan, coba lagi nanti!",
+                                                    );
+                                                  }
                                                 },
                                                 child: PreviewImage(
                                                   fileName: controller.detil

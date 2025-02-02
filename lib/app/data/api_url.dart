@@ -38,6 +38,8 @@ abstract class ApiUrl {
       "$url/siswa/absen/cekAbsen";
   static var urlGetJadwalHariAbsenSiswa =
       "$url/siswa/jadwal/getHariContainstJadwal";
+  static var urlGetDetilLaporanAbsenSiswa =
+      "$url/siswa/absen/detail/";
   static var urlGetDetilJadwalHariAbsenSiswa =
       "$url/siswa/jadwal?hari=";
   static var urlPostKoordinatAbsenSiswa =
@@ -45,4 +47,10 @@ abstract class ApiUrl {
   static String getAllHistoriAbsenSiswa(int bulan, int tahun) {
     return "$url/siswa/absen/laporan?month=$bulan&year=$tahun";
   }
+
+  // WALAS
+  static var urlGetProfileWalas = "$url/guru-walas/profile";
+  static var urlStatistikAbsenWalas = "$url/guru-walas/absen/statistik";
+  static var urlGetAbsenKelasWalasByTanggal = "$url/guru-walas/absen/kelas?tanggal=";
+
 }

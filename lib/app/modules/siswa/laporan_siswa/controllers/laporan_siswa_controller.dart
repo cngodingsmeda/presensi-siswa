@@ -10,8 +10,8 @@ class LaporanSiswaController extends GetxController {
   var absen = [].obs;
   var selectedMonth = 6.obs;
   var isLoading = false.obs;
-  DateTime now = DateTime.now();
   var token = AllMaterial.box.read("token");
+  DateTime now = DateTime.now();
   var historiAbsen = Rx<HistoriAbsenSiswaModel?>(null);
   var absensiList = <dynamic>[].obs;
 

@@ -180,6 +180,7 @@ class DetilLaporanPelajaranWalasView
                                           Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Expanded(
                                                 child:
@@ -205,6 +206,7 @@ class DetilLaporanPelajaranWalasView
                                           Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
                                               Expanded(
                                                 child:

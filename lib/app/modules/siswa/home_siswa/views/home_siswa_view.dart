@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'package:presensi_siswa/all_material.dart';
 import 'package:presensi_siswa/app/data/api_url.dart';
 import 'package:presensi_siswa/app/modules/siswa/absen_harian_siswa/views/absen_harian_siswa_view.dart';
-import 'package:presensi_siswa/app/modules/siswa/laporan_siswa/controllers/laporan_siswa_controller.dart';
+import 'package:presensi_siswa/app/modules/siswa/detil_laporan_siswa/views/detil_laporan_siswa_view.dart';
 import 'package:presensi_siswa/app/modules/siswa/main_siswa/controllers/main_siswa_controller.dart';
 
 import '../controllers/home_siswa_controller.dart';
@@ -16,7 +16,6 @@ class HomeSiswaView extends GetView<HomeSiswaController> {
   @override
   Widget build(BuildContext context) {
     final mainCont = Get.put(MainSiswaController());
-    final lapCont = Get.put(LaporanSiswaController());
     return Scaffold(
       backgroundColor: AllMaterial.colorWhite,
       body: SafeArea(
@@ -223,12 +222,12 @@ class HomeSiswaView extends GetView<HomeSiswaController> {
                         ),
                       ),
                       Obx(() {
-                        if (lapCont.isLoading.value) {
+                        if (mainCont.isLoading.value) {
                           return const Center(
                               child: CircularProgressIndicator());
                         }
 
-                        if (lapCont.absensiList.isEmpty) {
+                        if (mainCont.absensiList.isEmpty) {
                           return Center(
                             child: Padding(
                               padding: const EdgeInsets.only(top: 20),
@@ -241,14 +240,14 @@ class HomeSiswaView extends GetView<HomeSiswaController> {
                           );
                         }
 
-                        int itemCount = min(3, lapCont.absensiList.length);
+                        int itemCount = min(3, mainCont.absensiList.length);
 
                         return ListView.builder(
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
                           itemCount: itemCount,
                           itemBuilder: (context, index) {
-                            final absenData = lapCont.absensiList[index];
+                            final absenData = mainCont.absensiList[index];
                             final absen = absenData['absen'];
                             return Padding(
                               padding: const EdgeInsets.only(top: 16),
@@ -262,7 +261,16 @@ class HomeSiswaView extends GetView<HomeSiswaController> {
                                       "",
                                   svg: SvgPicture.asset(
                                       "assets/svg/absen-ceklis.svg"),
-                                  onTap: () {},
+                                  onTap: () {
+                                    print(absen["id"]);
+                                    Get.to(() => const DetilLaporanSiswaView(),
+                                        arguments: {
+                                          "tanggal":
+                                              AllMaterial.hariTanggalBulanTahun(
+                                                  absen['tanggal']),
+                                          "id": absen["id"],
+                                        });
+                                  },
                                 ),
                               ),
                             );

@@ -10,6 +10,7 @@ import 'package:presensi_siswa/app/modules/petugas/histori_tinjauan_petugas/cont
 import 'package:presensi_siswa/app/modules/petugas/histori_tinjauan_petugas/views/histori_tinjauan_petugas_view.dart';
 import 'package:presensi_siswa/app/modules/petugas/main_petugas/controllers/main_petugas_controller.dart';
 import 'package:presensi_siswa/app/widget/hero_image/hero_image.dart';
+import 'package:presensi_siswa/app/widget/open_file/open_file_custom.dart';
 import 'package:presensi_siswa/app/widget/preview_image/preview_image.dart';
 
 import '../controllers/home_petugas_controller.dart';
@@ -481,6 +482,8 @@ class HomePetugasView extends GetView<HomePetugasController> {
                                           Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Expanded(
                                                 child:
@@ -508,6 +511,8 @@ class HomePetugasView extends GetView<HomePetugasController> {
                                           Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
                                               Expanded(
                                                 child:
@@ -601,22 +606,51 @@ class HomePetugasView extends GetView<HomePetugasController> {
                                                               null
                                                       ? GestureDetector(
                                                           onTap: () {
-                                                            Get.to(
-                                                              () => HeroImage(
-                                                                namePath:
-                                                                    "${absen?.data?.siswa?.nama?.replaceAll(" ", "-")}-${DateFormat('dd-MM-yyyy').format(
-                                                                  DateTime
-                                                                      .now(),
-                                                                )}",
-                                                                imageUrl: absen
-                                                                        ?.data
-                                                                        ?.file
-                                                                        ?.replaceAll(
-                                                                            "localhost",
-                                                                            ApiUrl.baseUrl) ??
-                                                                    "https://picsum.photos/200/300?grayscale",
-                                                              ),
-                                                            );
+                                                            if (absen?.data
+                                                                        ?.file !=
+                                                                    null ||
+                                                                absen?.data
+                                                                        ?.file !=
+                                                                    "") {
+                                                              if (absen!.data!
+                                                                      .file!
+                                                                      .endsWith(
+                                                                          ".jpg") ||
+                                                                  absen.data!
+                                                                      .file!
+                                                                      .endsWith(
+                                                                          ".png]")) {
+                                                                Get.to(
+                                                                  () =>
+                                                                      HeroImage(
+                                                                    namePath:
+                                                                        "${absen.data?.siswa?.nama?.replaceAll(" ", "-")}-${DateFormat('dd-MM-yyyy').format(
+                                                                      DateTime
+                                                                          .now(),
+                                                                    )}",
+                                                                    imageUrl: absen
+                                                                            .data
+                                                                            ?.file
+                                                                            ?.replaceAll("localhost",
+                                                                                ApiUrl.baseUrl) ??
+                                                                        "https://picsum.photos/200/300?grayscale",
+                                                                  ),
+                                                                );
+                                                              } else if (absen.data!.file!.endsWith(".pdf") || absen.data!.file!.endsWith(".docx]")) {
+                                                                                FileHandler.openFile(absen.data!.file ?? "");
+                                                                              } else {
+                                                                                AllMaterial.messageScaffold(
+                                                                                  title: "File tidak ditemukan, coba lagi nanti!",
+                                                                                );
+                                                                              }
+                                                            } else {
+                                                              Get.back();
+                                                              AllMaterial
+                                                                  .messageScaffold(
+                                                                title:
+                                                                    "File tidak ditemukan, coba lagi nanti!",
+                                                              );
+                                                            }
                                                           },
                                                           child: PreviewImage(
                                                             fileName: absen

@@ -540,7 +540,9 @@ abstract class AllMaterial {
                         text: " $subtitle",
                         style: AllMaterial.workSans(
                           fontWeight: AllMaterial.fontMedium,
-                          color: subtitleColor ? AllMaterial.colorPrimary : AllMaterial.colorRed,
+                          color: subtitleColor
+                              ? AllMaterial.colorPrimary
+                              : AllMaterial.colorRed,
                         ),
                       ),
                     ],
@@ -566,6 +568,7 @@ abstract class AllMaterial {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
+          mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(
@@ -592,8 +595,6 @@ abstract class AllMaterial {
         SizedBox(
           child: Text(
             "$title",
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
             style: AllMaterial.workSans(
               color: AllMaterial.colorBlack,
               fontSize: 16,
@@ -676,14 +677,126 @@ abstract class AllMaterial {
               color: AllMaterial.colorGreySec,
               fontWeight: AllMaterial.fontRegular,
             ),
-            focusedBorder: OutlineInputBorder(
+            enabledBorder: OutlineInputBorder(
               borderSide: const BorderSide(
-                color: AllMaterial.colorPrimary,
+                color: Color(0xffEDF2EE),
               ),
               borderRadius: BorderRadius.circular(15),
             ),
-            hoverColor: AllMaterial.colorPrimary,
-            focusColor: AllMaterial.colorPrimary,
+            focusedBorder: readOnly == false
+                ? null
+                : OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: AllMaterial.colorPrimary,
+                    ),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+            hoverColor: readOnly == false ? null : AllMaterial.colorPrimary,
+            focusColor: readOnly == false ? null : AllMaterial.colorPrimary,
+            border: OutlineInputBorder(
+              borderSide: const BorderSide(
+                color: Color(0xffEDF2EE),
+              ),
+              borderRadius: BorderRadius.circular(15),
+            ),
+          ),
+        ),
+        const SizedBox(height: 25),
+      ],
+    );
+  }
+
+  // Dropdown Item
+  static dropDownWidget({
+    FocusNode? focusNode,
+    String? label,
+    TextEditingController? controller,
+    int maxLines = 1,
+    bool addRowButton = false,
+    String? rowButtonLabel,
+    String? hintText,
+    bool readOnly = false,
+    void Function()? onTap,
+    required List<String> dropdownItems,
+    String? selectedValue,
+    void Function(String?)? onChanged,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "$label",
+              style: AllMaterial.workSans(
+                fontWeight: AllMaterial.fontMedium,
+                fontSize: 14,
+                color: AllMaterial.colorGreySec,
+              ),
+            ),
+            addRowButton == true
+                ? TextButton(
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.all(5),
+                      overlayColor: AllMaterial.colorPrimary,
+                    ),
+                    onPressed: onTap,
+                    child: Text(
+                      "$rowButtonLabel",
+                      style: AllMaterial.workSans(
+                        fontWeight: AllMaterial.fontMedium,
+                        fontSize: 14,
+                        color: AllMaterial.colorBlack,
+                      ),
+                    ),
+                  )
+                : const SizedBox.shrink(),
+          ],
+        ),
+        const SizedBox(height: 6),
+        DropdownButtonFormField<String>(
+          value: selectedValue,
+          onChanged: onChanged,
+          items: dropdownItems.map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(
+                value,
+                style: AllMaterial.workSans(
+                  color: AllMaterial.colorGreySec,
+                ),
+              ),
+            );
+          }).toList(),
+          decoration: InputDecoration(
+            disabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(
+                color: AllMaterial.colorGreySec,
+              ),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            hintText: hintText,
+            hintStyle: AllMaterial.workSans(
+              color: AllMaterial.colorGreySec,
+              fontWeight: AllMaterial.fontRegular,
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: const BorderSide(
+                color: Color(0xffEDF2EE),
+              ),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            focusedBorder: readOnly == false
+                ? null
+                : OutlineInputBorder(
+                    borderSide: const BorderSide(
+                      color: AllMaterial.colorPrimary,
+                    ),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+            hoverColor: readOnly == false ? null : AllMaterial.colorPrimary,
+            focusColor: readOnly == false ? null : AllMaterial.colorPrimary,
             border: OutlineInputBorder(
               borderSide: const BorderSide(
                 color: Color(0xffEDF2EE),
@@ -855,8 +968,9 @@ abstract class AllMaterial {
         print("Download failed: $e");
       }
     } else {
-      print(
-          "Storage permission denied. Please enable storage permission in settings.");
+      AllMaterial.messageScaffold(
+          title:
+              "Storage permission denied. Please enable storage permission in settings.");
       openAppSettings();
     }
   }

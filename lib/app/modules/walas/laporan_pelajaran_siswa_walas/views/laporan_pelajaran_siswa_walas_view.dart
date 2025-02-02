@@ -70,6 +70,7 @@ class LaporanPelajaranSiswaWalasView
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Expanded(
                                     child: AllMaterial.contextWidget(
@@ -93,6 +94,7 @@ class LaporanPelajaranSiswaWalasView
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Expanded(
                                     child: AllMaterial.contextWidget(

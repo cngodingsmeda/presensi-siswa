@@ -16,7 +16,6 @@ class AbsenBulananSiswaPetugasView
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(AbsenBulananSiswaPetugasController());
-    var arg = Get.arguments ?? "";
     final profC = Get.put(MainPetugasController());
     var namaKelas = Get.arguments["namaKelas"];
     return Scaffold(
@@ -91,7 +90,8 @@ class AbsenBulananSiswaPetugasView
                             ),
                             children: [
                               TextSpan(
-                                  text: "Senin, 12 ${arg["bulan"]} 2024",
+                                  text: AllMaterial.hariTanggalBulanTahun(
+                                      DateTime.now().toIso8601String()),
                                   style: AllMaterial.workSans(
                                     color: AllMaterial.colorPrimary,
                                     fontWeight: AllMaterial.fontSemiBold,
@@ -158,112 +158,127 @@ class AbsenBulananSiswaPetugasView
                       ),
                       const SizedBox(height: 30),
                       Obx(
-                        () => Column(
-                          children: List.generate(
-                            controller.jumlahSiswa.value,
-                            (index) {
-                              String namaSiswa = controller.listSiswa[index];
+                        () => controller.statusCode.value == 404
+                            ? Center(
+                                child: Text(
+                                  "Tidak ada absen pada tanggal yang diberikan",
+                                  style: AllMaterial.workSans(
+                                    color: AllMaterial.colorGreySec,
+                                  ),
+                                ),
+                              )
+                            : Column(
+                                children: List.generate(
+                                  controller.jumlahSiswa.value,
+                                  (index) {
+                                    String namaSiswa =
+                                        controller.listSiswa[index];
 
-                              int countKeys(Map<String, dynamic>? data,
-                                  String namaSiswa) {
-                                if (data == null) return 0;
+                                    int countKeys(Map<String, dynamic>? data,
+                                        String namaSiswa) {
+                                      if (data == null) return 0;
 
-                                Map<String, dynamic>? siswaData =
-                                    data[namaSiswa] as Map<String, dynamic>?;
-                                if (siswaData == null) return 0;
-                                return siswaData.keys.length;
-                              }
+                                      Map<String, dynamic>? siswaData =
+                                          data[namaSiswa]
+                                              as Map<String, dynamic>?;
+                                      if (siswaData == null) return 0;
+                                      return siswaData.keys.length;
+                                    }
 
-                              int totalKeys = countKeys(
-                                controller.absen.value?.data?.absen,
-                                namaSiswa,
-                              );
-
-                              return Column(
-                                children: [
-                                  ListTile(
-                                    contentPadding: EdgeInsets.zero,
-                                    minVerticalPadding: 0,
-                                    leading: Text(
-                                      "${index + 1}.",
-                                      style: AllMaterial.workSans(
-                                        fontWeight: AllMaterial.fontBold,
-                                        fontSize: 15,
-                                        color: AllMaterial.colorBlack,
-                                      ),
-                                    ),
-                                    title: Text(
+                                    int totalKeys = countKeys(
+                                      controller.absen.value?.data?.absen,
                                       namaSiswa,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                      style: AllMaterial.workSans(
-                                        fontWeight: AllMaterial.fontRegular,
-                                        fontSize: 14,
-                                        color: AllMaterial.colorGreySec,
-                                      ),
-                                    ),
-                                    trailing: StatusRow(
-                                      namaSiswa: namaSiswa,
-                                      dataSiswa:
-                                          controller.absen.value?.data?.absen,
-                                      jumlahMapel: totalKeys,
-                                    ),
-                                    onTap: () {
-                                      final siswaKey = namaSiswa;
+                                    );
+                                    return Column(
+                                      children: [
+                                        ListTile(
+                                          contentPadding: EdgeInsets.zero,
+                                          minVerticalPadding: 0,
+                                          leading: Text(
+                                            "${index + 1}.",
+                                            style: AllMaterial.workSans(
+                                              fontWeight: AllMaterial.fontBold,
+                                              fontSize: 15,
+                                              color: AllMaterial.colorBlack,
+                                            ),
+                                          ),
+                                          title: Text(
+                                            namaSiswa,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: AllMaterial.workSans(
+                                              fontWeight:
+                                                  AllMaterial.fontRegular,
+                                              fontSize: 14,
+                                              color: AllMaterial.colorGreySec,
+                                            ),
+                                          ),
+                                          trailing: StatusRow(
+                                            namaSiswa: namaSiswa,
+                                            dataSiswa: controller
+                                                .absen.value?.data?.absen,
+                                            jumlahMapel: totalKeys,
+                                          ),
+                                          onTap: () {
+                                            final siswaKey = namaSiswa;
 
-                                      final dataSiswa =
-                                          controller.absen.value?.data?.absen;
+                                            final dataSiswa = controller
+                                                .absen.value?.data?.absen;
 
-                                      int? getIdSiswa(
-                                          String siswaKey, String key) {
-                                        final data = dataSiswa?[siswaKey]?[key];
-                                        if (data != null) {
-                                          return data["id_siswa"];
-                                        }
-                                        return 0;
-                                      }
+                                            int? getIdSiswa(
+                                                String siswaKey, String key) {
+                                              final data =
+                                                  dataSiswa?[siswaKey]?[key];
+                                              if (data != null) {
+                                                return data["id_siswa"];
+                                              }
+                                              return 0;
+                                            }
 
-                                      bool areAllValuesNull() {
-                                        for (int i = 1; i <= totalKeys; i++) {
-                                          String key = i.toString();
-                                          if (dataSiswa?[siswaKey]?[key] !=
-                                              null) {
-                                            return false;
-                                          }
-                                        }
-                                        return true;
-                                      }
+                                            bool areAllValuesNull() {
+                                              for (int i = 1;
+                                                  i <= totalKeys;
+                                                  i++) {
+                                                String key = i.toString();
+                                                if (dataSiswa?[siswaKey]
+                                                        ?[key] !=
+                                                    null) {
+                                                  return false;
+                                                }
+                                              }
+                                              return true;
+                                            }
 
-                                      bool isAlpa = areAllValuesNull();
-                                      final idSiswa =
-                                          getIdSiswa(siswaKey, "$totalKeys");
-                                      if (isAlpa) {
-                                        AllMaterial.messageScaffold(
-                                          title:
-                                              "Tidak ditemukan Absen untuk siswa terkait!",
-                                        );
-                                      } else {
-                                        print(idSiswa);
-                                        Get.to(
-                                          () =>
-                                              const AbsenPelajaranSiswaPetugasView(),
-                                          arguments: {
-                                            "idSiswa": idSiswa,
-                                            "kelas": namaKelas,
-                                            "nama": namaSiswa,
+                                            bool isAlpa = areAllValuesNull();
+                                            final idSiswa = getIdSiswa(
+                                                siswaKey, "$totalKeys");
+                                            if (isAlpa) {
+                                              AllMaterial.messageScaffold(
+                                                title:
+                                                    "Tidak ditemukan Absen untuk siswa terkait!",
+                                              );
+                                            } else {
+                                              print(idSiswa);
+                                              Get.to(
+                                                () =>
+                                                    const AbsenPelajaranSiswaPetugasView(),
+                                                arguments: {
+                                                  "idSiswa": idSiswa,
+                                                  "kelas": namaKelas,
+                                                  "nama": namaSiswa,
+                                                },
+                                              );
+                                            }
                                           },
-                                        );
-                                      }
-                                    },
-                                  ),
-                                  const Divider(
-                                    color: AllMaterial.colorStroke,
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                        ),
+                                        ),
+                                        const Divider(
+                                          color: AllMaterial.colorStroke,
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ),
                       ),
                     ],
                   ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:presensi_siswa/all_material.dart';
+import 'package:presensi_siswa/app/modules/siswa/detil_laporan_siswa/views/detil_laporan_siswa_view.dart';
 import 'package:presensi_siswa/app/modules/siswa/main_siswa/controllers/main_siswa_controller.dart';
 
 import '../controllers/laporan_siswa_controller.dart';
@@ -142,7 +143,16 @@ class LaporanSiswaView extends GetView<LaporanSiswaController> {
                               svg: SvgPicture.asset(
                                 "assets/svg/absen-ceklis.svg",
                               ),
-                              onTap: () {},
+                              onTap: () {
+                                Get.to(() => const DetilLaporanSiswaView(),
+                                    arguments: {
+                                      "tanggal":
+                                          AllMaterial.hariTanggalBulanTahun(
+                                        absen['tanggal'],
+                                      ),
+                                      "keyTanggal": absenData,
+                                    });
+                              },
                             ),
                           ),
                         );

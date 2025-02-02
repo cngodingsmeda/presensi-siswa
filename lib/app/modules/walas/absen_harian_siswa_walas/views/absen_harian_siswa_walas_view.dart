@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:presensi_siswa/all_material.dart';
-import 'package:presensi_siswa/app/modules/walas/laporan_pelajaran_siswa_walas/views/laporan_pelajaran_siswa_walas_view.dart';
+import 'package:presensi_siswa/app/modules/walas/main_walas/controllers/main_walas_controller.dart';
 
 import '../controllers/absen_harian_siswa_walas_controller.dart';
 
@@ -14,6 +14,8 @@ class AbsenHarianSiswaWalasView
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(AbsenHarianSiswaWalasController());
+    final mainCont = Get.put(MainWalasController());
+    var namaKelas = mainCont.profilWalas.value?.data?.kelas?.nama ?? "";
     return Scaffold(
       backgroundColor: AllMaterial.colorWhite,
       body: SafeArea(
@@ -55,7 +57,7 @@ class AbsenHarianSiswaWalasView
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "Absen Harian XI RPL 1",
+                        "Absen Harian $namaKelas",
                         style: AllMaterial.workSans(
                           fontSize: 25,
                           fontWeight: AllMaterial.fontMedium,
@@ -153,62 +155,67 @@ class AbsenHarianSiswaWalasView
                         ),
                       ),
                       const SizedBox(height: 30),
-                      Column(
-                        children: List.generate(
-                          controller.nama.length,
-                          (index) {
-                            return Column(
-                              children: [
-                                ListTile(
-                                  contentPadding: EdgeInsets.zero,
-                                  minVerticalPadding: 0,
-                                  leading: Text(
-                                    "${index + 1}.",
-                                    style: AllMaterial.workSans(
-                                      fontWeight: AllMaterial.fontBold,
-                                      fontSize: 15,
-                                      color: AllMaterial.colorBlack,
-                                    ),
+                      Obx(
+                        () => controller.statusCode.value == 404
+                            ? Center(
+                                child: Text(
+                                  "Tidak ada absen pada tanggal yang diberikan",
+                                  style: AllMaterial.workSans(
+                                    color: AllMaterial.colorGreySec,
                                   ),
-                                  title: Text(
-                                    controller.nama[index],
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: AllMaterial.workSans(
-                                      fontWeight: AllMaterial.fontRegular,
-                                      fontSize: 14,
-                                      color: AllMaterial.colorGreySec,
-                                    ),
-                                  ),
-                                  trailing: const Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Icon(
-                                        Icons.check,
-                                        color: AllMaterial.colorPrimary,
-                                      ),
-                                      Icon(
-                                        Icons.clear,
-                                        color: AllMaterial.colorRed,
-                                      ),
-                                      Icon(
-                                        Icons.check,
-                                        color: AllMaterial.colorPrimary,
-                                      ),
-                                    ],
-                                  ),
-                                  onTap: () {
-                                    Get.to(() =>
-                                        const LaporanPelajaranSiswaWalasView());
-                                  },
                                 ),
-                                const Divider(
-                                  color: AllMaterial.colorStroke,
-                                ),
-                              ],
-                            );
-                          },
-                        ),
+                              )
+                            : Column(
+                                children: controller
+                                        .absen.value?.data?.absen?.entries
+                                        .map(
+                                          (entry) => ListView.builder(
+                                              shrinkWrap: true,
+                                              itemCount: entry.value.length,
+                                              itemBuilder: (context, index) {
+                                                return Column(
+                                                  children: [
+                                                    ListTile(
+                                                      contentPadding:
+                                                          EdgeInsets.zero,
+                                                      leading: Text(
+                                                        "${index + 1}.",
+                                                        style: AllMaterial
+                                                            .workSans(
+                                                          fontWeight:
+                                                              AllMaterial
+                                                                  .fontBold,
+                                                          fontSize: 15,
+                                                          color: AllMaterial
+                                                              .colorBlack,
+                                                        ),
+                                                      ),
+                                                      title: Text(
+                                                        entry.key,
+                                                        style: AllMaterial
+                                                            .workSans(
+                                                          fontWeight:
+                                                              AllMaterial
+                                                                  .fontBold,
+                                                          fontSize: 15,
+                                                          color: AllMaterial
+                                                              .colorBlack,
+                                                        ),
+                                                      ),
+                                                      onTap: () {},
+                                                      trailing: Icon(
+                                                        MdiIcons.check,
+                                                        color: AllMaterial
+                                                            .colorPrimary,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                );
+                                              }),
+                                        )
+                                        .toList() ??
+                                    [],
+                              ),
                       ),
                     ],
                   ),

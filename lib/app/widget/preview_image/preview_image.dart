@@ -20,14 +20,36 @@ class PreviewImage extends StatelessWidget {
           ClipRRect(
             borderRadius: BorderRadius.circular(8.0),
             child: Hero(
-              tag: 'imageHero',
-              child: Image.network(
-                fileName,
-                width: 50,
-                height: 50,
-                fit: BoxFit.cover,
-              ),
-            ),
+                tag: 'imageHero',
+                child: fileName.endsWith(".jpg") || fileName.endsWith(".png")
+                    ? Image.network(
+                        fileName,
+                        width: 50,
+                        height: 50,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            width: 50,
+                            height: 50,
+                            color: Colors.grey.shade300,
+                            child: const Icon(
+                              Icons.broken_image,
+                              color: Colors.white,
+                              size: 30,
+                            ),
+                          );
+                        },
+                      )
+                    : Container(
+                        width: 50,
+                        height: 50,
+                        color: Colors.grey.shade300,
+                        child: const Icon(
+                          Icons.feed_outlined,
+                          color: Colors.white,
+                          size: 30,
+                        ),
+                      )),
           ),
           const SizedBox(width: 12),
           Expanded(

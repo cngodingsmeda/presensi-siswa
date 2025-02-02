@@ -115,6 +115,7 @@ class JadwalAbsenSiswaView extends GetView<JadwalAbsenSiswaController> {
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Expanded(
                                               child: AllMaterial.contextWidget(
@@ -143,6 +144,7 @@ class JadwalAbsenSiswaView extends GetView<JadwalAbsenSiswaController> {
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Expanded(
                                               child: AllMaterial.contextWidget(

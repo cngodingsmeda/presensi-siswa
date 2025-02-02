@@ -180,6 +180,7 @@ class DetilKelasDiajarMapelView
                                             CrossAxisAlignment.start,
                                         children: [
                                           Row(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
@@ -205,6 +206,7 @@ class DetilKelasDiajarMapelView
                                           ),
                                           const SizedBox(height: 20),
                                           Row(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [

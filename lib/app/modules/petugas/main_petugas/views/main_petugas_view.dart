@@ -80,16 +80,41 @@ class MainPetugasView extends GetView<MainPetugasController> {
 
             // Notifikasi
             SalomonBottomBarItem(
-              icon: Icon(
-                MdiIcons.bellOutline,
-                color: AllMaterial.colorBlack.withOpacity(0.15),
+              icon: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Icon(
+                    MdiIcons.bellOutline,
+                    color: AllMaterial.colorBlack.withOpacity(0.15),
+                  ),
+                  Obx(
+                    () => controller.unreadNotifications.value > 0
+                        ? Positioned(
+                            right: -6,
+                            top: -6,
+                            child: Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: const BoxDecoration(
+                                color: AllMaterial.colorRed,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Text(
+                                controller.unreadNotifications.value.toString(),
+                                style: AllMaterial.workSans(
+                                  color: AllMaterial.colorWhite,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ),
+                          )
+                        : const SizedBox.shrink(),
+                  ),
+                ],
               ),
               activeIcon: Icon(MdiIcons.bell),
               title: Text(
                 "Notifikasi",
-                style: AllMaterial.workSans(
-                  color: AllMaterial.colorPrimary,
-                ),
+                style: AllMaterial.workSans(color: AllMaterial.colorPrimary),
               ),
               selectedColor: AllMaterial.colorPrimary,
             ),

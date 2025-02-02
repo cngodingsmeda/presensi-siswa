@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:presensi_siswa/all_material.dart';
+import 'package:presensi_siswa/app/data/api_url.dart';
 import 'package:presensi_siswa/app/modules/walas/absen_harian_siswa_walas/views/absen_harian_siswa_walas_view.dart';
+import 'package:presensi_siswa/app/modules/walas/main_walas/controllers/main_walas_controller.dart';
 import 'package:presensi_siswa/app/modules/walas/pilih_mapel_laporan_siswa_walas/views/pilih_mapel_laporan_siswa_walas_view.dart';
+import 'package:presensi_siswa/app/widget/hero_image/hero_image.dart';
 
 import '../controllers/home_walas_controller.dart';
 
@@ -11,6 +14,8 @@ class HomeWalasView extends GetView<HomeWalasController> {
   const HomeWalasView({super.key});
   @override
   Widget build(BuildContext context) {
+    final mainCont = Get.put(MainWalasController());
+    var kelas = mainCont.profilWalas.value?.data?.kelas?.nama;
     return Scaffold(
       backgroundColor: AllMaterial.colorWhite,
       body: SafeArea(
@@ -48,15 +53,69 @@ class HomeWalasView extends GetView<HomeWalasController> {
                               ),
                             ],
                           ),
-                          Container(
-                            alignment: Alignment.bottomRight,
-                            height: 40,
-                            width: 40,
-                            decoration: BoxDecoration(
-                              boxShadow: [AllMaterial.topShadow],
-                              borderRadius: BorderRadius.circular(1000),
-                              color: AllMaterial.colorMint,
-                            ),
+                          Obx(
+                            () => mainCont.profilWalas.value?.data
+                                            ?.fotoProfile ==
+                                        "" ||
+                                    mainCont.profilWalas.value?.data
+                                            ?.fotoProfile ==
+                                        null
+                                ? Container(
+                                    alignment: Alignment.center,
+                                    height: 40,
+                                    width: 40,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(1000),
+                                      color: AllMaterial.colorMint,
+                                    ),
+                                    child: Obx(
+                                      () => Text(
+                                        mainCont.userNameFilter.value,
+                                        style: AllMaterial.workSans(
+                                          color: AllMaterial.colorWhite,
+                                          fontWeight: AllMaterial.fontSemiBold,
+                                          fontSize: 20,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                : GestureDetector(
+                                    onTap: () {
+                                      Get.to(
+                                        () => HeroImage(
+                                          namePath:
+                                              "${mainCont.profilWalas.value?.data?.nama?.replaceAll(" ", "-")}-fotoProfile",
+                                          imageUrl: mainCont.profilWalas.value
+                                                  ?.data?.fotoProfile
+                                                  ?.replaceAll("localhost",
+                                                      ApiUrl.baseUrl) ??
+                                              "https://picsum.photos/200/300?grayscale",
+                                        ),
+                                      );
+                                    },
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      height: 40,
+                                      width: 40,
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(1000),
+                                        color: AllMaterial.colorMint,
+                                        image: DecorationImage(
+                                          fit: BoxFit.cover,
+                                          image: NetworkImage(
+                                            mainCont.profilWalas.value?.data
+                                                    ?.fotoProfile
+                                                    ?.replaceAll(
+                                                  "localhost",
+                                                  ApiUrl.baseUrl,
+                                                ) ??
+                                                "https://picsum.photos/200/300?grayscale",
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
                           ),
                         ],
                       ),
@@ -98,7 +157,7 @@ class HomeWalasView extends GetView<HomeWalasController> {
                                 ),
                               ),
                               subtitle: Text(
-                                "Kelas XI RPL 1",
+                                "Kelas $kelas",
                                 style: AllMaterial.workSans(
                                   color: AllMaterial.colorGreySec,
                                 ),
@@ -134,7 +193,7 @@ class HomeWalasView extends GetView<HomeWalasController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "XI RPL 1 Hari Ini",
+                        "$kelas Hari Ini",
                         style: AllMaterial.workSans(
                           fontWeight: AllMaterial.fontMedium,
                           fontSize: 14,
@@ -148,19 +207,25 @@ class HomeWalasView extends GetView<HomeWalasController> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            AllMaterial.outlineText(
-                              title: "Jumlah Siswa",
-                              subtitle: "32 orang",
+                            Obx(
+                              () => AllMaterial.outlineText(
+                                title: "Jumlah Siswa",
+                                subtitle: "${mainCont.jumlahSiswa.value} orang",
+                              ),
                             ),
                             const SizedBox(width: 8),
-                            AllMaterial.outlineText(
-                              title: "Siswa Sakit",
-                              subtitle: "7 orang",
+                            Obx(
+                              () => AllMaterial.outlineText(
+                                title: "Siswa Hadir",
+                                subtitle: "${mainCont.siswaHadir.value} orang",
+                              ),
                             ),
                             const SizedBox(width: 8),
-                            AllMaterial.outlineText(
-                              title: "Siswa Tanpa Keterangan",
-                              subtitle: "0 orang",
+                            Obx(
+                              () => AllMaterial.outlineText(
+                                title: "Siswa Tanpa Keterangan",
+                                subtitle: "${mainCont.siswaAlpa.value} orang",
+                              ),
                             ),
                           ],
                         ),

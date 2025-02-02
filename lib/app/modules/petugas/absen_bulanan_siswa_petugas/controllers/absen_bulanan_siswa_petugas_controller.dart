@@ -26,6 +26,8 @@ class AbsenBulananSiswaPetugasController extends GetxController {
   var jumlahSiswa = 0.obs;
   var intPage = 1.obs;
   var listSiswa = <String>[].obs;
+  var statusCode = 0.obs;
+  var msg = "".obs;
 
   Future<void> fetchAbsenBulananByKelasTinjauan(
       String tanggal, String idKelas) async {
@@ -39,6 +41,7 @@ class AbsenBulananSiswaPetugasController extends GetxController {
         },
       );
       print(response.statusCode);
+      statusCode.value = response.statusCode;
       var data = jsonDecode(response.body);
       if (response.statusCode == 200) {
         var responseData = AbsenKelasHarianPetugasModel.fromJson(data);
@@ -49,7 +52,9 @@ class AbsenBulananSiswaPetugasController extends GetxController {
         print(data);
       } else {
         print(data);
+        msg.value = data["msg"];
       }
+      update();
     } catch (e) {
       print("${e}dawdwdw");
     }

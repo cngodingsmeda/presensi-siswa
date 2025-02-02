@@ -12,6 +12,7 @@ import '../controllers/main_siswa_controller.dart';
 
 class MainSiswaView extends GetView<MainSiswaController> {
   const MainSiswaView({super.key});
+
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(MainSiswaController());
@@ -24,17 +25,10 @@ class MainSiswaView extends GetView<MainSiswaController> {
           controller.currentIndexBar.value = value;
         },
         children: const [
-          // NAVIGASI HOME
           HomeSiswaView(),
-
-          // NAVIGASI LAPORAN
           LaporanSiswaView(),
-
-          // NAVIGASI NOTIFIKASI
           NotifikasiSiswaView(),
-
-          // NAVIGASI PROFIL
-          ProfilSiswaView()
+          ProfilSiswaView(),
         ],
       ),
       bottomNavigationBar: Obx(
@@ -45,6 +39,7 @@ class MainSiswaView extends GetView<MainSiswaController> {
           onTap: (index) {
             controller.currentIndexBar.value = index;
             controller.pageController.jumpToPage(index);
+            // if (index == 2) controller.clearNotifications(); // Reset notif di tab notifikasi
           },
           items: [
             // Beranda
@@ -56,13 +51,10 @@ class MainSiswaView extends GetView<MainSiswaController> {
               activeIcon: Icon(MdiIcons.homeVariant),
               title: Text(
                 "Beranda",
-                style: AllMaterial.workSans(
-                  color: AllMaterial.colorPrimary,
-                ),
+                style: AllMaterial.workSans(color: AllMaterial.colorPrimary),
               ),
               selectedColor: AllMaterial.colorPrimary,
             ),
-
             // Laporan
             SalomonBottomBarItem(
               icon: Icon(
@@ -72,29 +64,50 @@ class MainSiswaView extends GetView<MainSiswaController> {
               activeIcon: Icon(MdiIcons.chartBox),
               title: Text(
                 "Laporan",
-                style: AllMaterial.workSans(
-                  color: AllMaterial.colorPrimary,
-                ),
+                style: AllMaterial.workSans(color: AllMaterial.colorPrimary),
               ),
               selectedColor: AllMaterial.colorPrimary,
             ),
-
             // Notifikasi
             SalomonBottomBarItem(
-              icon: Icon(
-                MdiIcons.bellOutline,
-                color: AllMaterial.colorBlack.withOpacity(0.15),
+              icon: Stack(
+                clipBehavior: Clip.none,
+                children: [
+                  Icon(
+                    MdiIcons.bellOutline,
+                    color: AllMaterial.colorBlack.withOpacity(0.15),
+                  ),
+                  Obx(
+                    () => controller.unreadNotifications.value > 0
+                        ? Positioned(
+                            right: -6,
+                            top: -6,
+                            child: Container(
+                              padding: const EdgeInsets.all(4),
+                              decoration: const BoxDecoration(
+                                color: AllMaterial.colorRed,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Text(
+                                controller.unreadNotifications.value.toString(),
+                                style: AllMaterial.workSans(
+                                  color: AllMaterial.colorWhite,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ),
+                          )
+                        : const SizedBox.shrink(),
+                  ),
+                ],
               ),
               activeIcon: Icon(MdiIcons.bell),
               title: Text(
                 "Notifikasi",
-                style: AllMaterial.workSans(
-                  color: AllMaterial.colorPrimary,
-                ),
+                style: AllMaterial.workSans(color: AllMaterial.colorPrimary),
               ),
               selectedColor: AllMaterial.colorPrimary,
             ),
-
             // Profil
             SalomonBottomBarItem(
               icon: Icon(
@@ -104,9 +117,7 @@ class MainSiswaView extends GetView<MainSiswaController> {
               activeIcon: Icon(MdiIcons.account),
               title: Text(
                 "Profil",
-                style: AllMaterial.workSans(
-                  color: AllMaterial.colorPrimary,
-                ),
+                style: AllMaterial.workSans(color: AllMaterial.colorPrimary),
               ),
               selectedColor: AllMaterial.colorPrimary,
             ),

@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
 import 'package:presensi_siswa/all_material.dart';
 import 'package:presensi_siswa/app/data/api_url.dart';
 import 'package:presensi_siswa/app/model/model_petugas/absen_kelas_harian_petugas_model.dart';
@@ -10,8 +9,9 @@ import 'package:presensi_siswa/app/model/model_petugas/absen_kelas_harian_petuga
 class AbsenKelasHarianPetugasController extends GetxController {
   var absen = Rx<AbsenKelasHarianPetugasModel?>(null);
   var token = AllMaterial.box.read("token");
-  var jumlahSiswa = 0.obs;
   var intPage = 1.obs;
+  var jumlahSiswa = 0.obs;
+  var statusCode = 0.obs;
   var listSiswa = <String>[].obs;
 
   Future<void> fetchAbsenHarianByKelasTinjauan(
@@ -26,6 +26,7 @@ class AbsenKelasHarianPetugasController extends GetxController {
         },
       );
       print(response.statusCode);
+      statusCode.value = response.statusCode;
       var data = jsonDecode(response.body);
       if (response.statusCode == 200) {
         var responseData = AbsenKelasHarianPetugasModel.fromJson(data);
@@ -44,9 +45,9 @@ class AbsenKelasHarianPetugasController extends GetxController {
 
   @override
   void onInit() {
-    var idKelas = Get.arguments["idKelas"];
-    fetchAbsenHarianByKelasTinjauan(
-        DateFormat('yyyy-MM-dd').format(DateTime.now()), idKelas.toString());
+    // var idKelas = Get.arguments["idKelas"];
+    // // fetchAbsenHarianByKelasTinjauan(
+    // //     DateFormat('yyyy-MM-dd').format(DateTime.now()), idKelas.toString());
     super.onInit();
   }
 }

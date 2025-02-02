@@ -7,6 +7,7 @@ import 'package:location/location.dart';
 import 'package:presensi_siswa/all_material.dart';
 import 'package:presensi_siswa/app/controller/general_controller.dart';
 import 'package:presensi_siswa/app/data/api_url.dart';
+import 'package:presensi_siswa/app/model/model_siswa/histori_absen_siswa_model.dart';
 import 'package:presensi_siswa/app/model/model_siswa/profil_siswa_model.dart';
 import 'package:presensi_siswa/app/model/model_siswa/rekap_absen_mingguan_siswa_model.dart';
 import 'package:presensi_siswa/app/modules/siswa/home_siswa/controllers/home_siswa_controller.dart';
@@ -18,9 +19,17 @@ class MainSiswaController extends GetxController {
   var rekapMingguan = Rx<RekapMingguanSiswaModel?>(null);
   var isLoading = true.obs;
   var statusCode = 0.obs;
+  var unreadNotifications = 5.obs;
+  void clearNotifications() {
+    unreadNotifications.value = 0;
+  }
+
   var userNameFilter = "S".obs;
   static var jumlahSiswa = 0.obs;
   String token = AllMaterial.box.read("token");
+  DateTime now = DateTime.now();
+  var historiAbsen = Rx<HistoriAbsenSiswaModel?>(null);
+  var absensiList = <dynamic>[].obs;
   final homeCont = Get.put(HomeSiswaController());
 
 // Home
@@ -137,7 +146,8 @@ class MainSiswaController extends GetxController {
       isLoading.value = false;
       userNameFilter.value =
           profilSiswa.value?.data?.nama?[0].toUpperCase() ?? "S";
-      MainSiswaController.jumlahSiswa.value =  profilSiswa.value?.data?.kelas?.jumlahSiswa ?? 0;
+      MainSiswaController.jumlahSiswa.value =
+          profilSiswa.value?.data?.kelas?.jumlahSiswa ?? 0;
       update();
     } else if (response.statusCode == 401) {
       var genController = Get.put(GeneralController());
@@ -150,11 +160,39 @@ class MainSiswaController extends GetxController {
     }
   }
 
+  Future<void> fetchHistoriAbsen3Hari(int bulan) async {
+    isLoading.value = true;
+    try {
+      final response = await http.get(
+        Uri.parse(ApiUrl.getAllHistoriAbsenSiswa(bulan, now.year)),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      );
+      if (response.statusCode == 200) {
+        var data = jsonDecode(response.body);
+        absensiList.clear();
+        data['data']?.forEach((key, value) {
+          absensiList.addAll(value);
+        });
+        print("Data berhasil diambil: ${absensiList.length} entri");
+      } else {
+        print("Gagal mengambil data: ${response.body}");
+      }
+    } catch (e) {
+      print("Error: ${e.toString()}");
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
   @override
-  void onInit() {
+  void onInit() async {
     fetchProfilSiswa();
     fetchRekapAbsenMingguan();
-    getUserLocation();
+    fetchHistoriAbsen3Hari(now.month);
+    await getUserLocation();
     super.onInit();
   }
 }
