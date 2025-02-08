@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
 import 'package:presensi_siswa/all_material.dart';
 
@@ -10,20 +9,26 @@ class NotifikasiPetugasView extends GetView<NotifikasiPetugasController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: AllMaterial.containerLinear(
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20),
+      backgroundColor: AllMaterial.colorWhite,
+      appBar: AppBar(
+        backgroundColor: AllMaterial.colorWhite,
+        surfaceTintColor: AllMaterial.colorWhite,
+        centerTitle: true,
+        title: Text(
+          "Notifikasi Saya",
+          style: AllMaterial.workSans(
+            fontSize: 17,
+            fontWeight: AllMaterial.fontSemiBold,
+          ),
+        ),
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          child: SingleChildScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
             child: Column(
               children: [
-                Text(
-                  "Notifikasi Saya",
-                  style: AllMaterial.workSans(
-                    fontSize: 17,
-                    fontWeight: AllMaterial.fontSemiBold,
-                  ),
-                ),
-                const SizedBox(height: 17),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -38,20 +43,20 @@ class NotifikasiPetugasView extends GetView<NotifikasiPetugasController> {
                     ListView.builder(
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount: 3,
+                      itemCount: 13,
                       itemBuilder: (context, index) {
                         return Padding(
                           padding: const EdgeInsets.only(top: 16),
                           child: AllMaterial.notifWidget(
                             atas: "Absen Harian Berhasil!",
                             bawah:
-                                "Anda telah melakukan absen harian di jam ke-2 pada 23/01/2025 - 08:30",
+                                "Kamu telah melakukan absen harian di jam ke-2 pada 23/01/2025 - 08:30",
                             onTap: () {
                               AllMaterial.detilKonten(
                                 buttonLabel: "Tutup Notifikasi",
                                 title: "Absen Harian berhasil!",
                                 subtitle:
-                                    "Anda telah melakukan absen harian untuk mata pelajaran Matematika pada pukul 07:25!",
+                                    "Kamu telah melakukan absen harian untuk mata pelajaran Matematika pada pukul 07:25!",
                                 icon: const Icon(
                                   Icons.clear,
                                   color: AllMaterial.colorWhite,

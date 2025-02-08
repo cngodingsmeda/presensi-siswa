@@ -922,6 +922,13 @@ abstract class AllMaterial {
     return formattedDate;
   }
 
+  // Format = 2025-02-02
+  static String tahunBulanTanggal(String dateString) {
+  DateTime parsedDate = DateFormat('EEEE, dd MMMM yyyy', 'id_ID').parse(dateString);
+  String isoFormatDate = DateFormat('yyyy-MM-dd').format(parsedDate);
+  return isoFormatDate;
+}
+
   // Format = 21:20
   static String jamMenit(String? waktu) {
     if (waktu == null || waktu.isEmpty) {
@@ -978,11 +985,11 @@ abstract class AllMaterial {
   static String getErrorMessage(int statusCode) {
     switch (statusCode) {
       case 400:
-        return "Permintaan tidak valid. Periksa input Anda.";
+        return "Permintaan tidak valid. Periksa input Kamu.";
       case 401:
-        return "Anda tidak memiliki akses. Silakan login.";
+        return "Kamu tidak memiliki akses. Silakan login.";
       case 403:
-        return "Anda tidak diizinkan untuk mengakses halaman ini.";
+        return "Kamu tidak diizinkan untuk mengakses halaman ini.";
       case 404:
         return "Data tidak ditemukan.";
       case 408:

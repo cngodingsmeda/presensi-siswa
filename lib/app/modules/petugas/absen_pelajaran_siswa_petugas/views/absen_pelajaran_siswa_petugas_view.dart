@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:presensi_siswa/all_material.dart';
 import 'package:presensi_siswa/app/data/api_url.dart';
@@ -108,7 +106,7 @@ class AbsenPelajaranSiswaPetugasView
                                         icon: MdiIcons.clock,
                                         subtitle: "Waktu Absen",
                                         title:
-                                            "Pukul ${controller.jamAbsen[index]}",
+                                            "Pukul ${controller.detil.value?.data?.jam ?? ""}",
                                       ),
                                     ),
                                   ],
@@ -205,14 +203,9 @@ class AbsenPelajaranSiswaPetugasView
                                                             .endsWith(".jpg") ||
                                                         controller.detil.value!
                                                             .data!.file!
-                                                            .endsWith(
-                                                                ".png]")) {
+                                                            .endsWith(".png")) {
                                                       Get.to(
                                                         () => HeroImage(
-                                                          namePath:
-                                                              "${controller.detil.value?.data?.siswa?.nama?.replaceAll(" ", "-")}-${DateFormat('dd-MM-yyyy').format(
-                                                            DateTime.now(),
-                                                          )}",
                                                           imageUrl: controller
                                                                   .detil
                                                                   .value
@@ -231,7 +224,7 @@ class AbsenPelajaranSiswaPetugasView
                                                         controller.detil.value!
                                                             .data!.file!
                                                             .endsWith(
-                                                                ".docx]")) {
+                                                                ".docx")) {
                                                       FileHandler.openFile(
                                                           controller
                                                                   .detil

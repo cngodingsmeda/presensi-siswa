@@ -4,12 +4,10 @@ import 'package:presensi_siswa/all_material.dart';
 
 class HeroImage extends StatelessWidget {
   final String imageUrl;
-  final String namePath;
 
   HeroImage({
     super.key,
     required this.imageUrl,
-    required this.namePath,
   });
 
   final RxDouble initialPosition = 0.0.obs;
@@ -29,7 +27,7 @@ class HeroImage extends StatelessWidget {
               : IconButton(
                   icon: const Icon(Icons.download),
                   onPressed: () =>
-                      AllMaterial.downloadAndSaveImage(imageUrl, namePath),
+                      AllMaterial.downloadAndSaveImage(imageUrl, imageUrl),
                 ),
         ],
       ),

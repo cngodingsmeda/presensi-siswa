@@ -7,16 +7,8 @@ import 'package:presensi_siswa/app/data/api_url.dart';
 import 'package:presensi_siswa/app/model/model_siswa/detil_laporan_absen_siswa_model.dart';
 
 class DetilLaporanSiswaController extends GetxController {
-  var mapel = [
-    "Matematika",
-    "Pendidikan Agama Islam & Budi Pekerti",
-    "Penjas Orkes",
-  ];
-  var jam = ["07:00 - 09:25", "09:25 - 11:30", "11:30 - 14:00"];
-  var jamAbsen = ["07:30", "09:29", "12:30"];
   var token = AllMaterial.box.read("token");
   var detil = Rx<DetilLaporanAbsenSiswaModel?>(null);
-  var detilAbsen = <dynamic>[].obs;
 
   Future<void> fetchDetilAbsenSiswa(int id) async {
     try {
@@ -41,6 +33,7 @@ class DetilLaporanSiswaController extends GetxController {
     }
   }
 
+  var detilAbsen = <dynamic>[].obs;
   @override
   void onInit() {
     var arg = Get.arguments;

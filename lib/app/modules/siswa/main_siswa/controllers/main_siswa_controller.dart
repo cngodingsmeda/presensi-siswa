@@ -19,6 +19,9 @@ class MainSiswaController extends GetxController {
   var rekapMingguan = Rx<RekapMingguanSiswaModel?>(null);
   var isLoading = true.obs;
   var statusCode = 0.obs;
+  var latitude = 0.0.obs;
+  var longitude = 0.0.obs;
+  var isDalamRadius = false.obs;
   var unreadNotifications = 5.obs;
   void clearNotifications() {
     unreadNotifications.value = 0;
@@ -85,6 +88,9 @@ class MainSiswaController extends GetxController {
     try {
       LocationData userLocation = await location.getLocation();
       if (userLocation.latitude != null || userLocation.longitude != null) {
+        latitude.value = userLocation.latitude!.toDouble();
+        longitude.value = userLocation.longitude!.toDouble();
+        
         await cekRadiusKoordinatAbsenSiswa(
             userLocation.latitude, userLocation.longitude);
       }
@@ -116,7 +122,9 @@ class MainSiswaController extends GetxController {
       var data = jsonDecode(response.body);
       if (response.statusCode == 200) {
         print(data);
+        isDalamRadius.value = data["data"]["insideRadius"] ?? false;
         AllMaterial.messageScaffold(title: data["msg"]);
+        update();
       } else {
         print(data);
       }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:presensi_siswa/all_material.dart';
 import 'package:presensi_siswa/app/data/api_url.dart';
@@ -91,8 +90,6 @@ class HomePetugasView extends GetView<HomePetugasController> {
                                     onTap: () {
                                       Get.to(
                                         () => HeroImage(
-                                          namePath:
-                                              "${mainCont.profilPetugas.value?.data?.nama?.replaceAll(" ", "-")}-fotoProfile",
                                           imageUrl: mainCont.profilPetugas.value
                                                   ?.data?.fotoProfile
                                                   ?.replaceAll("localhost",
@@ -329,7 +326,7 @@ class HomePetugasView extends GetView<HomePetugasController> {
                                                 AllMaterial.cusDialogValidasi(
                                                   title: "Menolak Absen",
                                                   subtitle:
-                                                      "Apakah Anda yakin?",
+                                                      "Apakah Kamu yakin?",
                                                   onConfirm: () async {
                                                     await mainCont
                                                         .patchTinjauanAbsenPetugas(
@@ -374,7 +371,7 @@ class HomePetugasView extends GetView<HomePetugasController> {
                                                 AllMaterial.cusDialogValidasi(
                                                   title: "Menerima Absen",
                                                   subtitle:
-                                                      "Apakah Anda yakin?",
+                                                      "Apakah Kamu yakin?",
                                                   onConfirm: () async {
                                                     await mainCont
                                                         .patchTinjauanAbsenPetugas(
@@ -619,15 +616,10 @@ class HomePetugasView extends GetView<HomePetugasController> {
                                                                   absen.data!
                                                                       .file!
                                                                       .endsWith(
-                                                                          ".png]")) {
+                                                                          ".png")) {
                                                                 Get.to(
                                                                   () =>
                                                                       HeroImage(
-                                                                    namePath:
-                                                                        "${absen.data?.siswa?.nama?.replaceAll(" ", "-")}-${DateFormat('dd-MM-yyyy').format(
-                                                                      DateTime
-                                                                          .now(),
-                                                                    )}",
                                                                     imageUrl: absen
                                                                             .data
                                                                             ?.file
@@ -636,13 +628,26 @@ class HomePetugasView extends GetView<HomePetugasController> {
                                                                         "https://picsum.photos/200/300?grayscale",
                                                                   ),
                                                                 );
-                                                              } else if (absen.data!.file!.endsWith(".pdf") || absen.data!.file!.endsWith(".docx]")) {
-                                                                                FileHandler.openFile(absen.data!.file ?? "");
-                                                                              } else {
-                                                                                AllMaterial.messageScaffold(
-                                                                                  title: "File tidak ditemukan, coba lagi nanti!",
-                                                                                );
-                                                                              }
+                                                              } else if (absen
+                                                                      .data!
+                                                                      .file!
+                                                                      .endsWith(
+                                                                          ".pdf") ||
+                                                                  absen.data!
+                                                                      .file!
+                                                                      .endsWith(
+                                                                          ".docx")) {
+                                                                FileHandler.openFile(
+                                                                    absen.data!
+                                                                            .file ??
+                                                                        "");
+                                                              } else {
+                                                                AllMaterial
+                                                                    .messageScaffold(
+                                                                  title:
+                                                                      "File tidak ditemukan, coba lagi nanti!",
+                                                                );
+                                                              }
                                                             } else {
                                                               Get.back();
                                                               AllMaterial

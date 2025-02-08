@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 import 'package:get/get.dart';
-import 'package:presensi_siswa/all_material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+import 'package:presensi_siswa/all_material.dart';
 import 'package:presensi_siswa/app/data/api_url.dart';
 import 'package:presensi_siswa/app/model/model_walas/absen_kelas_harian_petugas_model.dart';
 
@@ -15,7 +16,8 @@ class AbsenHarianSiswaWalasController extends GetxController {
   var listSiswa = <String>[].obs;
   var page = 1.obs;
 
-  Future<void> fetchAbsenHarianByKelasTinjauan(String tanggal) async {
+  Future<void> fetchAbsenHarianWalas(
+      String tanggal) async {
     try {
       final response = await http.get(
         Uri.parse(
@@ -28,16 +30,13 @@ class AbsenHarianSiswaWalasController extends GetxController {
       print(response.statusCode);
       statusCode.value = response.statusCode;
       var data = jsonDecode(response.body);
-      print(data);
       if (response.statusCode == 200) {
         var responseData = AbsenKelasHarianWalasModel.fromJson(data);
-        print(responseData);
         absen.value = responseData;
         jumlahSiswa.value = responseData.data?.countData ?? 0;
-        if (data["data"]["absen"] != null) {
-          var absenSiswa = data["data"]["absen"] as Map<String, dynamic>;
-          listSiswa.value = absenSiswa.keys.toList();
-        }
+        var absenSiswa = data["data"]["absen"] as Map<String, dynamic>;
+        listSiswa.value = absenSiswa.keys.toList();
+        print(data);
       } else {
         print(data);
       }
@@ -46,12 +45,11 @@ class AbsenHarianSiswaWalasController extends GetxController {
     }
   }
 
+
   @override
   void onInit() {
-    fetchAbsenHarianByKelasTinjauan(
-      // DateFormat('yyyy-MM-dd').format(DateTime.now())
-      "2025-01-25",
-    );
+    fetchAbsenHarianWalas(
+        DateFormat('yyyy-MM-dd').format(DateTime.now()));
     // print(DateFormat('yyyy-MM-dd').format(DateTime.now()));
     super.onInit();
   }

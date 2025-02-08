@@ -30,6 +30,7 @@ class JadwalAbsenSiswaController extends GetxController {
       print(response.statusCode);
       var data = jsonDecode(response.body);
       if (response.statusCode == 200) {
+        print("data dari fetchJadwalHariAbsenSiswa: $data");
         hari.value = JadwalHariAbsenSiswaModel.fromJson(data);
         print(data);
       } else {
@@ -54,13 +55,13 @@ class JadwalAbsenSiswaController extends GetxController {
       var data = jsonDecode(response.body);
       if (response.statusCode == 200) {
         detil.value = DetilJadwalAbsenSiswaModel.fromJson(data);
-        print(data);
+        print("data di if: $data");
       } else {
-        print(data);
+        print("data di else: $data");
       }
       update();
     } catch (e) {
-      print("${e}hahahah");
+      print("hahahah: $e");
     }
   }
 

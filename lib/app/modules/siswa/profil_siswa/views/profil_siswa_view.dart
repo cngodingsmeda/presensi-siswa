@@ -151,7 +151,7 @@ class ProfilSiswaView extends GetView<ProfilSiswaController> {
                           final genC = Get.put(GeneralController());
                           AllMaterial.cusDialogValidasi(
                             title: "Logout",
-                            subtitle: "Apakah Anda yakin?",
+                            subtitle: "Apakah Kamu yakin?",
                             onConfirm: () async {
                               await genC.logout();
                               Get.back();

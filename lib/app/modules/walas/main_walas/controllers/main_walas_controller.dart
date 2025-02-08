@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:presensi_siswa/all_material.dart';
 import 'package:presensi_siswa/app/controller/general_controller.dart';
 import 'package:presensi_siswa/app/data/api_url.dart';
+import 'package:presensi_siswa/app/model/model_walas/histori_absen_siswa_walas_model.dart';
 import 'package:presensi_siswa/app/model/model_walas/profil_walas_model.dart';
 import 'package:presensi_siswa/app/modules/walas/profil_walas/controllers/profil_walas_controller.dart';
 
@@ -19,6 +20,8 @@ class MainWalasController extends GetxController {
   var jumlahSiswa = 0.obs;
   var siswaHadir = 0.obs;
   var siswaAlpa = 0.obs;
+  var unreadNotifications = 2.obs;
+  var histori = Rx<HistoriAbsenSiswaWalasModel?>(null);
   var profWalas = Get.put(ProfilWalasController());
 
   Future<void> fetchProfilWalas() async {
@@ -85,10 +88,40 @@ class MainWalasController extends GetxController {
     }
   }
 
+  Future<void> fetchHistoriAbsenSiswaWalas() async {
+    print("Fetching profil walas...");
+
+    final response = await http.get(
+      Uri.parse(ApiUrl.urlGetHistoriAbsenSiswaWalas),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+    );
+    // statusCode.value = response.statusCode;
+    print(response.statusCode);
+    var data = jsonDecode(response.body);
+    if (response.statusCode == 200) {
+      print(data);
+      histori.value = HistoriAbsenSiswaWalasModel.fromJson(data);
+
+      update();
+    } else if (response.statusCode == 401) {
+      var genController = Get.put(GeneralController());
+      genController.logout(isExpired: true);
+    } else {
+      // statusCode.value = response.statusCode;
+      update();
+      print("gagal menampilkan data");
+      throw Exception('Failed to load profile');
+    }
+  }
+
   @override
-  void onInit() {
-    fetchProfilWalas();
+  void onInit() async {
+    await fetchProfilWalas();
     fetchStatistikAbsenWalas();
+    fetchHistoriAbsenSiswaWalas();
     super.onInit();
   }
 }

@@ -38,7 +38,7 @@ class Data {
     String? tempatLahir;
     DateTime? tanggalLahir;
     String? agama;
-    dynamic fotoProfile;
+    String? fotoProfile;
     int? idSekolah;
     int? idTahun;
     int? idKelas;

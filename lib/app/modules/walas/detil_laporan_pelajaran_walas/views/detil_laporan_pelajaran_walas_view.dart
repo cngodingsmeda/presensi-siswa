@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:presensi_siswa/all_material.dart';
+import 'package:presensi_siswa/app/model/model_walas/laporan_pelajaran_kelas_walas_model.dart';
+import 'package:presensi_siswa/app/modules/walas/laporan_pelajaran_siswa_walas/views/laporan_pelajaran_siswa_walas_view.dart';
+import 'package:presensi_siswa/app/modules/walas/main_walas/controllers/main_walas_controller.dart';
 
 import '../controllers/detil_laporan_pelajaran_walas_controller.dart';
 
@@ -11,36 +14,27 @@ class DetilLaporanPelajaranWalasView
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(DetilLaporanPelajaranWalasController());
+    final profC = Get.put(MainWalasController());
     return Scaffold(
       backgroundColor: AllMaterial.colorWhite,
-      appBar: AppBar(
-        backgroundColor: AllMaterial.colorWhite,
-        surfaceTintColor: AllMaterial.colorWhite,
-        centerTitle: true,
-        title: Column(
-          children: [
-            Text(
-              "XI RPL 1 - Matematika",
-              style: AllMaterial.workSans(
-                color: AllMaterial.colorPrimary,
-                fontWeight: AllMaterial.fontSemiBold,
-                fontSize: 14,
-              ),
-            ),
-            Text(
-              "Senin, 25 Agustus 2024",
-              style: AllMaterial.workSans(
-                color: AllMaterial.colorGreySec,
-                fontSize: 14,
-              ),
-            ),
-          ],
-        ),
-      ),
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  icon: Icon(
+                    MdiIcons.arrowLeft,
+                    color: AllMaterial.colorBlack,
+                  ),
+                ),
+              ],
+            ),
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -48,31 +42,51 @@ class DetilLaporanPelajaranWalasView
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const SizedBox(height: 20),
-                      SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            AllMaterial.outlineText(
-                              title: "Siswa Hadir",
-                              subtitle: "30 orang",
-                            ),
-                            const SizedBox(width: 8),
-                            AllMaterial.outlineText(
-                              title: "Waktu Belajar",
-                              subtitle: "120 Menit",
-                            ),
-                            const SizedBox(width: 8),
-                            AllMaterial.outlineText(
-                              title: "Guru Mapel",
-                              subtitle: "Ratna S.Pd",
-                            ),
-                          ],
+                      Text(
+                        "Histori Absen ${profC.profilWalas.value?.data?.kelas?.nama ?? ""}",
+                        style: AllMaterial.workSans(
+                          fontSize: 25,
+                          fontWeight: AllMaterial.fontMedium,
                         ),
                       ),
+                      Wrap(
+                        spacing: 10,
+                        alignment: WrapAlignment.start,
+                        children: [
+                          AllMaterial.iconWidget(
+                            icon: MdiIcons.account,
+                            title: "32 Orang",
+                          ),
+                          AllMaterial.iconWidget(
+                            icon: MdiIcons.mapMarker,
+                            title:
+                                profC.profilWalas.value?.data?.sekolah?.nama ??
+                                    "",
+                          ),
+                        ],
+                      ),
                       const SizedBox(height: 20),
+                      Material(
+                        color: Colors.transparent,
+                        child: RichText(
+                          text: TextSpan(
+                            text: "Menampilkan hasil untuk ",
+                            style: AllMaterial.workSans(
+                              color: AllMaterial.colorGreySec,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: Get.arguments["tanggal"] ?? "",
+                                style: AllMaterial.workSans(
+                                  color: AllMaterial.colorPrimary,
+                                  fontWeight: AllMaterial.fontSemiBold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 18),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: List.generate(
@@ -127,176 +141,139 @@ class DetilLaporanPelajaranWalasView
                         ),
                       ),
                       const SizedBox(height: 30),
-                      Column(
-                        children: List.generate(
-                          controller.nama.length,
-                          (index) {
-                            return Column(
-                              children: [
-                                ListTile(
-                                  contentPadding: EdgeInsets.zero,
-                                  minVerticalPadding: 0,
-                                  leading: Text(
-                                    "${index + 1}.",
-                                    style: AllMaterial.workSans(
-                                      fontWeight: AllMaterial.fontBold,
-                                      fontSize: 15,
-                                      color: AllMaterial.colorBlack,
-                                    ),
+                      Obx(
+                        () => controller.statusCode.value == 404
+                            ? Center(
+                                child: Text(
+                                  "Tidak ada data absen yang ditemukan",
+                                  style: AllMaterial.workSans(
+                                    color: AllMaterial.colorGreySec,
                                   ),
-                                  title: Text(
-                                    controller.nama[index],
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: AllMaterial.workSans(
-                                      fontWeight: AllMaterial.fontRegular,
-                                      fontSize: 14,
-                                      color: AllMaterial.colorGreySec,
-                                    ),
-                                  ),
-                                  trailing: const Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Icon(
-                                        Icons.check,
-                                        color: AllMaterial.colorPrimary,
-                                      ),
-                                    ],
-                                  ),
-                                  onTap: () {
-                                    AllMaterial.detilKonten(
-                                      buttonLabel: "Tutup Laporan",
-                                      title: "Absen Harian",
-                                      addSubtitle: false,
-                                      icon: const Icon(
-                                        Icons.clear,
-                                        color: AllMaterial.colorWhite,
-                                      ),
-                                      onTap: () => Get.back(),
-                                      konten: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Expanded(
-                                                child:
-                                                    AllMaterial.contextWidget(
-                                                  icon: MdiIcons.mapMarker,
-                                                  subtitle: "Lokasi Absen",
-                                                  title: "SMK Negeri 2 Mataram",
-                                                ),
-                                              ),
-                                              const SizedBox(width: 10),
-                                              Expanded(
-                                                child:
-                                                    AllMaterial.contextWidget(
-                                                  icon: MdiIcons.clock,
-                                                  subtitle: "Waktu Absen",
-                                                  title:
-                                                      "Pukul ${controller.jamAbsen[index]}",
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 20),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Expanded(
-                                                child:
-                                                    AllMaterial.contextWidget(
-                                                  icon: MdiIcons.account,
-                                                  subtitle: "Nama Siswa",
-                                                  title: controller.nama[index],
-                                                ),
-                                              ),
-                                              const SizedBox(width: 10),
-                                              Expanded(
-                                                child:
-                                                    AllMaterial.contextWidget(
-                                                  icon: MdiIcons.fingerprint,
-                                                  subtitle: "Jenis Absen",
-                                                  title: "Absen Hadir",
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 20),
-                                          Container(
-                                            width: Get.width,
-                                            padding: const EdgeInsets.all(16),
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(15),
-                                              border: Border.all(
-                                                color: AllMaterial.colorStroke,
-                                                width: 1.5,
-                                              ),
-                                            ),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  "Deskripsi Absen",
-                                                  style: AllMaterial.workSans(
-                                                    fontSize: 17,
-                                                    color: AllMaterial
-                                                        .colorPrimary,
-                                                    fontWeight: AllMaterial
-                                                        .fontSemiBold,
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 15),
-                                                Text(
-                                                  "Tidak ada deskripsi yang ditambahkan.",
-                                                  style: AllMaterial.workSans(
-                                                    color: AllMaterial
-                                                        .colorGreySec,
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 15),
-                                                Text(
-                                                  "Bukti Dokumen",
-                                                  style: AllMaterial.workSans(
-                                                    fontSize: 17,
-                                                    color: AllMaterial
-                                                        .colorPrimary,
-                                                    fontWeight: AllMaterial
-                                                        .fontSemiBold,
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 15),
-                                                Text(
-                                                  "Tidak ada bukti dokumen yang ditambahkan.",
-                                                  style: AllMaterial.workSans(
-                                                    color: AllMaterial
-                                                        .colorGreySec,
-                                                  ),
-                                                ),
-                                              ],
+                                ),
+                              )
+                            : Column(
+                                children: List.generate(
+                                  controller.jumlahSiswa.value,
+                                  (index) {
+                                    String namaSiswa =
+                                        controller.listSiswa[index];
+
+                                    int countKeys(Map<String, dynamic>? data,
+                                        String namaSiswa) {
+                                      if (data == null) return 0;
+
+                                      Map<String, dynamic>? siswaData =
+                                          data[namaSiswa]
+                                              as Map<String, dynamic>?;
+                                      if (siswaData == null) return 0;
+                                      return siswaData.keys.length;
+                                    }
+
+                                    int totalKeys = countKeys(
+                                      controller.absen.value?.data?.absen,
+                                      namaSiswa,
+                                    );
+                                    return Column(
+                                      children: [
+                                        ListTile(
+                                          contentPadding: EdgeInsets.zero,
+                                          minVerticalPadding: 0,
+                                          leading: Text(
+                                            "${index + 1}.",
+                                            style: AllMaterial.workSans(
+                                              fontWeight: AllMaterial.fontBold,
+                                              fontSize: 15,
+                                              color: AllMaterial.colorBlack,
                                             ),
                                           ),
-                                        ],
-                                      ),
+                                          title: Text(
+                                            namaSiswa,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: AllMaterial.workSans(
+                                              fontWeight:
+                                                  AllMaterial.fontRegular,
+                                              fontSize: 14,
+                                              color: AllMaterial.colorGreySec,
+                                            ),
+                                          ),
+                                          trailing: StatusRow(
+                                            namaSiswa: namaSiswa,
+                                            dataSiswa: (controller
+                                                    .absen.value?.data?.absen)
+                                                ?.map(
+                                              (key, value) =>
+                                                  MapEntry(key, value),
+                                            ),
+                                            jumlahMapel: totalKeys,
+                                          ),
+                                          onTap: () {
+                                            final siswaKey = namaSiswa;
+
+                                            final dataSiswa = controller
+                                                .absen.value?.data?.absen;
+
+                                            int? getIdSiswa(
+                                                String siswaKey, String key) {
+                                              final data =
+                                                  dataSiswa?[siswaKey]?[key];
+                                              if (data != null) {
+                                                return data.idSiswa;
+                                              }
+                                              return 0;
+                                            }
+
+                                            bool areAllValuesNull() {
+                                              for (int i = 1;
+                                                  i <= totalKeys;
+                                                  i++) {
+                                                String key = i.toString();
+                                                if (dataSiswa?[siswaKey]
+                                                        ?[key] !=
+                                                    null) {
+                                                  return false;
+                                                }
+                                              }
+                                              return true;
+                                            }
+
+                                            bool isAlpa = areAllValuesNull();
+                                            final idSiswa = getIdSiswa(
+                                                siswaKey, "$totalKeys");
+                                            if (isAlpa) {
+                                              AllMaterial.messageScaffold(
+                                                title:
+                                                    "Tidak ditemukan Absen untuk siswa terkait!",
+                                              );
+                                            } else {
+                                              print("idSiswa: $idSiswa");
+                                              Get.to(
+                                                () =>
+                                                    const LaporanPelajaranSiswaWalasView(),
+                                                arguments: {
+                                                  "idSiswa": idSiswa,
+                                                  "kelas": profC
+                                                          .profilWalas
+                                                          .value
+                                                          ?.data
+                                                          ?.kelas
+                                                          ?.nama ??
+                                                      "",
+                                                      "tanggal": Get.arguments["tanggal"],
+                                                  "nama": namaSiswa,
+                                                },
+                                              );
+                                            }
+                                          },
+                                        ),
+                                        const Divider(
+                                          color: AllMaterial.colorStroke,
+                                        ),
+                                      ],
                                     );
                                   },
                                 ),
-                                const Divider(
-                                  color: AllMaterial.colorStroke,
-                                ),
-                              ],
-                            );
-                          },
-                        ),
+                              ),
                       ),
                     ],
                   ),
@@ -331,10 +308,12 @@ class DetilLaporanPelajaranWalasView
                 ),
               ),
             ),
-            Text(
-              "10 dari 32",
-              style: AllMaterial.workSans(
-                fontSize: 14,
+            Obx(
+              () => Text(
+                "${controller.listSiswa.length} dari ${controller.jumlahSiswa.value}",
+                style: AllMaterial.workSans(
+                  fontSize: 14,
+                ),
               ),
             ),
             TextButton(
@@ -355,6 +334,61 @@ class DetilLaporanPelajaranWalasView
           ],
         ),
       ),
+    );
+  }
+}
+
+class StatusRow extends StatelessWidget {
+  final Map<String, Map<String, AbsenRecord>>? dataSiswa;
+  final int? jumlahMapel;
+  final String? namaSiswa;
+
+  const StatusRow({
+    super.key,
+    required this.dataSiswa,
+    required this.jumlahMapel,
+    required this.namaSiswa,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: List.generate(
+        jumlahMapel ?? 0,
+        (index) {
+          String key = (index + 1).toString();
+
+          var siswaKey = namaSiswa ?? "";
+          final status = dataSiswa?[siswaKey]?[key];
+
+          return _buildIcon(status?.toJson());
+        },
+      ),
+    );
+  }
+
+  Widget _buildIcon(Map<String, dynamic>? data) {
+    IconData icon = Icons.clear;
+    Color color = Colors.red;
+
+    if (data != null) {
+      final String? status = data["status"];
+      if (status == "hadir") {
+        icon = Icons.check;
+        color = AllMaterial.colorPrimary;
+      } else if (status == "izin") {
+        icon = MdiIcons.fileChart;
+        color = AllMaterial.colorBlue;
+      } else if (status == "sakit") {
+        icon = MdiIcons.clipboardPlus;
+        color = AllMaterial.colorMint;
+      }
+    }
+
+    return Icon(
+      icon,
+      color: color,
     );
   }
 }

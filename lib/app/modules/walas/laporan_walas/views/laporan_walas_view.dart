@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:presensi_siswa/all_material.dart';
-import 'package:presensi_siswa/app/modules/walas/pilih_mapel_laporan_siswa_walas/views/pilih_mapel_laporan_siswa_walas_view.dart';
+import 'package:presensi_siswa/app/modules/walas/detil_laporan_pelajaran_walas/views/detil_laporan_pelajaran_walas_view.dart';
+import 'package:presensi_siswa/app/modules/walas/main_walas/controllers/main_walas_controller.dart';
 
 import '../controllers/laporan_walas_controller.dart';
 
@@ -11,6 +12,7 @@ class LaporanWalasView extends GetView<LaporanWalasController> {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(LaporanWalasController());
+    final mainCont = Get.put(MainWalasController());
     return Scaffold(
       body: AllMaterial.containerLinear(
         child: SafeArea(
@@ -106,58 +108,59 @@ class LaporanWalasView extends GetView<LaporanWalasController> {
                   ),
                 ),
                 Expanded(
-                  child: ListView.builder(
-                      itemCount: 2,
+                  child: Obx(() {
+                    if (controller.isLoading.value) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    if (controller.absensiList.isEmpty) {
+                      return Center(
+                        child: Text(
+                          "Tidak ada laporan absensi pada bulan ini",
+                          style: AllMaterial.workSans(
+                              color: AllMaterial.colorGreySec),
+                        ),
+                      );
+                    }
+
+                    return ListView.builder(
+                      itemCount: controller.absensiList.length,
                       itemBuilder: (context, index) {
+                        final absenData = controller.absensiList[index];
+                        final absen = absenData['absen'];
+                        print(mainCont.profilWalas.value?.data?.sekolah?.nama);
                         return Padding(
                           padding: const EdgeInsets.only(top: 16),
-                          child: AllMaterial.cardWidget(
-                            atas: "Absen XI RPL 1",
-                            tengah: "Senin, 24 Agustus 2024",
-                            bawah: "SMK Negeri 2 Mataram",
-                            onTap: () {
-                              Get.to(() =>
-                                  const PilihMapelLaporanSiswaWalasView());
-                            },
-                            svg: SvgPicture.asset(
-                              "assets/svg/absen-ceklis.svg",
-                              fit: BoxFit.cover,
+                          child: Obx(
+                            () => AllMaterial.cardWidget(
+                              atas: "Absen Bulanan",
+                              tengah: AllMaterial.hariTanggalBulanTahun(
+                                absen['tanggal'],
+                              ),
+                              bawah: mainCont
+                                      .profilWalas.value?.data?.sekolah?.nama ??
+                                  "",
+                              svg: SvgPicture.asset(
+                                "assets/svg/absen-ceklis.svg",
+                              ),
+                              onTap: () {
+                                Get.to(
+                                    () =>
+                                        const DetilLaporanPelajaranWalasView(),
+                                    arguments: {
+                                      "tanggal":
+                                          AllMaterial.hariTanggalBulanTahun(
+                                        absen['tanggal'],
+                                      ),
+                                    });
+                              },
                             ),
                           ),
                         );
-                      }),
-                ),
-                // Expanded(
-                //   child: Obx(
-                //     () => controller.absen.isNotEmpty
-                //         ? ListView.builder(
-                //             itemCount: controller.absen.length,
-                //             itemBuilder: (context, index) {
-                //               return Padding(
-                //                 padding: const EdgeInsets.only(top: 16),
-                //                 child: AllMaterial.cardWidget(
-                //                   atas: "Absen Hadir",
-                //                   tengah: "Senin, 24 Agustus 2024",
-                //                   bawah: "SMK Negeri 2 Mataram",
-                //                   onTap: () {
-                //                     // Get.to(() => const DetilLaporanSiswaView());
-                //                   },
-                //                   svg: SvgPicture.asset(
-                //                       "assets/svg/absen-ceklis.svg"),
-                //                 ),
-                //               );
-                //             },
-                //           )
-                //         : Center(
-                //             child: Text(
-                //               "Tidak ada Laporan Siswa untuk bulan ini",
-                //               style: AllMaterial.workSans(
-                //                 color: AllMaterial.colorGreySec,
-                //               ),
-                //             ),
-                //           ),
-                //   ),
-                // ),
+                      },
+                    );
+                  }),
+                )
               ],
             ),
           ),

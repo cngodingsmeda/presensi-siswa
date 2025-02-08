@@ -65,8 +65,7 @@ class ProfilPetugasView extends GetView<ProfilPetugasController> {
                               onTap: () {
                                 Get.to(
                                   () => HeroImage(
-                                    namePath:
-                                        "${mainCont.profilPetugas.value?.data?.nama?.replaceAll(" ", "-")}-fotoProfile",
+                                   
                                     imageUrl: mainCont.profilPetugas.value?.data
                                             ?.fotoProfile
                                             ?.replaceAll(
@@ -156,7 +155,7 @@ class ProfilPetugasView extends GetView<ProfilPetugasController> {
                             Get.to(() => const VerifikasiEmailView());
                           } else {
                             AllMaterial.messageScaffold(
-                              title: "Email Anda telah terverifikasi!",
+                              title: "Email Kamu telah terverifikasi!",
                             );
                           }
                         },
@@ -173,7 +172,7 @@ class ProfilPetugasView extends GetView<ProfilPetugasController> {
                           final genC = Get.put(GeneralController());
                           AllMaterial.cusDialogValidasi(
                             title: "Logout",
-                            subtitle: "Apakah Anda yakin?",
+                            subtitle: "Apakah Kamu yakin?",
                             onConfirm: () async {
                               await genC.logout();
                               Get.back();

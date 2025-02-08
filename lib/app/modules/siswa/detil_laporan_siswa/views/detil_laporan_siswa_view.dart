@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:presensi_siswa/all_material.dart';
 import 'package:presensi_siswa/app/data/api_url.dart';
 import 'package:presensi_siswa/app/widget/hero_image/hero_image.dart';
 import 'package:presensi_siswa/app/widget/open_file/open_file_custom.dart';
 import 'package:presensi_siswa/app/widget/preview_image/preview_image.dart';
+
 import '../controllers/detil_laporan_siswa_controller.dart';
 
 class DetilLaporanSiswaView extends GetView<DetilLaporanSiswaController> {
@@ -194,14 +194,9 @@ class DetilLaporanSiswaView extends GetView<DetilLaporanSiswaController> {
                                                             .endsWith(".jpg") ||
                                                         controller.detil.value!
                                                             .data!.file!
-                                                            .endsWith(
-                                                                ".png]")) {
+                                                            .endsWith(".png")) {
                                                       Get.to(
                                                         () => HeroImage(
-                                                          namePath:
-                                                              "${controller.detil.value?.data?.siswa?.nama?.replaceAll(" ", "-")}-${DateFormat('dd-MM-yyyy').format(
-                                                            DateTime.now(),
-                                                          )}",
                                                           imageUrl: controller
                                                                   .detil
                                                                   .value
@@ -220,7 +215,7 @@ class DetilLaporanSiswaView extends GetView<DetilLaporanSiswaController> {
                                                         controller.detil.value!
                                                             .data!.file!
                                                             .endsWith(
-                                                                ".docx]")) {
+                                                                ".docx")) {
                                                       FileHandler.openFile(
                                                           controller
                                                                   .detil

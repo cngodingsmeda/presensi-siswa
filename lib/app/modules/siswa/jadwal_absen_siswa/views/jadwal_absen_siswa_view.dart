@@ -91,18 +91,20 @@ class JadwalAbsenSiswaView extends GetView<JadwalAbsenSiswaController> {
                               onTap: () async {
                                 await controller.fetchDetilJadwalHariAbsenSiswa(
                                     jadwal?.hari ?? "");
+                                print(index);
+
                                 if (controller.detil.value == null) {
                                   AllMaterial.messageScaffold(
-                                      title:
-                                          "Terjadi kesalahan, coba lagi nanti");
+                                    title: "Terjadi kesalahan, coba lagi nanti",
+                                  );
                                 } else {
                                   var detil = controller.detil.value;
                                   AllMaterial.detilKonten(
                                     buttonLabel: "Tutup Jadwal",
                                     title:
-                                        "Jadwal Hari ${detil?.data?[index].hari ?? ""}",
+                                        "Jadwal Hari ${detil?.data?.first.hari ?? ""}",
                                     subtitle:
-                                        "Absen Harian di hari ${detil?.data?[index].hari ?? ""} ${tersedia ? "tersedia" : "tidak tersedia"} untuk kelas $namaKelas.",
+                                        "Absen Harian di hari ${detil?.data?.first.hari ?? ""} ${tersedia ? "tersedia" : "tidak tersedia"} untuk kelas $namaKelas.",
                                     icon: const Icon(
                                       Icons.clear,
                                       color: AllMaterial.colorWhite,
@@ -115,7 +117,8 @@ class JadwalAbsenSiswaView extends GetView<JadwalAbsenSiswaController> {
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Expanded(
                                               child: AllMaterial.contextWidget(
@@ -144,7 +147,8 @@ class JadwalAbsenSiswaView extends GetView<JadwalAbsenSiswaController> {
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
-                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Expanded(
                                               child: AllMaterial.contextWidget(

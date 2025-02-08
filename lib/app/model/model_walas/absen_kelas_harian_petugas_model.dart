@@ -22,7 +22,7 @@ class AbsenKelasHarianWalasModel {
 class Data {
   int? countData;
   int? countPage;
-  Map<String, Map<String, AbsenDetail>>? absen;
+  Map<String, Map<String, AbsenDetail?>>? absen;
 
   Data({this.countData, this.countPage, this.absen});
 
@@ -35,7 +35,10 @@ class Data {
               return MapEntry(
                 namaSiswa,
                 (value as Map<String, dynamic>).map((key, value) {
-                  return MapEntry(key, AbsenDetail.fromJson(value));
+                  return MapEntry(
+                    key,
+                    value != null ? AbsenDetail.fromJson(value) : null,
+                  );
                 }),
               );
             })
@@ -50,12 +53,13 @@ class Data {
       'absen': absen?.map((namaSiswa, value) {
         return MapEntry(
           namaSiswa,
-          value.map((key, value) => MapEntry(key, value.toJson())),
+          value.map((key, value) => MapEntry(key, value?.toJson())),
         );
       }),
     };
   }
 }
+
 
 class AbsenDetail {
   int? id;

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:presensi_siswa/all_material.dart';
 import 'package:presensi_siswa/app/data/api_url.dart';
@@ -9,6 +8,7 @@ import 'package:presensi_siswa/app/modules/petugas/main_petugas/controllers/main
 import 'package:presensi_siswa/app/widget/hero_image/hero_image.dart';
 import 'package:presensi_siswa/app/widget/open_file/open_file_custom.dart';
 import 'package:presensi_siswa/app/widget/preview_image/preview_image.dart';
+
 import '../controllers/histori_tinjauan_petugas_controller.dart';
 
 class HistoriTinjauanPetugasView
@@ -173,7 +173,7 @@ class HistoriTinjauanPetugasView
                                                                   title:
                                                                       "Menolak Absen",
                                                                   subtitle:
-                                                                      "Apakah Anda yakin?",
+                                                                      "Apakah Kamu yakin?",
                                                                   onConfirm:
                                                                       () async {
                                                                     await mainCont
@@ -237,7 +237,7 @@ class HistoriTinjauanPetugasView
                                                                   title:
                                                                       "Menerima Absen",
                                                                   subtitle:
-                                                                      "Apakah Anda yakin?",
+                                                                      "Apakah Kamu yakin?",
                                                                   onConfirm:
                                                                       () async {
                                                                     await mainCont
@@ -552,16 +552,13 @@ class HistoriTinjauanPetugasView
                                                                               () {
                                                                             if (absen?.data?.file != null ||
                                                                                 absen?.data?.file != "") {
-                                                                              if (absen!.data!.file!.endsWith(".jpg") || absen.data!.file!.endsWith(".png]")) {
+                                                                              if (absen!.data!.file!.endsWith(".jpg") || absen.data!.file!.endsWith(".png")) {
                                                                                 Get.to(
                                                                                   () => HeroImage(
-                                                                                    namePath: "${absen.data?.siswa?.nama?.replaceAll(" ", "-")}-${DateFormat('dd-MM-yyyy').format(
-                                                                                      DateTime.now(),
-                                                                                    )}",
                                                                                     imageUrl: absen.data?.file?.replaceAll("localhost", ApiUrl.baseUrl) ?? "https://picsum.photos/200/300?grayscale",
                                                                                   ),
                                                                                 );
-                                                                              } else if (absen.data!.file!.endsWith(".pdf") || absen.data!.file!.endsWith(".docx]")) {
+                                                                              } else if (absen.data!.file!.endsWith(".pdf") || absen.data!.file!.endsWith(".docx")) {
                                                                                 FileHandler.openFile(absen.data!.file ?? "");
                                                                               } else {
                                                                                 Get.back();
@@ -853,16 +850,13 @@ class HistoriTinjauanPetugasView
                                                                               () {
                                                                             if (absen?.data?.file != null ||
                                                                                 absen?.data?.file != "") {
-                                                                              if (absen!.data!.file!.endsWith(".jpg") || absen.data!.file!.endsWith(".png]")) {
+                                                                              if (absen!.data!.file!.endsWith(".jpg") || absen.data!.file!.endsWith(".png")) {
                                                                                 Get.to(
                                                                                   () => HeroImage(
-                                                                                    namePath: "${absen.data?.siswa?.nama?.replaceAll(" ", "-")}-${DateFormat('dd-MM-yyyy').format(
-                                                                                      DateTime.now(),
-                                                                                    )}",
                                                                                     imageUrl: absen.data?.file?.replaceAll("localhost", ApiUrl.baseUrl) ?? "https://picsum.photos/200/300?grayscale",
                                                                                   ),
                                                                                 );
-                                                                              } else if (absen.data!.file!.endsWith(".pdf") || absen.data!.file!.endsWith(".docx]")) {
+                                                                              } else if (absen.data!.file!.endsWith(".pdf") || absen.data!.file!.endsWith(".docx")) {
                                                                                 FileHandler.openFile(absen.data!.file ?? "");
                                                                               } else {
                                                                                 Get.back();
@@ -1155,19 +1149,16 @@ class HistoriTinjauanPetugasView
                                                                               () {
                                                                             if (absen?.data?.file != null ||
                                                                                 absen?.data?.file != "") {
-                                                                              if (absen!.data!.file!.endsWith(".jpg") || absen.data!.file!.endsWith(".png]")) {
+                                                                              if (absen!.data!.file!.endsWith(".jpg") || absen.data!.file!.endsWith(".png")) {
                                                                                 Get.to(
                                                                                   () => HeroImage(
-                                                                                    namePath: "${absen.data?.siswa?.nama?.replaceAll(" ", "-")}-${DateFormat('dd-MM-yyyy').format(
-                                                                                      DateTime.now(),
-                                                                                    )}",
                                                                                     imageUrl: absen.data?.file?.replaceAll("localhost", ApiUrl.baseUrl) ?? "https://picsum.photos/200/300?grayscale",
                                                                                   ),
                                                                                 );
-                                                                              } else if (absen.data!.file!.endsWith(".pdf") || absen.data!.file!.endsWith(".docx]")) {
+                                                                              } else if (absen.data!.file!.endsWith(".pdf") || absen.data!.file!.endsWith(".docx")) {
                                                                                 FileHandler.openFile(absen.data!.file ?? "");
                                                                               } else {
-                                                                              Get.back();
+                                                                                Get.back();
                                                                                 AllMaterial.messageScaffold(
                                                                                   title: "File tidak ditemukan, coba lagi nanti!",
                                                                                 );

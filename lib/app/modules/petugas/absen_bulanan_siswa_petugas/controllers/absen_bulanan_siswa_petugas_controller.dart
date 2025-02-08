@@ -8,18 +8,6 @@ import 'package:presensi_siswa/app/data/api_url.dart';
 import 'package:presensi_siswa/app/model/model_petugas/absen_kelas_harian_petugas_model.dart';
 
 class AbsenBulananSiswaPetugasController extends GetxController {
-     var nama = [
-    "Kathryn Murphy",
-    "John Doe",
-    "Alice Johnson",
-    "Michael Smith",
-    "Sophia Davis",
-    "William Brown",
-    "Olivia Wilson",
-    "James Garcia",
-    "Isabella Martinez",
-    "Liam Anderson",
-  ];
 
   var absen = Rx<AbsenKelasHarianPetugasModel?>(null);
   var token = AllMaterial.box.read("token");

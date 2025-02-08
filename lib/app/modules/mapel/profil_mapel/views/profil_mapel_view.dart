@@ -3,7 +3,10 @@ import 'package:get/get.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:presensi_siswa/all_material.dart';
 import 'package:presensi_siswa/app/controller/general_controller.dart';
+import 'package:presensi_siswa/app/data/api_url.dart';
 import 'package:presensi_siswa/app/modules/mapel/edit_profil_mapel/views/edit_profil_mapel_view.dart';
+import 'package:presensi_siswa/app/modules/mapel/main_mapel/controllers/main_mapel_controller.dart';
+import 'package:presensi_siswa/app/widget/hero_image/hero_image.dart';
 import 'package:presensi_siswa/app/widget/ubah_password/views/ubah_password_view.dart';
 import 'package:presensi_siswa/app/widget/verifikasi_email/views/verifikasi_email_view.dart';
 
@@ -13,13 +16,16 @@ class ProfilMapelView extends GetView<ProfilMapelController> {
   const ProfilMapelView({super.key});
   @override
   Widget build(BuildContext context) {
+    // final controller = Get.put(ProfilMapelController());
+    final mainCont = Get.put(MainMapelController());
     return Scaffold(
       backgroundColor: AllMaterial.colorWhite,
       body: AllMaterial.containerLinear(
         child: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
+              padding: const EdgeInsets.only(
+                  bottom: 10, top: 20, left: 10, right: 10),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -34,22 +40,71 @@ class ProfilMapelView extends GetView<ProfilMapelController> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Container(
-                        alignment: Alignment.bottomRight,
-                        height: 80,
-                        width: 80,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(1000),
-                          color: AllMaterial.colorMint,
-                        ),
-                      ),
+                      mainCont.profilMapel.value?.data?.fotoProfile == "" ||
+                              mainCont.profilMapel.value?.data?.fotoProfile ==
+                                  null
+                          ? Container(
+                              alignment: Alignment.center,
+                              height: 80,
+                              width: 80,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(1000),
+                                color: AllMaterial.colorMint,
+                              ),
+                              child: Obx(
+                                () => Text(
+                                  mainCont.userNameFilter.value,
+                                  style: AllMaterial.workSans(
+                                    color: AllMaterial.colorWhite,
+                                    fontWeight: AllMaterial.fontSemiBold,
+                                    fontSize: 40,
+                                  ),
+                                ),
+                              ),
+                            )
+                          : GestureDetector(
+                              onTap: () {
+                                Get.to(
+                                  () => HeroImage(
+                                   
+                                    imageUrl: mainCont.profilMapel.value?.data
+                                            ?.fotoProfile
+                                            ?.replaceAll(
+                                                "localhost", ApiUrl.baseUrl) ??
+                                        "https://picsum.photos/200/300?grayscale",
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                alignment: Alignment.center,
+                                height: 80,
+                                width: 80,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(1000),
+                                  color: AllMaterial.colorMint,
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(
+                                      mainCont.profilMapel.value?.data
+                                              ?.fotoProfile
+                                              ?.replaceAll(
+                                            "localhost",
+                                            ApiUrl.baseUrl,
+                                          ) ??
+                                          "https://picsum.photos/200/300?grayscale",
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
                       const SizedBox(width: 16),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Ratna S.Pd",
+                              AllMaterial.formatNamaPanjang(
+                                  mainCont.profilMapel.value?.data?.nama ?? ""),
                               style: AllMaterial.workSans(
                                 fontWeight: AllMaterial.fontBold,
                                 fontSize: 20,
@@ -57,7 +112,7 @@ class ProfilMapelView extends GetView<ProfilMapelController> {
                               ),
                             ),
                             Text(
-                              "NIP : 21424521232",
+                              "NIP : ${mainCont.profilMapel.value?.data?.nip ?? ""}",
                               style: AllMaterial.workSans(
                                 fontWeight: AllMaterial.fontMedium,
                                 fontSize: 14,
@@ -103,7 +158,7 @@ class ProfilMapelView extends GetView<ProfilMapelController> {
                           final genC = Get.put(GeneralController());
                           AllMaterial.cusDialogValidasi(
                             title: "Logout",
-                            subtitle: "Apakah Anda yakin?",
+                            subtitle: "Apakah Kamu yakin?",
                             onConfirm: () async {
                               await genC.logout();
                               Get.back();

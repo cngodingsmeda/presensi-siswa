@@ -4,8 +4,8 @@ import 'package:get/get.dart';
 import 'package:presensi_siswa/all_material.dart';
 import 'package:presensi_siswa/app/data/api_url.dart';
 import 'package:presensi_siswa/app/modules/walas/absen_harian_siswa_walas/views/absen_harian_siswa_walas_view.dart';
+import 'package:presensi_siswa/app/modules/walas/detil_laporan_pelajaran_walas/views/detil_laporan_pelajaran_walas_view.dart';
 import 'package:presensi_siswa/app/modules/walas/main_walas/controllers/main_walas_controller.dart';
-import 'package:presensi_siswa/app/modules/walas/pilih_mapel_laporan_siswa_walas/views/pilih_mapel_laporan_siswa_walas_view.dart';
 import 'package:presensi_siswa/app/widget/hero_image/hero_image.dart';
 
 import '../controllers/home_walas_controller.dart';
@@ -15,7 +15,6 @@ class HomeWalasView extends GetView<HomeWalasController> {
   @override
   Widget build(BuildContext context) {
     final mainCont = Get.put(MainWalasController());
-    var kelas = mainCont.profilWalas.value?.data?.kelas?.nama;
     return Scaffold(
       backgroundColor: AllMaterial.colorWhite,
       body: SafeArea(
@@ -83,8 +82,6 @@ class HomeWalasView extends GetView<HomeWalasController> {
                                     onTap: () {
                                       Get.to(
                                         () => HeroImage(
-                                          namePath:
-                                              "${mainCont.profilWalas.value?.data?.nama?.replaceAll(" ", "-")}-fotoProfile",
                                           imageUrl: mainCont.profilWalas.value
                                                   ?.data?.fotoProfile
                                                   ?.replaceAll("localhost",
@@ -156,10 +153,12 @@ class HomeWalasView extends GetView<HomeWalasController> {
                                   color: AllMaterial.colorBlack,
                                 ),
                               ),
-                              subtitle: Text(
-                                "Kelas $kelas",
-                                style: AllMaterial.workSans(
-                                  color: AllMaterial.colorGreySec,
+                              subtitle: Obx(
+                                () => Text(
+                                  "Kelas ${mainCont.profilWalas.value?.data?.kelas?.nama ?? ""}",
+                                  style: AllMaterial.workSans(
+                                    color: AllMaterial.colorGreySec,
+                                  ),
                                 ),
                               ),
                               trailing: const Icon(
@@ -175,6 +174,7 @@ class HomeWalasView extends GetView<HomeWalasController> {
                 ),
                 const SizedBox(height: 23),
                 Container(
+                  height: Get.height,
                   decoration: BoxDecoration(
                     boxShadow: [
                       AllMaterial.topShadow,
@@ -192,12 +192,14 @@ class HomeWalasView extends GetView<HomeWalasController> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "$kelas Hari Ini",
-                        style: AllMaterial.workSans(
-                          fontWeight: AllMaterial.fontMedium,
-                          fontSize: 14,
-                          color: AllMaterial.colorGreySec,
+                      Obx(
+                        () => Text(
+                          "${mainCont.profilWalas.value?.data?.kelas?.nama ?? ""} Hari Ini",
+                          style: AllMaterial.workSans(
+                            fontWeight: AllMaterial.fontMedium,
+                            fontSize: 14,
+                            color: AllMaterial.colorGreySec,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -239,26 +241,69 @@ class HomeWalasView extends GetView<HomeWalasController> {
                           color: AllMaterial.colorGreySec,
                         ),
                       ),
-                      ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount: 3,
-                        itemBuilder: (context, index) => Padding(
-                          padding: const EdgeInsets.only(top: 16),
-                          child: AllMaterial.cardWidget(
-                            atas: "Absen Hadir",
-                            tengah: "Senin, 24 Agustus 2024",
-                            bawah: "Senin, 24 Agustus 2024",
-                            onTap: () {
-                              Get.to(() =>
-                                  const PilihMapelLaporanSiswaWalasView());
-                            },
-                            svg: SvgPicture.asset(
-                              "assets/svg/absen-ceklis.svg",
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
+                      Obx(
+                        () {
+                          // var histori = mainCont.histori.value?.data?.length > 3
+                          //     ? mainCont.histori.value?.data?.sublist(0, 3)
+                          //     : mainCont.histori.value?.data;
+                          var historiAbsen = mainCont.histori.value?.data ?? [];
+                          if (historiAbsen.isEmpty) {
+                            print(historiAbsen.length);
+                            return Padding(
+                              padding: const EdgeInsets.only(top: 30),
+                              child: Center(
+                                child: Text(
+                                  "Tidak ada histori absen siswa",
+                                  style: AllMaterial.workSans(
+                                    color: AllMaterial.colorGreySec,
+                                  ),
+                                ),
+                              ),
+                            );
+                          } else {
+                            return ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount: historiAbsen.length > 3
+                                  ? 3
+                                  : historiAbsen.length,
+                              itemBuilder: (context, index) {
+                                var histori = historiAbsen[index];
+                                return Padding(
+                                  padding: const EdgeInsets.only(top: 16),
+                                  child: AllMaterial.cardWidget(
+                                    tengah: AllMaterial.hariTanggalBulanTahun(
+                                        histori.tanggal?.toIso8601String() ??
+                                            DateTime.now().toIso8601String()),
+                                    atas:
+                                        "Absen ${mainCont.profilWalas.value?.data?.kelas?.nama ?? ""}",
+                                    bawah: mainCont.profilWalas.value?.data
+                                            ?.sekolah?.nama ??
+                                        "",
+                                    onTap: () {
+                                      Get.to(
+                                          () =>
+                                              const DetilLaporanPelajaranWalasView(),
+                                          arguments: {
+                                            "tanggal": AllMaterial
+                                                .hariTanggalBulanTahun(
+                                              histori.tanggal
+                                                      ?.toIso8601String() ??
+                                                  DateTime.now()
+                                                      .toIso8601String(),
+                                            ),
+                                          });
+                                    },
+                                    svg: SvgPicture.asset(
+                                      "assets/svg/absen-ceklis.svg",
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          }
+                        },
                       ),
                       const SizedBox(height: 16),
                     ],

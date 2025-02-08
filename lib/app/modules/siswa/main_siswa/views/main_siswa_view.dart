@@ -39,7 +39,6 @@ class MainSiswaView extends GetView<MainSiswaController> {
           onTap: (index) {
             controller.currentIndexBar.value = index;
             controller.pageController.jumpToPage(index);
-            // if (index == 2) controller.clearNotifications(); // Reset notif di tab notifikasi
           },
           items: [
             // Beranda

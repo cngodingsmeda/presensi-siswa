@@ -7,7 +7,6 @@ import 'package:presensi_siswa/app/data/api_url.dart';
 import 'package:presensi_siswa/app/model/model_siswa/histori_absen_siswa_model.dart';
 
 class LaporanSiswaController extends GetxController {
-  var absen = [].obs;
   var selectedMonth = 6.obs;
   var isLoading = false.obs;
   var token = AllMaterial.box.read("token");

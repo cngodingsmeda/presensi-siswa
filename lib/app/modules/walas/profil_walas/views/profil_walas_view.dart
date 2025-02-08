@@ -64,8 +64,7 @@ class ProfilWalasView extends GetView<ProfilWalasController> {
                               onTap: () {
                                 Get.to(
                                   () => HeroImage(
-                                    namePath:
-                                        "${mainCont.profilWalas.value?.data?.nama?.replaceAll(" ", "-")}-fotoProfile",
+                                   
                                     imageUrl: mainCont.profilWalas.value?.data
                                             ?.fotoProfile
                                             ?.replaceAll(
@@ -154,7 +153,7 @@ class ProfilWalasView extends GetView<ProfilWalasController> {
                             Get.to(() => const VerifikasiEmailView());
                           } else {
                             AllMaterial.messageScaffold(
-                              title: "Email Anda telah terverifikasi!",
+                              title: "Email Kamu telah terverifikasi!",
                             );
                           }
                         },
@@ -171,7 +170,7 @@ class ProfilWalasView extends GetView<ProfilWalasController> {
                           final genC = Get.put(GeneralController());
                           AllMaterial.cusDialogValidasi(
                             title: "Logout",
-                            subtitle: "Apakah Anda yakin?",
+                            subtitle: "Apakah Kamu yakin?",
                             onConfirm: () async {
                               await genC.logout();
                               Get.back();

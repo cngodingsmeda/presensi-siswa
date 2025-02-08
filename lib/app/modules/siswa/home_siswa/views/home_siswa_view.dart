@@ -267,8 +267,9 @@ class HomeSiswaView extends GetView<HomeSiswaController> {
                                         arguments: {
                                           "tanggal":
                                               AllMaterial.hariTanggalBulanTahun(
-                                                  absen['tanggal']),
-                                          "id": absen["id"],
+                                            absen['tanggal'],
+                                          ),
+                                          "keyTanggal": absenData,
                                         });
                                   },
                                 ),

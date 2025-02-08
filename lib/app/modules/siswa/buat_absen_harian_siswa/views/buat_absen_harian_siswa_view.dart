@@ -47,24 +47,19 @@ class BuatAbsenHarianSiswaView extends GetView<BuatAbsenHarianSiswaController> {
                   readOnly: true,
                 ),
                 AllMaterial.dropDownWidget(
-                  dropdownItems: [
-                    "Absen Hadir",
-                    "Absen Dispensasi",
-                    "Absen Izin",
-                    "Absen Izin Telat",
-                    "Absen Telat",
-                    "Absen Sakit"
-                  ],
-                  hintText: "Absen Hadir",
-                  onChanged: (value) {},
-                  selectedValue: "Absen Hadir",
+                  dropdownItems: controller.dropdownItems,
+                  hintText: "Jenis Absen",
+                  onChanged: (value) {
+                    controller.jenisAbsenSiswa.value = value.toString();
+                  },
+                  selectedValue: controller.dropdownItems[0],
                   controller: controller.jenisAbsenC,
                   focusNode: controller.jenisAbsenF,
                   label: "Jenis Absen",
                 ),
                 AllMaterial.editableWidget(
-                  controller: TextEditingController(),
-                  focusNode: FocusNode(),
+                  controller: controller.deskripsiC,
+                  focusNode: controller.deskripsiF,
                   label: "Deskripsi",
                   hintText: "Masukkan Deskripsi Absen...",
                   maxLines: 4,
@@ -117,6 +112,9 @@ class BuatAbsenHarianSiswaView extends GetView<BuatAbsenHarianSiswaController> {
                                       ? controller.selectedFile.value!.path
                                           .split('/')
                                           .last
+                                          .toString()
+                                          .split(' ')
+                                          .join('-')
                                       : "Pilih file atau dokumen",
                                   style: AllMaterial.workSans(
                                     fontWeight: AllMaterial.fontRegular,
@@ -127,8 +125,8 @@ class BuatAbsenHarianSiswaView extends GetView<BuatAbsenHarianSiswaController> {
                               ),
                               if (controller.selectedFile.value != null)
                                 IconButton(
-                                  icon: const Icon(
-                                    Icons.clear,
+                                  icon: Icon(
+                                    MdiIcons.trashCan,
                                     color: AllMaterial.colorRed,
                                   ),
                                   onPressed: () {
@@ -246,7 +244,42 @@ class BuatAbsenHarianSiswaView extends GetView<BuatAbsenHarianSiswaController> {
             const SizedBox(height: 20),
             AllMaterial.cusButton(
               onTap: () {
-                Get.to(() => const BuatAbsenHarianSiswaView());
+                if (controller.selectedFile.value == null) {
+                  AllMaterial.messageScaffold(
+                      title: "Bukti dokumen wajib diisi!");
+                  controller.showImageSourceDialog();
+                } else {
+                  if (controller.jenisAbsenSiswa.value == "hadir" &&
+                      controller.mainCont.isDalamRadius.isFalse) {
+                    AllMaterial.cusDialogValidasi(
+                      title: "Kamu berada di luar radius",
+                      subtitle: "Apakah kamu ingin tetap absen?",
+                      onConfirm: () async {
+                        Get.back();
+                        await controller.postAbsenSiswa(
+                          controller.mainCont.latitude.value,
+                          controller.mainCont.longitude.value,
+                          controller.selectedFile.value!,
+                        );
+                      },
+                      onCancel: () => Get.back(),
+                    );
+                  } else {
+                    AllMaterial.cusDialogValidasi(
+                      title: "Mengirim ${controller.jenisAbsenSiswa.value}",
+                      subtitle: "Apakah kamu yakin?",
+                      onConfirm: () async {
+                        Get.back();
+                        await controller.postAbsenSiswa(
+                          controller.mainCont.latitude.value,
+                          controller.mainCont.longitude.value,
+                          controller.selectedFile.value!,
+                        );
+                      },
+                      onCancel: () => Get.back(),
+                    );
+                  }
+                }
               },
               label: "Kirim Absen",
               icon: const Icon(
